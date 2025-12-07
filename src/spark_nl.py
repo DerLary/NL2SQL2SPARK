@@ -61,6 +61,7 @@ def parsing_error_handler(error: Exception):
     return f"Agent Error: {str_error}"
 
 
+#TODO
 def get_spark_session():
     """
     Creates a Spark session with SQLite access.
@@ -94,6 +95,7 @@ def get_spark_sql():
     return spark_sql
 
 
+#TODO
 def run_sparksql_query(spark_session, query):
     """
     Runs a Spark SQL query on a given Spark session.
