@@ -61,7 +61,7 @@ This project uses Google's Gemini models (default: `gemini-2.5-flash`). You need
 
 1.  Go to [Google AI Studio](https://aistudio.google.com/).
 2.  Create an API key.
-3.  (Optional) You can set up billing in Google Cloud to get $300 in free credits if you need higher rate limits. The free tier (up to 10 requests per minute and 1500 requests/day for `gemini-2.5-flash`) might be sufficient just for basic testing.
+3.  (Optional) You can set up billing in Google Cloud to get $300 in free credits if you need higher rate limits. The free tier (up to 10 requests per minute and 250 requests/day for `gemini-2.5-flash`, as for 7-12-2025) might be sufficient just for basic testing.
 
 Create a `.env` file in the root of the repository and add your key:
 
