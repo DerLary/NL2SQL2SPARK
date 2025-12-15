@@ -9,7 +9,8 @@ from spark_nl import (
     process_result,
     print_results,
     pretty_print_cot,
-    run_sparksql_query
+    run_sparksql_query,
+    save_results
 )
 from benchmark_ds import (
     load_tables,
@@ -23,7 +24,7 @@ from evaluation import (
     evaluate_spark_sql
 )
 
-def benchmark_query(query_id):
+def benchmark_query(query_id, provider):
 
     dotenv.load_dotenv()
 
@@ -34,11 +35,12 @@ def benchmark_query(query_id):
     print(f"--- Benchmarking Query ID {query_id} on Database '{database_name}' ---")
     load_tables(spark_session, database_name)
     spark_sql = get_spark_sql()
-    llm = get_llm()
+    llm = get_llm(provider=provider)
     agent = get_spark_agent(spark_sql, llm=llm)
-    run_nl_query(agent, nl_query)
+    run_nl_query(agent, nl_query, llm=llm)
     json_result = process_result()
     print_results(json_result)
+    save_results(json_result)
     # pretty_print_cot(json_result)
     
     print(f"NL Query: \033[92m{nl_query}\033[0m")
@@ -64,6 +66,7 @@ def benchmark_query(query_id):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Benchmark a specific query ID.")
     parser.add_argument("--id", type=int, default=1, help="Query ID to benchmark (default: 1)")
+    parser.add_argument("--provider", type=str, default="google", help="LLM provider (default: google)")
     args = parser.parse_args()
     
-    benchmark_query(args.id)
+    benchmark_query(args.id, args.provider)

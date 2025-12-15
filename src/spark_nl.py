@@ -1,23 +1,28 @@
 import types
 import time
 import json
+import datetime
+import uuid
 
 from pyspark.sql import SparkSession
-from langchain_community.utilities.spark_sql import SparkSQL
-from langchain_community.agent_toolkits import (
-    SparkSQLToolkit,
-    create_spark_sql_agent
-)
 from langchain_core.callbacks import BaseCallbackHandler
-import pandas as pd
+from langchain_cloudflare import ChatCloudflareWorkersAI
 
+import pandas as pd
 import config
 from evaluation import result_to_obj
-
+from llm import get_cloudflare_neuron_pricing
+from spark_toolkit.toolkit import SparkSQLToolkit
+from spark_toolkit.base import create_spark_sql_agent
+from spark_toolkit.spark_sql import SparkSQL
 
 class AgentEarlyExit(BaseException):
     def __init__(self, answer):
         self.answer = answer
+
+
+class AgentLoopException(BaseException):
+    pass
 
 
 class AgentMonitoringCallback(BaseCallbackHandler):
@@ -26,15 +31,23 @@ class AgentMonitoringCallback(BaseCallbackHandler):
         self.chain_of_thought = []
         self.input_tokens = 0
         self.output_tokens = 0
+        self.last_prompt = None
+        self.last_answer = None
+        self.schema_sql_db_count = 0
 
     def on_llm_start(self, serialized, prompts, **kwargs):
         self.count += 1
+        if prompts:
+            self.last_prompt = prompts[0]
 
     def on_llm_end(self, response, **kwargs):
 
         if hasattr(response, "generations"):
             for g in response.generations:
                 for gen in g:
+                    if hasattr(gen, "text"):
+                        self.last_answer = gen.text
+                    
                     gen_dict = gen.__dict__
                     if "message" in gen_dict:
                         message_dict = gen_dict["message"].__dict__
@@ -42,13 +55,35 @@ class AgentMonitoringCallback(BaseCallbackHandler):
                         self.output_tokens += message_dict["usage_metadata"]["output_tokens"]
 
     def on_agent_action(self, action, **kwargs):
-        self.chain_of_thought.append(action.log)
+        log_message = action.log
+        self.chain_of_thought.append(log_message)
+        print(f"\n[Real-time CoT] {log_message}")
+
+        if action.tool == "schema_sql_db":
+            self.schema_sql_db_count += 1
+            if self.schema_sql_db_count > config.SCHEMA_LOOP_COUNT:
+                raise AgentLoopException("Loop detected: schema_sql_db called too many times")
 
     def on_tool_end(self, output, **kwargs):
-        self.chain_of_thought.append(f"Observation: {output}")
+        message = f"Observation: {output}"
+        self.chain_of_thought.append(message)
+        print(f"\n[Real-time CoT] {message}")
         
     def on_agent_finish(self, finish, **kwargs):
-        self.chain_of_thought.append(finish.log)
+        log_message = finish.log
+        self.chain_of_thought.append(log_message)
+        print(f"\n[Real-time CoT] {log_message}")
+
+    def on_tool_start(self, serialized, input_str, **kwargs):
+        tool_name = serialized.get("name") if serialized else "unknown"
+        message = f"Action: {tool_name}\nAction Input: {input_str}"
+        self.chain_of_thought.append(message)
+        print(f"\n[Real-time CoT] {message}")
+        
+        if tool_name == "schema_sql_db":
+            self.schema_sql_db_count += 1
+            if self.schema_sql_db_count > config.SCHEMA_LOOP_COUNT:
+                raise AgentLoopException("Loop detected: schema_sql_db called too many times")
 
 
 def parsing_error_handler(error: Exception):
@@ -155,7 +190,7 @@ def get_spark_agent(spark_sql, llm):
     return agent
 
 
-def run_nl_query(agent, nl_query):
+def run_nl_query(agent, nl_query, llm=None):
 
     print("--- Starting Agent ---")
     total_start = time.time()
@@ -173,13 +208,20 @@ def run_nl_query(agent, nl_query):
 
     try:
         nl_query = nl_query + "\n\n" + config.DEFAULT_PROMPT_SUFIX
-        response = agent.invoke({"input": nl_query}, config={"callbacks": [cb]})
-        final_answer = response['output']
+        from langchain_core.messages import HumanMessage
+        response = agent.invoke({"messages": [HumanMessage(content=nl_query)]}, config={"callbacks": [cb]})
+        final_answer = response["messages"][-1].content
 
     except AgentEarlyExit as e:
         print("--- Exit Triggered (Parsing Bypass) ---")
         print(e)
         final_answer = e.answer
+
+    except AgentLoopException as e:
+        print("--- Loop Detected ---")
+        print(e)
+        final_answer = str(e)
+        config.metrics["query"] = None
 
     except Exception as e:
         print("--- Agent Error Occurred ---")
@@ -197,6 +239,19 @@ def run_nl_query(agent, nl_query):
     config.metrics["chain_of_thought"] = cb.chain_of_thought
     config.metrics["input_tokens"] = cb.input_tokens
     config.metrics["output_tokens"] = cb.output_tokens
+    config.metrics["prompt"] = cb.last_prompt
+    config.metrics["final_answer"] = cb.last_answer
+
+    # Calculate Cloudflare Neurons if applicable
+    if llm and isinstance(llm, ChatCloudflareWorkersAI):
+        model_name = llm.model
+        pricing = get_cloudflare_neuron_pricing(model_name)
+        if pricing:
+            input_neurons = (cb.input_tokens / 1_000_000) * pricing["input_neurons_per_m"]
+            output_neurons = (cb.output_tokens / 1_000_000) * pricing["output_neurons_per_m"]
+            total_neurons = input_neurons + output_neurons
+            config.metrics["cloudflare_neurons"] = total_neurons
+            print(f"[Cloudflare Cost] Estimated Neurons: {total_neurons:.2f}")
 
 
 def process_result():
@@ -215,7 +270,10 @@ def process_result():
         "llm_requests": config.metrics.get("llm_requests", 0),
         "chain_of_thought": config.metrics.get("chain_of_thought", []),
         "input_tokens": config.metrics.get("input_tokens", 0),
-        "output_tokens": config.metrics.get("output_tokens", 0)
+        "output_tokens": config.metrics.get("output_tokens", 0),
+        "cloudflare_neurons": config.metrics.get("cloudflare_neurons", None),
+        "prompt": config.metrics.get("prompt", None),
+        "final_answer": config.metrics.get("final_answer", None)
     }
     
     return json_result
@@ -249,6 +307,10 @@ def print_results(json_result, print_result=False):
     print(f"5. Input Tokens             : {json_result.get('input_tokens')}")
     print(f"6. Output Tokens            : {json_result.get('output_tokens')}")
     
+    neurons = json_result.get('cloudflare_neurons')
+    if neurons is not None:
+        print(f"7. Cloudflare Neurons       : {neurons:.2f}")
+    
     print(f"Spark Query: {color_start}{json_result.get('sparksql_query')}{color_end}")
     
     error = json_result.get("spark_error")
@@ -273,3 +335,13 @@ def pretty_print_cot(json_result):
         print(step)
         print("-" * 20)
     print("="*40)
+
+
+def save_results(results, output_file=None):
+    if output_file is None:
+        current_date = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        random_suffix = str(uuid.uuid4())[:8]
+        output_file = f"{current_date}_{random_suffix}.json"
+        
+    with open(output_file, 'w') as f:
+        json.dump(results, f, indent=4)

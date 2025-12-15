@@ -1,6 +1,7 @@
 import ast
 import json
 import re
+import sqlglot
 import pandas as pd
 import pyspark.sql
 
@@ -167,6 +168,16 @@ def scan_alias(toks):
 
 def get_tables_with_alias(schema, toks):
     tables = scan_alias(toks)
+    for idx, tok in enumerate(toks):
+        if tok in schema:
+            if idx + 1 < len(toks):
+                next_tok = toks[idx+1]
+                if (next_tok not in CLAUSE_KEYWORDS and 
+                    next_tok not in JOIN_KEYWORDS and 
+                    next_tok not in [',', ')', ';', '(', '.'] and
+                    next_tok not in schema):
+                    tables[next_tok] = tok
+
     for key in schema:
         assert key not in tables, "Alias {} has the same name in table".format(key)
         tables[key] = key
@@ -176,6 +187,19 @@ def get_tables_with_alias(schema, toks):
 def parse_col(toks, start_idx, tables_with_alias, schema, default_tables=None):
 
     tok = toks[start_idx]
+    
+    if tok == 'case':
+        idx = start_idx
+        idx += 1
+        depth = 1
+        while idx < len(toks) and depth > 0:
+            if toks[idx] == 'case':
+                depth += 1
+            elif toks[idx] == 'end':
+                depth -= 1
+            idx += 1
+        return idx, " ".join(toks[start_idx:idx])
+
     if tok == "*":
         return start_idx + 1, schema.idMap[tok]
 
@@ -200,7 +224,7 @@ def parse_col(toks, start_idx, tables_with_alias, schema, default_tables=None):
             key = table + "." + tok
             return start_idx+1, schema.idMap[key]
 
-    assert False, "Error col: {}".format(tok)
+    return start_idx+1, tok
 
 
 def parse_col_unit(toks, start_idx, tables_with_alias, schema, default_tables=None):
@@ -272,6 +296,8 @@ def parse_table_unit(toks, start_idx, tables_with_alias, schema):
 
     if idx + 1 < len_ and toks[idx+1] == "as":
         idx += 3
+    elif idx + 1 < len_ and toks[idx+1] in tables_with_alias and tables_with_alias[toks[idx+1]] == key:
+        idx += 2
     else:
         idx += 1
 
@@ -291,6 +317,9 @@ def parse_value(toks, start_idx, tables_with_alias, schema, default_tables=None)
         idx, val = parse_sql(toks, idx, tables_with_alias, schema)
     elif "\"" in toks[idx]:
         val = toks[idx]
+        idx += 1
+    elif toks[idx] == 'null':
+        val = None
         idx += 1
     else:
         try:
@@ -318,6 +347,11 @@ def parse_condition(toks, start_idx, tables_with_alias, schema, default_tables=N
     conds = []
 
     while idx < len_:
+        leading_not = False
+        if toks[idx] == 'not':
+            leading_not = True
+            idx += 1
+
         val_unit = None
         val1_is_col = True
         try:
@@ -332,10 +366,18 @@ def parse_condition(toks, start_idx, tables_with_alias, schema, default_tables=N
         if toks[idx] == 'not':
             not_op = True
             idx += 1
+        
+        if leading_not:
+            not_op = not not_op
 
         assert idx < len_ and toks[idx] in WHERE_OPS, "Error condition: idx: {}, tok: {}".format(idx, toks[idx])
         op_id = WHERE_OPS.index(toks[idx])
         idx += 1
+        
+        if toks[idx-1] == 'is' and idx < len_ and toks[idx] == 'not':
+            not_op = not not_op
+            idx += 1
+
         val1 = val2 = None
         if op_id == WHERE_OPS.index('between'):
             idx, val1 = parse_value(toks, idx, tables_with_alias, schema, default_tables)
@@ -389,6 +431,10 @@ def parse_select(toks, start_idx, tables_with_alias, schema, default_tables=None
             agg_id = AGG_OPS.index(toks[idx])
             idx += 1
         idx, val_unit = parse_val_unit(toks, idx, tables_with_alias, schema, default_tables)
+        
+        if idx < len_ and toks[idx] == 'as':
+            idx += 2
+
         val_units.append((agg_id, val_unit))
         if idx < len_ and toks[idx] == ',':
             idx += 1
