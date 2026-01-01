@@ -1,9 +1,12 @@
+import os
 import types
 import time
 import json
 import datetime
 import uuid
 
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from pyspark.sql import SparkSession
 from langchain_core.callbacks import BaseCallbackHandler
 from langchain_cloudflare import ChatCloudflareWorkersAI
@@ -15,6 +18,25 @@ from llm import get_cloudflare_neuron_pricing
 from spark_toolkit.toolkit import SparkSQLToolkit
 from spark_toolkit.base import create_spark_sql_agent
 from spark_toolkit.spark_sql import SparkSQL
+
+import json
+import re
+
+def parse_react_action(text: str):
+    """
+    Parse:
+    Action: tool_name
+    Action Input: {...}
+    """
+    action_match = re.search(r"Action:\s*(\w+)", text)
+    input_match = re.search(r"Action Input:\s*(\{.*\})", text, re.DOTALL)
+
+    if not action_match or not input_match:
+        return None, None
+
+    tool = action_match.group(1)
+    params = json.loads(input_match.group(1))
+    return tool, params
 
 class AgentEarlyExit(BaseException):
     def __init__(self, answer):
@@ -101,7 +123,13 @@ def get_spark_session():
     """
     Creates a Spark session with SQLite access.
     """
-    pass
+    jar_path = "/usr/share/java/xerial-sqlite-jdbc-3.44.1.0.jar"
+    spark = SparkSession.builder \
+        .master("local[*]") \
+        .appName("NL2SQL2Spark") \
+        .config("spark.jars", jar_path) \
+        .getOrCreate()
+    return spark
 
 
 def get_schema_manually(self, table_names):
@@ -123,11 +151,15 @@ def get_schema_manually(self, table_names):
     return "\n\n".join(all_schemas)
 
 
-def get_spark_sql():
+def get_spark_sql(_spark_session):
 
     spark_sql = SparkSQL(schema=None)
     spark_sql.get_table_info = types.MethodType(get_schema_manually, spark_sql)
     return spark_sql
+# def get_spark_sql(spark_session):
+#     spark_sql = SparkSQL(spark_session=spark_session, schema=None)
+#     spark_sql.get_table_info = types.MethodType(get_schema_manually, spark_sql)
+#     return spark_sql
 
 
 #TODO
@@ -139,7 +171,10 @@ def run_sparksql_query(spark_session, query):
         spark_session: Spark session to run the query on.
         query: A string with the Spark SQL query to run.
     """
-    pass
+    # df = spark_session.sql(query)
+    # pd_df = df.toPandas()
+    # return pd_df
+    return spark_session.sql(query)
 
 
 def get_spark_agent(spark_sql, llm):
@@ -181,16 +216,29 @@ def get_spark_agent(spark_sql, llm):
 
     spark_sql.run = types.MethodType(timed_run, spark_sql)
     toolkit = SparkSQLToolkit(db=spark_sql, llm=llm)
-    agent = create_spark_sql_agent(
+    agent, tools = create_spark_sql_agent(
         llm=llm,
         toolkit=toolkit, verbose=True,
         handle_parsing_errors=parsing_error_handler
     )
 
-    return agent
+    return agent, tools
 
+def schema_context(spark):
+    out = []
+    for t in spark.catalog.listTables():
+        name = t.name
+        cols = spark.table(name).schema
+        col_str = ", ".join([f"{c.name}:{c.dataType.simpleString()}" for c in cols])
+        out.append(f"- {name}({col_str})")
+    print("\n\n\n")
+    # print("[Internal Log] Available tables/views:")
+    # for line in out:
+    #     print("  ", line)
+    # print("\n\n\n")
+    return "Available tables/views:\n" + "\n".join(out)
 
-def run_nl_query(agent, nl_query, llm=None):
+def run_nl_query(agent, nl_query, llm=None, query_id=None, tools=None, spark_session=None, iteration=1, difficulty=None):
 
     print("--- Starting Agent ---")
     total_start = time.time()
@@ -212,6 +260,50 @@ def run_nl_query(agent, nl_query, llm=None):
         response = agent.invoke({"messages": [HumanMessage(content=nl_query)]}, config={"callbacks": [cb]})
         final_answer = response["messages"][-1].content
 
+        # for cloudflare: explicitly state which tables are available
+        # nl_query = (
+        #     schema_context(spark_session)
+        #     + "\n\nQuestion:\n"
+        #     + nl_query
+        #     + "\n\nIMPORTANT: Use ONLY the tables listed above. Do not invent table/column names."
+        #     + "\n\n"
+        #     + config.DEFAULT_PROMPT_SUFIX
+        # )
+
+        print("\n=== RAW AGENT RESPONSE ===")
+        print(response)
+        print("=== RAW AGENT MESSAGES ===")
+        for m in response.get("messages", []):
+            print(type(m), getattr(m, "content", None))
+        print("==========================\n")
+        # response = agent.invoke({"messages": [HumanMessage(content=nl_query)]})
+        # msg = response["messages"][-1]
+        # text = msg.content
+
+        # # parse response to extract tool calls for cloudflare
+        # tool_name, tool_args = parse_react_action(text)
+        # print(f"[ReAct Adapter] Parsed tool: {tool_name}, args: {tool_args}")
+        # # print("agent.tools:", [t.name for t in agent.tools])
+
+        # if tool_name:
+        #     print(f"[ReAct Adapter] Executing tool: {tool_name}")
+        #     tool_map = {t.name: t for t in tools}
+        #     if tool_name not in tool_map:
+        #         raise ValueError(f"Tool '{tool_name}' not found. Available: {list(tool_map)}")
+
+        #     result = tool_map[tool_name].invoke(tool_args)
+
+        #     # store metrics like before
+        #     config.metrics["query"] = tool_args.get("query")
+        #     config.metrics["result"] = result
+        #     config.metrics["spark_time"] = 0.0
+
+        #     final_answer = result
+        # else:
+        #     final_answer = text
+
+        print("Final answer:", final_answer )
+
     except AgentEarlyExit as e:
         print("--- Exit Triggered (Parsing Bypass) ---")
         print(e)
@@ -230,6 +322,16 @@ def run_nl_query(agent, nl_query, llm=None):
 
     total_end = time.time()
 
+    llm_name = ""
+    if llm and isinstance(llm, ChatOpenAI) or isinstance(llm, ChatCloudflareWorkersAI):
+        llm_name = "cloudflare"
+    else:
+        if isinstance(llm, ChatGoogleGenerativeAI):
+             llm_name = "google"
+        else:
+            llm_name = "unknown"     
+
+    config.metrics["llm"] = llm_name  
     config.metrics["answer"] = final_answer
     total_time = total_end - total_start
     config.metrics["total_time"] = total_time
@@ -241,6 +343,9 @@ def run_nl_query(agent, nl_query, llm=None):
     config.metrics["output_tokens"] = cb.output_tokens
     config.metrics["prompt"] = cb.last_prompt
     config.metrics["final_answer"] = cb.last_answer
+    config.metrics["query_id"] = query_id
+    config.metrics["iteration"] = iteration
+    config.metrics["difficulty"] = difficulty
 
     # Calculate Cloudflare Neurons if applicable
     if llm and isinstance(llm, ChatCloudflareWorkersAI):
@@ -260,7 +365,11 @@ def process_result():
     error = config.metrics.get("spark_error", None)
     
     json_result = {
+        "llm": config.metrics.get("llm", None),
         "sparksql_query": config.metrics.get("query", None),
+        "query_id": config.metrics.get("query_id", None),
+        "iteration": config.metrics.get("iteration", None),
+        "difficulty": config.metrics.get("difficulty", None),
         "execution_status": "ERROR" if error else ("VALID" if config.metrics.get("query", None) else "NOT_EXECUTED"),
         "query_result": result,
         "spark_error": error,
@@ -337,11 +446,17 @@ def pretty_print_cot(json_result):
     print("="*40)
 
 
-def save_results(results, output_file=None):
+def save_results(results, output_file=None, query_id=None, iteration=1, additional_data=None, base_folder="."):
     if output_file is None:
         current_date = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         random_suffix = str(uuid.uuid4())[:8]
-        output_file = f"{current_date}_{random_suffix}.json"
+        output_file = f"{current_date}_ID_{query_id}_ITER_{iteration}_{random_suffix}.json"
+    print(f"[Internal Log] Saving results to {output_file}")
         
-    with open(output_file, 'w') as f:
+    if additional_data:
+        results.update(additional_data)
+
+    with open(os.path.join(base_folder, output_file), 'w') as f:
         json.dump(results, f, indent=4)
+
+    return os.path.join(base_folder, output_file)

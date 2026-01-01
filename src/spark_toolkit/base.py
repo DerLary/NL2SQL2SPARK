@@ -30,7 +30,7 @@ def create_spark_sql_agent(
     verbose: bool = False,
     agent_executor_kwargs: Optional[Dict[str, Any]] = None,
     **kwargs: Any,
-) -> Runnable:
+) -> tuple[Runnable, List[Any]]:
     """Construct a Spark SQL agent from an LLM and tools.
 
     Args:
@@ -60,4 +60,4 @@ def create_spark_sql_agent(
     prefix = prefix.format(top_k=top_k)
     
     agent = create_react_agent(llm, tools, prompt=prefix)
-    return agent
+    return agent, tools
