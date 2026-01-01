@@ -4,6 +4,8 @@ import re
 import sqlglot
 import pandas as pd
 import pyspark.sql
+from sqlglot import exp
+from pyspark.sql import functions as F
 
 #TODO
 def translate_sqlite_to_spark(sqlite_query):
@@ -13,7 +15,51 @@ def translate_sqlite_to_spark(sqlite_query):
     Args:
         sqlite_query: A String with the SQLite query to transpile.
     """
-    pass
+    if not sqlite_query or not isinstance(sqlite_query, str):
+        return sqlite_query
+
+    q = sqlite_query.strip().rstrip(";")
+
+    try:
+        spark_sql = sqlglot.transpile(q, read="sqlite", write="spark")[0]
+        # return sqlglot.transpile(q, read="sqlite", write="spark")[0]
+        # query_id 168:
+            #   problem: pyspark.errors.exceptions.captured.AnalysisException: [DATATYPE_MISMATCH.UNEXPECTED_INPUT_TYPE] Cannot resolve "sum((gender = F))" due to data type mismatch: The first parameter requires the "NUMERIC" or "ANSI INTERVAL" type, however "(gender = F)" has the type "BOOLEAN"
+        
+    except Exception:
+        # return original if sqlglot can't parse/transpile it
+        return q
+    
+    # parse the Spark SQL into an AST for transformations
+    try:
+        tree = sqlglot.parse_one(spark_sql, read="spark")
+    except Exception:
+        return spark_sql
+
+    # 1) Fix SUM(<boolean predicate>) which works in SQLite (0/1) but not in Spark.
+    # replace: SUM(predicate) -> SUM(CASE WHEN predicate THEN 1 ELSE 0 END)
+    def rewrite_sum_of_predicate(node: exp.Expression) -> exp.Expression:
+        if isinstance(node, exp.Sum):
+            arg = node.this
+            # sqlglot: comparisons/boolean logic are Expressions like EQ, GT, And, Or, Like, In, etc.
+            predicate_types = (
+                exp.EQ, exp.NEQ, exp.GT, exp.GTE, exp.LT, exp.LTE,
+                exp.And, exp.Or, exp.Not,
+                exp.Like, exp.ILike,
+                exp.In, exp.Between,
+                exp.Is, exp.Paren,
+            )
+            # manual translation of predicate -> CASE WHEN predicate THEN 1 ELSE 0 END
+            if isinstance(arg, predicate_types):
+                case_expr = exp.Case(
+                    ifs=[exp.When(this=arg, true=exp.Literal.number(1))], default=exp.Literal.number(0),
+                )
+                return exp.Sum(this=case_expr)
+        return node
+
+    tree = tree.transform(rewrite_sum_of_predicate)
+
+    return tree.sql(dialect="spark")
 
 def result_to_obj(s):
     if s and isinstance(s, str):
@@ -41,7 +87,190 @@ def jaccard_index(df1, df2):
         df1: The first dataframe.
         df2: The second dataframe.
     """
-    pass
+    def to_row_set(x):
+        # 1. Spark DataFrames
+        if pyspark and isinstance(x, pyspark.sql.dataframe.DataFrame):
+            cols = sorted(x.columns)
+
+            # problem query_id 1169: column name is a SQL expression:
+                # pyspark.errors.exceptions.captured.AnalysisException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name 
+                    #   `(CAST(sum(CASE WHEN ((UA <= 8`.`0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6`.`5) AND (SEX = F)) THEN 1 ELSE 0 END))` 
+                    #   cannot be resolved. Did you mean one of the following? ...;
+            def safe_col(c):
+            # quote if it contains chars Spark treats specially
+                if any(ch in c for ch in " .()/-+*'\"`"):
+                    return F.col(f"`{c}`").alias(c)
+                return F.col(c)
+
+            return {tuple(row) for row in x.select([safe_col(c) for c in cols]).collect()}
+            # return {tuple(row) for row in x.select(*cols).collect()}
+
+        # 2. Pandas DataFrames (Your Test Case)
+        if isinstance(x, pd.DataFrame):
+            # sort to ensure consistent tuple structure
+            cols = sorted(x.columns)
+            return {tuple(row) for row in x[cols].itertuples(index=False, name=None)}
+
+        # 3. List of Dicts / Results (Agent Output)
+        if isinstance(x, list):
+            out = set()
+            for item in x:
+                if isinstance(item, dict):
+                    # sort by key to match the sorted columns above
+                    out.add(tuple(item[k] for k in sorted(item.keys())))
+                elif isinstance(item, (list, tuple)):
+                    out.add(tuple(item))
+                else:
+                    out.add((item,))
+            return out
+
+        # 4. Fallback for scalars (strings/ints)
+        return { (str(x),) }
+
+    s1 = to_row_set(df1)
+    s2 = to_row_set(df2)
+
+    union = s1 | s2
+    if not union:
+        return 1.0
+
+    return len(s1 & s2) / len(union)
+
+import pandas as pd
+
+# problem with above: numbers are returned as e.g., "3.0" (string) and not 3 (number) 
+# alternative: treat values as equal when their string representation matches
+def jaccard_index_new(df1, df2):
+    """
+    Calculates the Jaccard index between two dataframes.
+    - Converts ALL values to strings (including numbers and None) -> because the agent output may have everything as strings (at least for google)
+    - Converts Spark DataFrames to list-of-dicts using column names.
+
+    Args:
+        df1: The first dataframe.
+        df2: The second dataframe.
+    """
+
+    def to_str(v):
+        if v is None:
+            return "NULL"
+        return str(v)
+
+    def rowdict_to_tuple(d: dict):
+        # sort keys so ordering doesn't matter
+        return tuple((k, to_str(d[k])) for k in sorted(d.keys()))
+
+    def to_row_set(x):
+        # 1) Spark DataFrame -> list-of-dicts -> canonical tuples
+        try:
+            import pyspark
+            from pyspark.sql.dataframe import DataFrame as SparkDF
+        except Exception:
+            pyspark = None
+            SparkDF = None
+
+        if SparkDF is not None and isinstance(x, SparkDF):
+            cols = x.columns
+            # collect Rows, convert to dicts keyed by column names
+            rows = x.collect()
+            dict_rows = []
+            for r in rows:
+                rd = r.asDict(recursive=True)
+                # ensure only the dataframe columns and in consistent form
+                dict_rows.append({c: to_str(rd.get(c)) for c in cols})
+            return {rowdict_to_tuple(d) for d in dict_rows}
+
+        # 2) Pandas DataFrame -> list-of-dicts -> canonical tuples
+        if isinstance(x, pd.DataFrame):
+            dict_rows = x.to_dict(orient="records")
+            # make all values strings
+            dict_rows = [{k: to_str(v) for k, v in d.items()} for d in dict_rows]
+            return {rowdict_to_tuple(d) for d in dict_rows}
+
+        # 3) List handling
+        if isinstance(x, list):
+            out = set()
+            for item in x:
+                # list of dicts (already keyed)
+                if isinstance(item, dict):
+                    out.add(rowdict_to_tuple({k: to_str(v) for k, v in item.items()}))
+
+                # list of lists/tuples (NOT keyed) -> treat as positional columns: c0,c1,...
+                elif isinstance(item, (list, tuple)):
+                    d = {f"c{i}": to_str(v) for i, v in enumerate(item)}
+                    out.add(rowdict_to_tuple(d))
+
+                else:
+                    # scalar element in list
+                    d = {"c0": to_str(item)}
+                    out.add(rowdict_to_tuple(d))
+            return out
+
+        # 4) Scalar fallback
+        return {rowdict_to_tuple({"c0": to_str(x)})}
+
+    s1 = to_row_set(df1)
+    s2 = to_row_set(df2)
+
+    union = s1 | s2
+    if not union:
+        return 1.0
+    return len(s1 & s2) / len(union)
+
+# process the NL2SQL json file again to compute the jaccard index again based on the new logic
+def postprocess_with_new_jaccard_index(json_file):
+    # input: json object with 
+    # "query_result": [
+    #     [
+    #         "Sebastian",
+    #         "Vettel",
+    #         "397.0"
+    #     ]
+    # ],
+    # and "ground_truth": [
+    #     {
+    #         "forename": "Sebastian",
+    #         "surname": "Vettel",
+    #         "points": 397.0
+    #     }
+    # ],"
+    # print("HANDLING FILE: ", json_file, "\n ")
+
+    with open(json_file, "r") as f:
+        data = json.load(f)
+    if data.get("execution_status", "") == "ERROR":
+        # print("Skipping file with ERROR status: ", json_file)
+        return
+    ground_truth = data.get("ground_truth", None)
+    query_result = data.get("query_result", None)
+    if ground_truth is None or query_result is None:
+        print("No ground_truth or query_result found in the json file.", json_file)
+        return
+    # convert ground_truth to dataframe
+    # ground_truth is list of dicts with 1 key; convert to a 1-col DF named c0
+    ground_truth_df = pd.DataFrame(ground_truth)
+    if not ground_truth_df.empty:
+        ground_truth_df = ground_truth_df.iloc[:, :].copy()
+        ground_truth_df.columns = [f"c{i}" for i in range(ground_truth_df.shape[1])]
+
+    # convert query_result to dataframe
+    # build with its own number of columns
+    ncols = len(query_result[0]) if query_result and len(query_result) > 0 else 0
+    query_result_df = pd.DataFrame(query_result, columns=[f"c{i}" for i in range(ncols)])
+
+    # compute jaccard index
+    jaccard = jaccard_index_new(ground_truth_df, query_result_df)
+    # print(f"Jaccard Index: {jaccard}")
+    # print("GROUND TRUTH DF:")
+    # print(ground_truth_df)
+    # print("QUERY RESULT DF:")
+    # print(query_result_df)
+
+    # save the jaccard index back to the json file
+    data["jaccard_index_new"] = jaccard
+
+    with open(json_file, "w") as f:
+        json.dump(data, f, indent=4)
 
 # -----------------------------------------------------------------------------
 # Spider Evaluation Logic (adapted from https://github.com/taoyds/spider)
@@ -896,3 +1125,20 @@ def evaluate_spark_sql(gold_sql, pred_sql, spark, db_name="default"):
     except Exception as e:
         print(f"Evaluation Error: {e}")
         return 0
+
+if __name__ == "__main__":
+    # test the jaccard_index./sr     function
+    # Source - https://stackoverflow.com/a
+# Posted by user2285236, modified by community. See post 'Timeline' for change history
+# Retrieved 2025-12-30, License - CC BY-SA 4.0
+
+    # from sklearn.metrics.pairwise import pairwise_distances
+    # res = 1 - pairwise_distances(df.T.to_numpy(), metric='jaccard')
+
+    # df1 = pd.DataFrame({'a': [1, 2], 'b': [3, 4]})
+    # df2 = pd.DataFrame({'a': [2, 3], 'b': [4, 5]})  
+    # sim = jaccard_index(df1, df2)
+    # print(f"Jaccard Similarity: {sim}")
+    # print("SHould be: 0.3333")
+
+    postprocess_with_new_jaccard_index("/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/COPY_benchmark_results_20260101_google_ce2b3070/20260101_125531_ID_1223_ITER_5_2c505099.json")
