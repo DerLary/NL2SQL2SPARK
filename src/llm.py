@@ -3,6 +3,7 @@ import requests
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_cloudflare import ChatCloudflareWorkersAI
+from langchain_openai import ChatOpenAI
 
 from config import (
     DEFAULT_MODELS,
@@ -24,6 +25,26 @@ def get_llm(
         model: The name of the language model to use.
         temperature: The temperature to use for the language model.
     """
+    if provider == Provider.GOOGLE.value:
+        model = model or DEFAULT_MODELS[Provider.GOOGLE]
+        return ChatGoogleGenerativeAI(model=model, temperature=temperature)
+    elif provider == Provider.CLOUDFLARE.value:
+        # # needs CF_AI_API_TOKEN and CF_ACCOUNT_ID env variable set
+        model = model or DEFAULT_MODELS[Provider.CLOUDFLARE]
+        # return ChatCloudflareWorkersAI(
+        #     model_name=model,
+        #     temperature=temperature,
+        # )
+        return ChatOpenAI(
+            model=model,
+            temperature=temperature,
+            api_key=os.environ["CF_AI_API_TOKEN"],
+            base_url=f"https://api.cloudflare.com/client/v4/accounts/"
+                    f"{os.environ['CF_ACCOUNT_ID']}/ai/v1",
+        )
+    else:
+        raise ValueError(f"Unsupported provider: {provider}")
+    
     pass
 
 
