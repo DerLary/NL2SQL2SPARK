@@ -2,7 +2,7 @@ import os
 import config
 import glob
 import json
-from evaluation import postprocess_with_new_jaccard_index
+from evaluation import postprocess_with_new_jaccard_index, recompute_ground_truth
 
 # after "benchmark_queries" has run we have folders like 
     # benchmark_results_20260101_google_ce2b3070
@@ -12,6 +12,7 @@ from evaluation import postprocess_with_new_jaccard_index
 # the following functions aggregate these results (all orchestrated in "aggregate_without_new_run")
     # 1. sort_experiments_in_folders: move all json files with the same query_id into a subfolder (for the pipepline this is already done)
     # 2. for each query_id folder, postprocess the json files with the new jaccard index logic (postprocess_with_new_jaccard_index)
+    # 3. for early configuration the ground_truth was missing -> compute it now and add it to the json files (recompute_ground_truth)
     # 3. aggregate_results: for each query_id folder, aggregate the results of the different iterations into a single (per QUERY_ID) file "AGG_ID_<query_id>_<parent_folder>.json"
     # 4. aggregate_queryAggregates: for all query_id folders, aggregate the per query_id aggregated files into a single file "AGGREGATED_<parent_folder>.json"
     # -> now we have a single file per benchmark run (e.g., "AGGREGATED_benchmark_results_20260101_google_ce2b3070.json")
@@ -47,50 +48,60 @@ def aggregate_results(result_files, base_folder="."):
     # aggregate multiple runs with identical llm, query_id together and calculate average metrics
     aggregated = {}
     for file in result_files:
-        with open(os.path.join(base_folder, file), 'r') as f:
-            data = json.load(f)
-            key = (data.get("llm"), data.get("query_id"))
-            # make a proper string 
-            key = str(key[0]) + "_" + str(key[1])
-            if key not in aggregated:
-                aggregated[key] = {
-                    "llm": data.get("llm"),
-                    "query_id": data.get("query_id"),
-                    "nl_query": data.get("nl_query"),
-                    "golden_query": data.get("golden_query"),
-                    "sparksql_query": data.get("sparksql_query"),
-                    "difficulty": data.get("difficulty"),
+        try:
+            with open(os.path.join(base_folder, file), 'r') as f:
+                data = json.load(f)
+                key = (data.get("llm"), data.get("query_id"))
+                # make a proper string 
+                key = str(key[0]) + "_" + str(key[1])
+                if key not in aggregated:
+                    aggregated[key] = {
+                        "llm": data.get("llm"),
+                        "query_id": data.get("query_id"),
+                        "nl_query": data.get("nl_query"),
+                        "golden_query": data.get("golden_query"),
+                        "sparksql_query": [],
+                        "difficulty": data.get("difficulty"),
 
-                    "execution_status": [],
-                    "query_result": [],
-                    "ground_truth": [],
-                    "spark_error": [],
-                    "total_time": [],
-                    "spark_time": [],
-                    "translation_time": [],
-                    "jaccard_index": [],
-                    "jaccard_index_new": [],
-                    "exact_match": []
-                }
-            aggregated[key]["query_result"].append(data.get("query_result", []))
-            # there are experiments without ground_truth because I only added it later
-            aggregated[key]["spark_error"].append(data.get("spark_error", ""))
+                        "execution_status": [],
+                        "query_result": [],
+                        "ground_truth": [],
+                        "used_hil_query": [],
+                        "spark_error": [],
+                        "total_time": [],
+                        "spark_time": [],
+                        "translation_time": [],
+                        "jaccard_index": [],
+                        "jaccard_index_new": [],
+                        "exact_match": []
+                    }
+                aggregated[key]["sparksql_query"].append(data.get("sparksql_query", ""))
+                aggregated[key]["query_result"].append(data.get("query_result", []))
+                # there are experiments without ground_truth because I only added it later
+                aggregated[key]["spark_error"].append(data.get("spark_error", ""))
 
-            aggregated[key]["total_time"].append(data.get("total_time", 0))
-            aggregated[key]["spark_time"].append(data.get("spark_time", 0))
-            aggregated[key]["translation_time"].append(data.get("translation_time", 0))
-            if not "ground_truth" in data and data.get("execution_status", "") != "ERROR":
-                print(f"[Internal Log] No ground_truth in query_id: {data.get('query_id')} \n file: {file}")
-            else:   
-                aggregated[key]["ground_truth"].append(data.get("ground_truth", []))
+                aggregated[key]["total_time"].append(data.get("total_time", 0))
+                aggregated[key]["spark_time"].append(data.get("spark_time", 0))
+                aggregated[key]["translation_time"].append(data.get("translation_time", 0))
+                if not "ground_truth" in data and data.get("execution_status", "") != "ERROR":
+                    print(f"[Internal Log] No ground_truth in query_id: {data.get('query_id')} \n file: {file}")
+                    print("QUERY ID: ", data.get("query_id"))
+                else:   
+                    aggregated[key]["ground_truth"].append(data.get("ground_truth", []))
 
-            aggregated[key]["execution_status"].append(data.get("execution_status", ""))
-            # only if execution_status = VALID
-            if "jaccard_index" in data:
-                aggregated[key]["jaccard_index"].append(data["jaccard_index"])
-                aggregated[key]["jaccard_index_new"].append(data["jaccard_index_new"])
-            if "exact_match" in data:
-                aggregated[key]["exact_match"].append(data["exact_match"]) 
+                if "used_hil_query" in data:
+                    aggregated[key]["used_hil_query"].append(data.get("used_hil_query", []))
+
+                aggregated[key]["execution_status"].append(data.get("execution_status", ""))
+                # only if execution_status = VALID
+                if "jaccard_index" in data:
+                    aggregated[key]["jaccard_index"].append(data["jaccard_index"])
+                    aggregated[key]["jaccard_index_new"].append(data["jaccard_index_new"])
+                if "exact_match" in data:
+                    aggregated[key]["exact_match"].append(data["exact_match"]) 
+        except Exception as e:
+            print(f"[Internal Log] Error processing file {file}: {e}")
+            raise e
 
     # Now calculate averages
     for key in aggregated:
@@ -112,19 +123,38 @@ def merge_json_files(base_folder, file_pattern="AGG_ID_*.json"):
     merged_results = {}
 
     aggregated_files = glob.glob(os.path.join(base_folder, "*", file_pattern))
+
+    def as_list(x):
+        """Wrap scalars into a list; pass lists through unchanged."""
+        return x if isinstance(x, list) else [x]
+
     # produce a final json by merging the separate json files together
     for agg_file in aggregated_files:
         with open(agg_file, "r") as f:
             data = json.load(f)
+
             for key, value in data.items():
+                # should be the case when this model-query_id combination was only run in one benchmark run
                 if key not in merged_results:
                     merged_results[key] = value
+                    merged_results[key]["source_file"] = [agg_file]
                 else:
                     for sub_key, sub_value in value.items():
-                        if sub_key not in merged_results[key]:
-                            merged_results[key][sub_key] = sub_value
-                        else:
-                            merged_results[key][sub_key].extend(sub_value)
+                        try: 
+                            if sub_key not in merged_results[key]:
+                                merged_results[key][sub_key] = sub_value
+                            else:
+                                merged_results[key]["duplicate_source"] = [agg_file]
+                                # if not a list -> make it a list 
+                                if isinstance(merged_results[key][sub_key], list):
+                                    merged_results[key][sub_key].extend(sub_value)
+                                else:
+                                    old_value = merged_results[key][sub_key]
+                                    merged_results[key][sub_key] = as_list(old_value) + as_list(sub_value)
+                                    
+                        except Exception as e:
+                            print(f"[Internal Log] Error merging key {key} sub_key {sub_key} from file {agg_file}: {e}")
+                            raise e
     return merged_results
 
 # Aggregate all "AGG_ID_<query_id>_<parent_folder>.json" files (per query_id files) in one file per benchmark run
@@ -177,21 +207,32 @@ def aggregate_aggregates(base_folder="."):
 
 # aggregate already existing results without running new benchmarks
 def aggregate_without_new_run(base_folder="."):
-    # sort experiments with the same query_id into the same folder
-    sort_experiments_in_folders(base_folder=base_folder)
+    folders_to_analyze = []
+    # if no base_folder given -> aggregate all results per folder and then all together
+    if base_folder == ".":
+        benchmark_folders = [f.path for f in os.scandir(config.RAW_RESULTS_FOLDER) if f.is_dir() and f.name.startswith("benchmark_results_")]
+        folders_to_analyze.extend(benchmark_folders)
+    else:
+        folders_to_analyze.append(base_folder)
 
-    # for all query_id subfolders, postprocess the json files with the new jaccard index logic
-    query_id_folders = [f.path for f in os.scandir(base_folder) if f.is_dir()]
-    for folder in query_id_folders:
-        json_files = glob.glob(os.path.join(folder, "*_ID_*_ITER_*.json"))
-        for json_file in json_files:
-            postprocess_with_new_jaccard_index(json_file)
-        # aggregate results on the query_id folder
-        filenames = glob.glob(os.path.join(folder, "*_ID_*_ITER_*.json"))
-        aggregate_results(filenames, base_folder=folder)
+    for folder in folders_to_analyze:
+        base_folder = folder
+        # sort experiments with the same query_id into the same folder
+        sort_experiments_in_folders(base_folder=folder)
 
-    aggregate_queryAggregates(base_folder=base_folder)
+        # for all query_id subfolders, postprocess the json files with the new jaccard index logic
+        query_id_folders = [f.path for f in os.scandir(folder) if f.is_dir()]
+        for qfolder in query_id_folders:
+            json_files = glob.glob(os.path.join(qfolder, "*_ID_*_ITER_*.json"))
+            for json_file in json_files:
+                recompute_ground_truth(json_file)
+                postprocess_with_new_jaccard_index(json_file)
+            # aggregate results on the query_id folder
+            filenames = glob.glob(os.path.join(qfolder, "*_ID_*_ITER_*.json"))
+            aggregate_results(filenames, base_folder=qfolder)
+
+        aggregate_queryAggregates(base_folder=folder)
     if config.MERGE_ALL_RESULTS:
         aggregate_aggregates(base_folder=config.RAW_RESULTS_FOLDER)
-
+    return
 

@@ -44,6 +44,7 @@ from langchain_core.globals import set_debug, set_verbose
 
 import sys
 import logging
+from plotting import plotting
 
 class TeeStdout:
     def __init__(self, *streams):
@@ -64,13 +65,20 @@ def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder
     dotenv.load_dotenv()
 
     spark_session = get_spark_session()
+    additional_data = {}
 
     database_name, nl_query, golden_query, difficulty = load_query_info(query_id)
+    additional_data["nl_query"] = nl_query
+
     # replace nl_query with hil_query if provided
     if hil_query is not None:
+        additional_data = {"used_hil_query": hil_query}
         nl_query = hil_query
     golden_query_spark = translate_sqlite_to_spark(golden_query)
+    additional_data["golden_query"] = golden_query_spark
+
     print(f"--- Benchmarking Query ID {query_id} on Database '{database_name}' ---")
+
     load_tables(spark_session, database_name)
     spark_sql = get_spark_sql(spark_session)
     llm = get_llm(provider=provider)
@@ -86,9 +94,6 @@ def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder
     print(f"NL Query: \033[92m{nl_query}\033[0m")
     print(f"Golden Query (Spark SQL): \033[93m{golden_query_spark}\033[0m")
     # only available if execution was valid -> execution_status
-    additional_data = {}
-    additional_data["golden_query"] = golden_query_spark
-    additional_data["nl_query"] = nl_query
 
     if json_result["execution_status"] == "VALID":
         ground_truth_df = run_sparksql_query(spark_session, golden_query_spark)
@@ -104,7 +109,8 @@ def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder
         print(inferred_result)
         ea = jaccard_index(ground_truth_df, inferred_result)
         additional_data["jaccard_index"] = ea
-
+        print(f"Jaccard Index: {ea}")
+        
         # Structural Accuracy        
         spark_sql_query = json_result.get("sparksql_query")
         if spark_sql_query:
@@ -121,25 +127,7 @@ def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder
 # the results should be aggregated per query id and should include the number of iteration (so 1 -5), the difficulty based on the query id (easy, medium, hard) and at the end the average execution accuracy and structural accuracy and time should be stored for each query
 # the number of iterations should be configurable via command line argument and the query ids should be configurable via the configuration file
 def benchmark_queries(provider, iterations=config.NUM_ITERATIONS):
-    # query_ids = select_random_queries()
-        # query_ids = []
-        # json_file = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/benchmark_results_20251231_google_d598f842/selected_query_ids.json"
-        # with open(json_file, "r") as f:
-        #     data = json.load(f)
-        #     for qid in data["query_ids"].keys():
-        #         query_ids.append(int(qid))
-
-        # # skip all queries up and including "593"
-        # query_ids = query_ids[query_ids.index(593)+1:]
-        # print("Benchmarking the following Query IDs: ", query_ids)
-    # query_ids = [134, 778, 983, 1272, 48, 895]
-                 
-    # query_ids = [557, 1212, 523, 944, 1169, 1482, 83, 1223, 28, 219, 220, 125]
-
-    # noch nicht passiert (Rest der Ergebnisse (Ordner): Oben neuste, unten älteste)
-    # changed SQL translation in the last two folders (?)
-    # query_ids = [1169, 1482, 83, 1223, 28, 219, 220, 125]
-    query_ids = [593]
+    query_ids = select_random_queries()
 
     # generate a string consisting of date + random suffix to create a folder name
     current_date = datetime.now().strftime("%Y%m%d")
@@ -220,6 +208,7 @@ if __name__ == "__main__":
     parser.add_argument("--base-folder", type=str, default=None, help="If set, aggregate results from the specified folder without running new benchmarks.")
     parser.add_argument("--only-aggregate", action="store_true", help="If set, only aggregate results without running new benchmarks.")
     parser.add_argument("--run-pipeline", action="store_true", help="If set, run the automated pipeline on predefined query IDs.")
+    parser.add_argument("--plotting-json", type=str, default=None, help="If set, generate plots from the specified aggregated results JSON file.")
     args = parser.parse_args()
     
     if args.only_aggregate:
@@ -228,6 +217,11 @@ if __name__ == "__main__":
         exit(0)
     elif args.run_pipeline:
         benchmark_queries(provider=args.provider, iterations=config.NUM_ITERATIONS)
+        exit(0)
+    elif args.plotting_json is not None:
+
+        aggregated_results_file = args.plotting_json
+        plotting(aggregated_results_file)
         exit(0)
     else:
         base_folder = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/SINGLE_RUNS"
