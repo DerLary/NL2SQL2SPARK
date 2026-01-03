@@ -6,6 +6,7 @@ import pandas as pd
 import pyspark.sql
 from sqlglot import exp
 from pyspark.sql import functions as F
+import os 
 
 #TODO
 def translate_sqlite_to_spark(sqlite_query):
@@ -217,6 +218,29 @@ def jaccard_index_new(df1, df2):
         return 1.0
     return len(s1 & s2) / len(union)
 
+# process the NL2SQL json file again to compute the ground_truth if it is missing (for earlier configuration runs)
+def recompute_ground_truth(json_file):
+    from spark_nl import compute_only_golden_query_result 
+    
+    with open(json_file, "r") as f:
+        data = json.load(f)
+    if data.get("execution_status", "") == "ERROR":
+        # print("Skipping file with ERROR status: ", json_file)
+        return
+    ground_truth = data.get("ground_truth", None)
+    
+    if ground_truth is None:
+        golden_query = data.get("golden_query", None)
+        if golden_query is None:
+            print("No golden_query found to compute ground_truth in the json file.", json_file)
+            raise ValueError("No golden_query found to compute ground_truth")
+        # compute the ground_truth
+        ground_truth = compute_only_golden_query_result(json_file)
+        data["ground_truth"] = ground_truth
+        with open(json_file, "w") as f:
+            json.dump(data, f, indent=4)
+
+
 # process the NL2SQL json file again to compute the jaccard index again based on the new logic
 def postprocess_with_new_jaccard_index(json_file):
     # input: json object with 
@@ -243,9 +267,13 @@ def postprocess_with_new_jaccard_index(json_file):
         return
     ground_truth = data.get("ground_truth", None)
     query_result = data.get("query_result", None)
-    if ground_truth is None or query_result is None:
-        print("No ground_truth or query_result found in the json file.", json_file)
+    if query_result is None:
+        print("No query_result found in the json file.", json_file)
         return
+    if ground_truth is None:
+        print("No ground_truth found in the json file.", json_file)
+        return
+
     # convert ground_truth to dataframe
     # ground_truth is list of dicts with 1 key; convert to a 1-col DF named c0
     ground_truth_df = pd.DataFrame(ground_truth)
@@ -1141,4 +1169,4 @@ if __name__ == "__main__":
     # print(f"Jaccard Similarity: {sim}")
     # print("SHould be: 0.3333")
 
-    postprocess_with_new_jaccard_index("/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/COPY_benchmark_results_20260101_google_ce2b3070/20260101_125531_ID_1223_ITER_5_2c505099.json")
+    recompute_ground_truth("/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1374/20251231_115747_ID_1374_ITER_5_c14e62f2.json")

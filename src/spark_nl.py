@@ -13,11 +13,12 @@ from langchain_cloudflare import ChatCloudflareWorkersAI
 
 import pandas as pd
 import config
-from evaluation import result_to_obj
+from evaluation import result_to_obj, translate_sqlite_to_spark
 from llm import get_cloudflare_neuron_pricing
 from spark_toolkit.toolkit import SparkSQLToolkit
 from spark_toolkit.base import create_spark_sql_agent
 from spark_toolkit.spark_sql import SparkSQL
+from benchmark_ds import load_query_info, load_tables
 
 import json
 import re
@@ -131,6 +132,26 @@ def get_spark_session():
         .getOrCreate()
     return spark
 
+def compute_only_golden_query_result(json_file):
+    
+    with open(json_file, "r") as f:
+        data = json.load(f)
+    golden_query = data.get("golden_query", None)
+    if not golden_query:
+        print("No golden_query found to compute ground_truth in the json file.", json_file)
+        raise ValueError("No golden_query found to compute ground_truth")
+    
+    query_id = data.get("query_id", None)
+    database_name, _, golden_query, _ = load_query_info(query_id)
+
+    spark_session = get_spark_session()
+    golden_query_spark = translate_sqlite_to_spark(golden_query)
+    load_tables(spark_session, database_name)
+
+    # print(f"\n\n GOLDEN QUERY SPARK TRANSLATION:   ID: {query_id}", golden_query_spark, "\n\n")
+    ground_truth_df = run_sparksql_query(spark_session, golden_query_spark)
+    ground_truth_obj = ground_truth_df.collect()
+    return [row.asDict() for row in ground_truth_obj]
 
 def get_schema_manually(self, table_names):
     all_schemas = []
