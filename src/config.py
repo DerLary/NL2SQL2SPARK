@@ -36,6 +36,10 @@ NUM_CHALLENGING = 10
 NUM_ITERATIONS = 10
 
 RAW_RESULTS_FOLDER = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS"
+PLOTS_FOLDER = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/PLOTS"
 
 FORCE_REAGG = True
 MERGE_ALL_RESULTS = True
+
+RECOMPUTE_PLOTTING_DATA = False
+RECOMPUTE_PLOTS = True
