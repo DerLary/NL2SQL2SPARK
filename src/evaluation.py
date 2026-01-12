@@ -1,6 +1,8 @@
 import ast
 import json
 import re
+import traceback
+from sqlalchemy import null
 import sqlglot
 import pandas as pd
 import pyspark.sql
@@ -457,6 +459,26 @@ def parse_col(toks, start_idx, tables_with_alias, schema, default_tables=None):
             idx += 1
         return idx, " ".join(toks[start_idx:idx])
 
+    # problem: SELECT CAST(SUM(CASE WHEN `DOC` = 54 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN `DOC` = 52 THEN 1 ELSE 0 END) 
+    # If token looks like a function name and is followed by "(",
+    # consume until the matching ")" and treat the whole thing as one "column-like" unit.
+    if start_idx + 1 < len(toks) and toks[start_idx + 1] == '(':
+        # Avoid handling aggregate functions already handled in parse_col_unit
+        # (count, sum, avg, min, max) and keywords.
+        if tok not in AGG_OPS and tok not in CLAUSE_KEYWORDS and tok not in JOIN_KEYWORDS:
+            idx = start_idx + 1  # at '('
+            depth = 0
+            while idx < len(toks):
+                if toks[idx] == '(':
+                    depth += 1
+                elif toks[idx] == ')':
+                    depth -= 1
+                    if depth == 0:
+                        idx += 1  # consume final ')'
+                        break
+                idx += 1
+            return idx, " ".join(toks[start_idx:idx])
+
     if tok == "*":
         return start_idx + 1, schema.idMap[tok]
 
@@ -604,6 +626,9 @@ def parse_condition(toks, start_idx, tables_with_alias, schema, default_tables=N
     conds = []
 
     while idx < len_:
+        while idx < len_ and toks[idx] == '(':
+            idx += 1
+
         leading_not = False
         if toks[idx] == 'not':
             leading_not = True
@@ -636,13 +661,47 @@ def parse_condition(toks, start_idx, tables_with_alias, schema, default_tables=N
             idx += 1
 
         val1 = val2 = None
+
+        # handle 'IN' with parenthesized list
+        if op_id == WHERE_OPS.index('in'):
+            if idx < len_ and toks[idx] == '(':
+                idx += 1  # consume '('
+                vals = []
+
+                # parse comma-separated values until ')'
+                while idx < len_ and toks[idx] != ')':
+                    if toks[idx] == ',':
+                        idx += 1
+                        continue
+
+                    idx, v = parse_value(toks, idx, tables_with_alias, schema, default_tables)
+                    vals.append(v)
+
+                assert idx < len_ and toks[idx] == ')'
+                idx += 1 
+
+                # make a canonical representation of the value list
+                canon = tuple(sorted(str(v) for v in vals))
+
+                val1 = canon
+                val2 = None
+                conds.append((not_op, op_id, val_unit, val1, val2))
+
+                # continue parsing AND/OR
+                if idx < len_ and (toks[idx] in CLAUSE_KEYWORDS or toks[idx] in (")", ";") or toks[idx] in JOIN_KEYWORDS):
+                    break
+                if idx < len_ and toks[idx] in COND_OPS:
+                    conds.append(toks[idx])
+                    idx += 1
+                continue
+
         if op_id == WHERE_OPS.index('between'):
-            idx, val1 = parse_value(toks, idx, tables_with_alias, schema, default_tables)
+            idx, val1 = parse_value_expr(toks, idx, tables_with_alias, schema, default_tables)
             assert toks[idx] == 'and'
             idx += 1
             idx, val2 = parse_value(toks, idx, tables_with_alias, schema, default_tables)
         else:
-            idx, val1 = parse_value(toks, idx, tables_with_alias, schema, default_tables)
+            idx, val1 = parse_value_expr(toks, idx, tables_with_alias, schema, default_tables)
             val2 = None
 
             if not val1_is_col and isinstance(val1, tuple):
@@ -659,6 +718,9 @@ def parse_condition(toks, start_idx, tables_with_alias, schema, default_tables=N
                 op_id = WHERE_OPS.index(new_op)
 
         conds.append((not_op, op_id, val_unit, val1, val2))
+
+        while idx < len_ and toks[idx] == ')':
+            idx += 1
 
         if idx < len_ and (toks[idx] in CLAUSE_KEYWORDS or toks[idx] in (")", ";") or toks[idx] in JOIN_KEYWORDS):
             break
@@ -881,10 +943,16 @@ def parse_sql(toks, start_idx, tables_with_alias, schema):
 
 
 def get_sql(schema, query):
-    toks = tokenize(query)
-    tables_with_alias = get_tables_with_alias(schema.schema, toks)
-    _, sql = parse_sql(toks, 0, tables_with_alias, schema)
-
+    try:
+        toks = tokenize(query)
+        
+        tables_with_alias = get_tables_with_alias(schema.schema, toks)
+        _, sql = parse_sql(toks, 0, tables_with_alias, schema)
+    except Exception as e:
+        import traceback
+        print("Error parsing SQL:", repr(e))
+        traceback.print_exc()
+        sql = None
     return sql
 
 # -----------------------------------------------------------------------------
@@ -1135,6 +1203,22 @@ class Evaluator:
 
         return res
 
+# to handle things like T1.height_cm * 100 > (SELECT AVG(height_cm) FROM superhero) * 80
+def parse_value_expr(toks, start_idx, tables_with_alias, schema, default_tables=None):
+    """
+    Parse <value> ( ( +|-|*|/ ) <value> )*
+    Returns a nested tuple AST like ('*', left, right) or just an atom.
+    """
+    idx = start_idx
+    idx, left = parse_value(toks, idx, tables_with_alias, schema, default_tables)
+
+    while idx < len(toks) and toks[idx] in ('+', '-', '*', '/'):
+        op = toks[idx]
+        idx += 1
+        idx, right = parse_value(toks, idx, tables_with_alias, schema, default_tables)
+        left = (op, left, right)
+
+    return idx, left
 
 def evaluate_spark_sql(gold_sql, pred_sql, spark, db_name="default"):
     """
@@ -1144,7 +1228,9 @@ def evaluate_spark_sql(gold_sql, pred_sql, spark, db_name="default"):
     try:
         schema_dict = get_schema(spark, db_name)
         schema = Schema(schema_dict)
+        print("Trying to parse gold SQL...")
         g_sql = get_sql(schema, gold_sql)
+        print("Trying to parse predicted SQL...")
         p_sql = get_sql(schema, pred_sql)
         
         evaluator = Evaluator()
@@ -1152,21 +1238,6 @@ def evaluate_spark_sql(gold_sql, pred_sql, spark, db_name="default"):
         return exact_score
     except Exception as e:
         print(f"Evaluation Error: {e}")
+        print("Gold SQL:", gold_sql)
+        print("Predicted SQL:", pred_sql)
         return 0
-
-if __name__ == "__main__":
-    # test the jaccard_index./sr     function
-    # Source - https://stackoverflow.com/a
-# Posted by user2285236, modified by community. See post 'Timeline' for change history
-# Retrieved 2025-12-30, License - CC BY-SA 4.0
-
-    # from sklearn.metrics.pairwise import pairwise_distances
-    # res = 1 - pairwise_distances(df.T.to_numpy(), metric='jaccard')
-
-    # df1 = pd.DataFrame({'a': [1, 2], 'b': [3, 4]})
-    # df2 = pd.DataFrame({'a': [2, 3], 'b': [4, 5]})  
-    # sim = jaccard_index(df1, df2)
-    # print(f"Jaccard Similarity: {sim}")
-    # print("SHould be: 0.3333")
-
-    recompute_ground_truth("/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1374/20251231_115747_ID_1374_ITER_5_c14e62f2.json")
