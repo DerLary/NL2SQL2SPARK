@@ -3,11 +3,9 @@ from datetime import datetime
 import json
 import uuid
 import dotenv
-import glob
 import random
 import config
 from aggregation import (
-    aggregate_results,
     aggregate_without_new_run
 )
 
@@ -18,7 +16,6 @@ from spark_nl import (
     run_nl_query,
     process_result,
     print_results,
-    pretty_print_cot,
     run_sparksql_query,
     save_results
 )
@@ -30,17 +27,11 @@ from llm import get_llm
 from evaluation import (
     translate_sqlite_to_spark,
     jaccard_index,
-    result_to_obj,
     evaluate_spark_sql,
-    postprocess_with_new_jaccard_index
 )
 import os
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
 os.environ["LANGCHAIN_DEBUG"] = "true"
-from langchain_core.globals import set_debug, set_verbose
-
-# set_debug(True)     # prints internal LangChain debug info
-# set_verbose(True)   # more agent/tool logging
 
 import sys
 import logging
@@ -61,7 +52,6 @@ class TeeStdout:
 
 
 def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder="."):
-
     dotenv.load_dotenv()
 
     spark_session = get_spark_session()
@@ -83,18 +73,14 @@ def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder
     spark_sql = get_spark_sql(spark_session)
     llm = get_llm(provider=provider)
     agent, tools = get_spark_agent(spark_sql, llm=llm)
-    # print("\n\n\n\n")
-    # print("TOOLS: ", tools)
-    # print("\n\n\n\n")
     run_nl_query(agent, nl_query, llm=llm, query_id=query_id, tools=tools, spark_session=spark_session, iteration=iteration, difficulty=difficulty)
     json_result = process_result()
     print_results(json_result)
-    # pretty_print_cot(json_result)
     
     print(f"NL Query: \033[92m{nl_query}\033[0m")
     print(f"Golden Query (Spark SQL): \033[93m{golden_query_spark}\033[0m")
+    
     # only available if execution was valid -> execution_status
-
     if json_result["execution_status"] == "VALID":
         ground_truth_df = run_sparksql_query(spark_session, golden_query_spark)
         print("Ground Truth:")
@@ -117,7 +103,6 @@ def benchmark_query(query_id, provider, hil_query=None, iteration=1, base_folder
             em_score = evaluate_spark_sql(golden_query_spark, spark_sql_query, spark_session)
             additional_data["exact_match"] = em_score
             print(f"Spider Exact Match Score: {em_score}")
-
 
     filename = save_results(json_result, output_file=None, query_id=query_id, iteration=iteration, additional_data=additional_data, base_folder=base_folder)
 
@@ -176,12 +161,6 @@ def benchmark_queries(provider, iterations=config.NUM_ITERATIONS):
             print(f"--- Benchmarking Query ID {query_id}, Iteration {i+1}/{iterations} ---")
             filenames.append(benchmark_query(query_id, provider, iteration=i+1, base_folder=query_folder))
 
-    # filenames = ["/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/20251230_185115_ID_0_ITER_1_63f0f2f2.json", \
-                #  "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/20251230_185116_ID_0_ITER_2_3f2e9424.json", \
-                #  "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/20251230_185118_ID_2_ITER_1_251ca350.json", \
-                #  "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/20251230_185120_ID_2_ITER_2_f7505643.json"]
-
-
 def select_random_queries():
     # use database_name, nl_query, golden_query, difficulty = load_query_info(query_id) to load random queries from the benchmark file
     # select NUM_SIMPLE + NUM_MODERATE + NUM_CHALLENGING random query ids from the benchmark file
@@ -202,7 +181,7 @@ def select_random_queries():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Benchmark a specific query ID.")
-    parser.add_argument("--id", type=int, default=1, help="Query ID to benchmark (default: 1)")
+    parser.add_argument("--id", type=int, default=None, help="Query ID to benchmark (default: 1)")
     parser.add_argument("--provider", type=str, default="google", help="LLM provider (default: google)")
     parser.add_argument("--hil-query", type=str, default=None, help="Optional natural language query to use instead of loading from benchmark.")
     parser.add_argument("--base-folder", type=str, default=None, help="If set, aggregate results from the specified folder without running new benchmarks.")
@@ -211,18 +190,13 @@ if __name__ == "__main__":
     parser.add_argument("--plotting-json", type=str, default=None, help="If set, generate plots from the specified aggregated results JSON file.")
     args = parser.parse_args()
     
+    if args.id is not None:
+        base_folder = args.base_folder if args.base_folder else config.BASE_FOLDER_SINGLE_RUNS
+        benchmark_query(args.id, args.provider, hil_query=args.hil_query, base_folder=base_folder)
     if args.only_aggregate:
         base_folder = args.base_folder if args.base_folder else "."
         aggregate_without_new_run(base_folder=base_folder)
-        exit(0)
-    elif args.run_pipeline:
+    if args.run_pipeline:
         benchmark_queries(provider=args.provider, iterations=config.NUM_ITERATIONS)
-        exit(0)
-    elif args.plotting_json is not None:
-
-        aggregated_results_file = args.plotting_json
-        plotting(aggregated_results_file)
-        exit(0)
-    else:
-        base_folder = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/SINGLE_RUNS"
-        benchmark_query(args.id, args.provider, hil_query=args.hil_query, base_folder=base_folder)
+    if args.plotting_json is not None:
+        plotting(args.plotting_json)

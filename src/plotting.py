@@ -1,18 +1,14 @@
 import json
-from json.tool import main
 import math
-import argparse
 from collections import defaultdict
 import os
 import sys
-
 import matplotlib.pyplot as plt
 import config
-
+import ijson
 
 DIFFICULTY_ORDER = ["simple", "moderate", "challenging"]
 METRICS = [
-    #("jaccard_index", "Jaccard Index"),
     ("jaccard_index_new", "Jaccard Index"),
     ("exact_match", "Exact Match"),
     ("total_time", "Total time (s)"),
@@ -20,19 +16,15 @@ METRICS = [
     ("translation_time", "Translation\ntime (s)"),
 ]
 
-
 def is_finite_number(x) -> bool:
     return isinstance(x, (int, float)) and math.isfinite(x)
 
-
 def as_list(x):
-    """Ensure x is a list; if missing/None -> empty list."""
     if x is None:
         return []
     if isinstance(x, list):
         return x
     return [x]
-
 
 def count_errors(entry: dict) -> int:
     """
@@ -45,10 +37,8 @@ def count_errors(entry: dict) -> int:
     err_status_cnt = sum(1 for s in statuses if str(s).upper() == "ERROR")
     err_spark_cnt = sum(1 for e in spark_errs if e not in (None, "", "null"))
 
-    # Avoid double-counting the same iteration if both signals exist:
-    # We'll approximate by taking max of both counts (common in your data).
+    # Avoid double-counting the same iteration if both signals exist -> take the max
     return max(err_status_cnt, err_spark_cnt)
-
 
 def extract_metric_values(entry: dict, metric_name: str):
     """
@@ -77,7 +67,7 @@ def extract_metric_values(entry: dict, metric_name: str):
                 pass
             continue
 
-        # sometimes your aggregation might store single values as e.g. numpy scalars etc.
+        # scalar convertible to float
         try:
             fv = float(v)
             if math.isfinite(fv):
@@ -87,8 +77,6 @@ def extract_metric_values(entry: dict, metric_name: str):
 
     return out
 
-
-
 def compute_global_ylims(grouped):
     """
     Compute y-limits per metric across all difficulties for comparability.
@@ -97,8 +85,6 @@ def compute_global_ylims(grouped):
     """
     ylims = {}
 
-    # fixed for jaccard
-    # ylims["jaccard_index"] = (-0.1, 1.1)
     ylims["jaccard_index_new"] = (-0.1, 1.1)
     ylims["exact_match"] = (-0.1, 1.1)
 
@@ -119,7 +105,6 @@ def compute_global_ylims(grouped):
 
     return ylims
 
-
 def add_error_counts_below_ticks(ax, x_positions, error_counts):
     """
     Draw small red numbers below the x tick labels.
@@ -136,10 +121,9 @@ def add_error_counts_below_ticks(ax, x_positions, error_counts):
                 clip_on=False,
             )
 
-
 def plot_difficulty(grouped, difficulty: str, ylims, out_folder: str = config.PLOTS_FOLDER):
     """
-    One figure per difficulty, with 5 subplots (Option A).
+    One figure per difficulty, with 5 subplots
     x-axis: query_id
     Each subplot: boxplot per query_id for that metric.
     """
@@ -155,10 +139,7 @@ def plot_difficulty(grouped, difficulty: str, ylims, out_folder: str = config.PL
         return
 
     # Sort query_ids for consistent ordering
-    print("UNSORTED query_ids:", list(grouped[difficulty].keys())[:10])
     query_ids = sorted(grouped[difficulty].keys(), key=int)
-    print("SORTED query_ids:", query_ids[:10])
-    # print(f"Plotting difficulty='{difficulty}' with {len(query_ids)} query_ids... {query_ids[:10]}...")
     x_positions = list(range(1, len(query_ids) + 1))
 
     # error counts per query_id
@@ -178,8 +159,6 @@ def plot_difficulty(grouped, difficulty: str, ylims, out_folder: str = config.PL
         data_for_boxes = []
         for qid in query_ids:
             vals = grouped[difficulty][qid]["metrics"].get(metric_name, [])
-            # Matplotlib boxplot requires at least one value.
-            # If empty, use [nan] so the position still exists without crashing.
             if vals:
                 data_for_boxes.append(vals)
             else:
@@ -210,7 +189,6 @@ def plot_difficulty(grouped, difficulty: str, ylims, out_folder: str = config.PL
         ax.set_xlabel(ax.get_xlabel(), fontsize=18, fontweight="bold")
 
     plt.tight_layout()
-    # plt.show()
     fig.savefig(out_path)
     print(f"Saved plot to: {out_path}")
 
@@ -219,19 +197,8 @@ def iter_aggregated_entries(path: str):
     Stream (key, entry_dict) pairs from a huge top-level JSON object:
       { "google_557": {...}, "google_944": {...}, ... }
 
-    Requires: pip install ijson
-    Falls back to json.load if ijson isn't available.
     """
-    try:
-        import ijson
-    except ImportError:
-        # Fallback (old behavior, may be slow / memory heavy)
-        with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        for k, v in data.items():
-            yield k, v
-        return
-
+    
     # Streaming parse: iterate over top-level key/value pairs
     with open(path, "rb") as f:
         for k, v in ijson.kvitems(f, ""):
@@ -266,17 +233,17 @@ def load_and_group(path: str):
 
     return grouped
 
-def debug_one(grouped, difficulty, qid):
-    if difficulty not in grouped or qid not in grouped[difficulty]:
-        print(f"Not found: {difficulty=} {qid=}")
-        return
-    bucket = grouped[difficulty][qid]
-    print(f"\n=== DEBUG {difficulty} qid={qid} ===")
-    print("errors:", bucket["errors"])
-    for metric, _ in METRICS:
-        vals = bucket["metrics"].get(metric, [])
-        print(f"{metric}: n={len(vals)} sample={vals[:5]}")
-    print("========================\n")
+# def debug_one(grouped, difficulty, qid):
+#     if difficulty not in grouped or qid not in grouped[difficulty]:
+#         print(f"Not found: {difficulty=} {qid=}")
+#         return
+#     bucket = grouped[difficulty][qid]
+#     print(f"\n=== DEBUG {difficulty} qid={qid} ===")
+#     print("errors:", bucket["errors"])
+#     for metric, _ in METRICS:
+#         vals = bucket["metrics"].get(metric, [])
+#         print(f"{metric}: n={len(vals)} sample={vals[:5]}")
+#     print("========================\n")
 
 def plotting(json_path: str):
     out_path = json_path.rsplit(".", 1)[0] + "_grouped.json"
@@ -291,16 +258,6 @@ def plotting(json_path: str):
         with open(out_path, "r", encoding="utf-8") as f:
             grouped = json.load(f)
 
-    # print("GROUPED: ", grouped)
-    # print("\n=== DEBUG: grouped structure ===")
-    # for diff in grouped:
-    #     qids = sorted(grouped[diff].keys())
-    #     print(f"difficulty={diff}  #query_ids={len(qids)}  sample_qids={qids[:10]}")
-    # print("================================\n")
-
-    # # Example debug output for one difficulty/query_id
-    # debug_one(grouped, "simple", 778)
-
     ylims = compute_global_ylims(grouped)
 
     # Plot in a consistent order; include any unknown difficulties at the end
@@ -312,7 +269,7 @@ def plotting(json_path: str):
     for diff in ordered:
         plot_difficulty(grouped, diff, ylims, config.PLOTS_FOLDER)
 
-    # save grouped data as JSON for further analysis if needed
+    # cache grouped data as JSON 
     if not os.path.exists(out_path) or config.RECOMPUTE_PLOTTING_DATA:
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(grouped, f, indent=2)
@@ -373,7 +330,6 @@ def plotting(json_path: str):
         with open(time_report_path, "w", encoding="utf-8") as f:
             json.dump(time_report, f, indent=2)
         print(f"Saved time report to: {time_report_path}")  
-
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
