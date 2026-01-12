@@ -155,10 +155,24 @@ def jaccard_index_new(df1, df2):
     """
 
     def to_str(v):
+        # handle null/missing values uniformly
+        # 1) Python None
         if v is None:
-            return "NULL"
-        return str(v)
+            return "<NULL>"
+        # 2) pandas NaN
+        try:
+            if pd.isna(v):
+                return "<NULL>"
+        except Exception:
+            pass
 
+        # 3) strings that mean null
+        if isinstance(v, str):
+            s = v.strip().lower()
+            if s in {"none", "null", "nan", ""}:
+                return "<NULL>"
+            return v.strip()
+        
     def rowdict_to_tuple(d: dict):
         # sort keys so ordering doesn't matter
         return tuple((k, to_str(d[k])) for k in sorted(d.keys()))
