@@ -39,9 +39,41 @@ def load_tables(spark_session, db_name):
             #   problem: pyspark.errors.exceptions.captured.AnalysisException: [DATATYPE_MISMATCH.UNEXPECTED_INPUT_TYPE] Cannot resolve "sum((gender = F))" due to data type mismatch: The first parameter requires the "NUMERIC" or "ANSI INTERVAL" type, however "(gender = F)" has the type "BOOLEAN"
         return '"' + name.replace('"', '""') + '"'
     
+    # query_id 1272 / 523:
+        # problem: java.sql.SQLException: Error parsing date
+        # Unparseable date: "1993-02-10" does not match (\p{Nd}++)\Q-\E(\p{Nd}++)\Q-\E(\p{Nd}++)\Q \E(\p{Nd}++)\Q:\E(\p{Nd}++)\Q:\E(\p{Nd}++)\Q.\E(\p{Nd}++) 
+    def is_date_like(sqlite_decl_type: str) -> bool:
+        if not sqlite_decl_type:
+            return False
+        t = sqlite_decl_type.strip().upper()
+        # Be conservative + schema-agnostic: only act on explicit date-ish declarations
+        return ("DATE" in t) or ("DATETIME" in t) or ("TIMESTAMP" in t)
+
+
     # load tables into Spark
     for table_name in tables:
-        dbtable = quote_sqlite_ident(table_name)
+        # get table schema to identify date-like columns
+        cursor.execute(f"PRAGMA table_info({quote_sqlite_ident(table_name)});")
+
+        cols = cursor.fetchall()
+        if not cols:
+            continue
+
+        select_exprs = []
+        for _, col_name, col_type, *_ in cols:
+            qcol = quote_sqlite_ident(col_name)
+            if is_date_like(col_type):
+                # Prevent SQLite JDBC driver from calling getDate()/getTimestamp()
+                select_exprs.append(f"CAST({qcol} AS TEXT) AS {qcol}")
+            else:
+                select_exprs.append(f"{qcol}")
+
+        qtable = quote_sqlite_ident(table_name)
+        select_sql = f"SELECT {', '.join(select_exprs)} FROM {qtable}"
+        # Spark JDBC expects dbtable either as a table name or a parenthesized subquery + alias
+        dbtable = f"({select_sql}) AS {qtable}"
+            
+        # dbtable = quote_sqlite_ident(table_name)
 
         df = spark_session.read \
             .format("jdbc") \
