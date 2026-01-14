@@ -29,12 +29,12 @@ from evaluation import (
     jaccard_index,
     evaluate_spark_sql,
 )
+from explainer import execute_query, has_broadcast_joins
 import os
 os.environ["LANGCHAIN_TRACING_V2"] = "false"
 os.environ["LANGCHAIN_DEBUG"] = "true"
 
 import sys
-import logging
 from plotting import plotting
 
 class TeeStdout:
@@ -188,6 +188,8 @@ if __name__ == "__main__":
     parser.add_argument("--only-aggregate", action="store_true", help="If set, only aggregate results without running new benchmarks.")
     parser.add_argument("--run-pipeline", action="store_true", help="If set, run the automated pipeline on predefined query IDs.")
     parser.add_argument("--plotting-json", type=str, default=None, help="If set, generate plots from the specified aggregated results JSON file.")
+    parser.add_argument("--explainer-json", type=str, default=None, help="If set, execute the explainer on the specified JSON result file.")
+    parser.add_argument("--get-broadcast-joins", action="store_true", help="If set, get queries with broadcast joins from the specified explainer JSON file.")
     args = parser.parse_args()
     
     if args.id is not None:
@@ -200,3 +202,30 @@ if __name__ == "__main__":
         benchmark_queries(provider=args.provider, iterations=config.NUM_ITERATIONS)
     if args.plotting_json is not None:
         plotting(args.plotting_json)
+    if args.explainer_json is not None:
+        # if given path is a directory, execute explainer for all result files in the directory
+        # result file looks like "RAW_RESULTS/benchmark_results_20251231_google_06264356/895/20251231_130459_ID_895_ITER_8_8f37b651.json"
+        if os.path.isdir(args.explainer_json):
+            if not args.get_broadcast_joins:
+                for root, dirs, files in os.walk(args.explainer_json):
+                    for file in files:
+                        # there might be other json files (e.g., aggregated results), only select those with _ID_ and _ITER_ in the filename
+                        if file.endswith(".json") and "_ID_" in file and "_ITER_" in file:
+                            json_file_path = os.path.join(root, file)
+                            execute_query(json_file_path)
+
+            else:
+                json_files_with_broadcast = []
+                for root, dirs, files in os.walk(args.explainer_json):
+                    for file in files:
+                        # there might be other json files (e.g., aggregated results), only select those with _ID_ and _ITER_ in the filename
+                        if file.endswith(".json") and "with_explain" in file:
+                            json_file_path = os.path.join(root, file)
+                            json_file = has_broadcast_joins(json_file_path)
+                            if json_file is not None:
+                                json_files_with_broadcast.append(json_file)
+                print("Queries with broadcast joins:")
+                for query in json_files_with_broadcast:
+                    print(query)
+        else:
+            execute_query(args.explainer_json)

@@ -14,11 +14,15 @@ BASE_FOLDER_SINGLE_RUNS = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe D
 
 PLOTS_FOLDER = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/PLOTS"
 
+BASE_FOLDER_EXPLAIN = "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/EXPLAINED_RESULTS"
+
 FORCE_REAGG = False
 MERGE_ALL_RESULTS = True
 
 RECOMPUTE_PLOTTING_DATA = False
 RECOMPUTE_PLOTS = False
+
+RECOMPUTE_EXPLAIN_DATA = False
 
 from enum import Enum
 
