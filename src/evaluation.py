@@ -1,7 +1,6 @@
 import ast
 import json
 import re
-import traceback
 from sqlalchemy import null
 import sqlglot
 import pandas as pd

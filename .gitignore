@@ -8,3 +8,17 @@ sample/
 *__pycache__/
 
 sparkai-env/
+benchmark_results_*/*
+RAW_RESULTS/*
+PLOTS/*
+dev_20240627/*
+spider_data/*
+
+dev.zip
+.gitignore
+SINGLE_RUNS/*
+TEST/*
+PROBLEMS/*
+SINGLE_RUNS_J/*
+EXPLAINED_RESULTS/*
+EXPLAINED_RESULTS_J/*

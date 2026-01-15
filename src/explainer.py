@@ -1,6 +1,5 @@
 from unittest import result
 import dotenv
-from llm import get_llm
 from spark_nl import get_spark_session, get_spark_sql, get_spark_sql, run_sparksql_query
 from benchmark_ds import load_tables, load_query_info
 from evaluation import translate_sqlite_to_spark, jaccard_index, evaluate_spark_sql
