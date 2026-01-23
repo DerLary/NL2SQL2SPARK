@@ -1,0 +1,79 @@
+
+Execution Plan for: Model Query ID 593...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias('COUNT(1))]
++- 'SubqueryAlias SubQuery
+   +- 'UnresolvedHaving ('COUNT(distinct 'T2.Name) = 2)
+      +- 'Aggregate ['T1.Id], ['T1.Id]
+         +- 'Filter (('T1.Location = New York) AND 'T2.Name IN (Supporter,Teachers))
+            +- 'Join Inner, ('T1.Id = 'T2.UserId)
+               :- 'SubqueryAlias T1
+               :  +- 'UnresolvedRelation [users], [], false
+               +- 'SubqueryAlias T2
+                  +- 'UnresolvedRelation [badges], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [count(1) AS count(1)#37175L]
++- Project
+   +- Filter (count(distinct Name#37087)#37174L = 2)
+      +- Aggregate [Id#37136], [count(distinct Name#37087) AS count(distinct Name#37087)#37174L]
+         +- Project [Id#37136, Name#37087]
+            +- Join Inner, (Id#37136 = UserId#37086)
+               :- Project [Id#37136]
+               :  +- Filter ((isnotnull(Location#37142) AND (Location#37142 = New York)) AND isnotnull(Id#37136))
+               :     +- Relation [Id#37136,Reputation#37137,CreationDate#37138,DisplayName#37139,LastAccessDate#37140,WebsiteUrl#37141,Location#37142,AboutMe#37143,Views#37144,UpVotes#37145,DownVotes#37146,AccountId#37147,Age#37148,ProfileImageUrl#37149] JDBCRelation((SELECT "Id", "Reputation", CAST("CreationDate" AS TEXT) AS "CreationDate", "DisplayName", CAST("LastAccessDate" AS TEXT) AS "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users") AS "users") [numPartitions=1]
+               +- Project [UserId#37086, Name#37087]
+                  +- Filter (Name#37087 IN (Supporter,Teachers) AND isnotnull(UserId#37086))
+                     +- Relation [Id#37085,UserId#37086,Name#37087,Date#37088] JDBCRelation((SELECT "Id", "UserId", "Name", CAST("Date" AS TEXT) AS "Date" FROM "badges") AS "badges") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[count(1)], output=[count(1)#37175L])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=61749]
+      +- HashAggregate(keys=[], functions=[partial_count(1)], output=[count#37177L])
+        +- Project
+            +- Filter (count(distinct Name#37087)#37174L = 2)
+              +- HashAggregate(keys=[Id#37136], functions=[count(distinct Name#37087)], output=[count(distinct Name#37087)#37174L])
+                  +- HashAggregate(keys=[Id#37136], functions=[partial_count(distinct Name#37087)], output=[Id#37136, count#37180L])
+                    +- HashAggregate(keys=[Id#37136, Name#37087], functions=[], output=[Id#37136, Name#37087])
+                        +- HashAggregate(keys=[Id#37136, Name#37087], functions=[], output=[Id#37136, Name#37087])
+                          +- Project [Id#37136, Name#37087]
+                              +- SortMergeJoin [Id#37136], [UserId#37086], Inner
+                                :- Sort [Id#37136 ASC NULLS FIRST], false, 0
+                                :  +- Exchange hashpartitioning(Id#37136, 200), ENSURE_REQUIREMENTS, [plan_id=61735]
+                                :     +- Scan JDBCRelation((SELECT "Id", "Reputation", CAST("CreationDate" AS TEXT) AS "CreationDate", "DisplayName", CAST("LastAccessDate" AS TEXT) AS "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users") AS "users") [numPartitions=1] [Id#37136] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>
+                                +- Sort [UserId#37086 ASC NULLS FIRST], false, 0
+                                    +- Exchange hashpartitioning(UserId#37086, 200), ENSURE_REQUIREMENTS, [plan_id=61736]
+                                      +- Scan JDBCRelation((SELECT "Id", "UserId", "Name", CAST("Date" AS TEXT) AS "Date" FROM "badges") AS "badges") [numPartitions=1] [UserId#37086,Name#37087] PushedFilters: [*In(Name, [Supporter,Teachers]), *IsNotNull(UserId)], ReadSchema: struct<UserId:int,Name:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[count(1)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=61825]
+  +- HashAggregate(keys=[], functions=[partial_count(1)])
+  +- Project
+  +- Filter (count(distinct Name#37087)#37188L = 2)
+  +- HashAggregate(keys=[Id#37136], functions=[count(distinct Name#37087)])
+  +- HashAggregate(keys=[Id#37136], functions=[partial_count(distinct Name#37087)])
+  +- HashAggregate(keys=[Id#37136, Name#37087], functions=[])
+  +- HashAggregate(keys=[Id#37136, Name#37087], functions=[])
+  +- Project [Id#37136, Name#37087]
+  +- SortMergeJoin [Id#37136], [UserId#37086], Inner
+  :- Sort [Id#37136 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(Id#37136, 200), ENSURE_REQUIREMENTS, [plan_id=61811]
+  :     +- Scan JDBCRelation((SELECT "Id", "Reputation", CAST("CreationDate" AS TEXT) AS "CreationDate", "DisplayName", CAST("LastAccessDate" AS TEXT) AS "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users") AS "users") [numPartitions=1] [Id#37136] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>
+  +- Sort [UserId#37086 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(UserId#37086, 200), ENSURE_REQUIREMENTS, [plan_id=61812]
+  +- Scan JDBCRelation((SELECT "Id", "UserId", "Name", CAST("Date" AS TEXT) AS "Date" FROM "badges") AS "badges") [numPartitions=1] [UserId#37086,Name#37087] PushedFilters: [*In(Name, [Supporter,Teachers]), *IsNotNull(UserId)], ReadSchema: struct<UserId:int,Name:string>
+================================================================================

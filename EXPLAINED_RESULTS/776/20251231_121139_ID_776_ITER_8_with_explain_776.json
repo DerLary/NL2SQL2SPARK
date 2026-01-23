@@ -1,0 +1,122 @@
+{
+    "query_id": 776,
+    "difficulty": "simple",
+    "is_initial": true,
+    "nl_query": "Provide the hero name and race of Charles Chandler. hero name refers to superhero_name; Charles Chandler is the full name of superhero;",
+    "golden_query": "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+    "sparksql_query": "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+    "jaccard_index": 1.0,
+    "exact_match": 1,
+    "ground_truth": [
+        {
+            "superhero_name": "3-D Man",
+            "race": "-"
+        }
+    ],
+    "query_result": [
+        [
+            "3-D Man",
+            "-"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 776...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['T1.superhero_name, 'T2.race]\n+- 'Filter ('T1.full_name = Charles Chandler)\n   +- 'Join Inner, ('T1.race_id = 'T2.id)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [superhero], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [race], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [superhero_name#12994, race#12992]\n+- Join Inner, (race_id#13000 = id#12991)\n   :- Project [superhero_name#12994, race_id#13000]\n   :  +- Filter ((isnotnull(full_name#12995) AND (full_name#12995 = Charles Chandler)) AND isnotnull(race_id#13000))\n   :     +- Relation [id#12993,superhero_name#12994,full_name#12995,gender_id#12996,eye_colour_id#12997,hair_colour_id#12998,skin_colour_id#12999,race_id#13000,publisher_id#13001,alignment_id#13002,height_cm#13003,weight_kg#13004] JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1]\n   +- Filter isnotnull(id#12991)\n      +- Relation [id#12991,race#12992] JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [superhero_name#12994, race#12992]\n  +- SortMergeJoin [race_id#13000], [id#12991], Inner\n      :- Sort [race_id#13000 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(race_id#13000, 200), ENSURE_REQUIREMENTS, [plan_id=30243]\n      :     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>\n      +- Sort [id#12991 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(id#12991, 200), ENSURE_REQUIREMENTS, [plan_id=30244]\n            +- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [superhero_name#12994, race#12992]\n  +- SortMergeJoin [race_id#13000], [id#12991], Inner\n  :- Sort [race_id#13000 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(race_id#13000, 200), ENSURE_REQUIREMENTS, [plan_id=30273]\n  :     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>\n  +- Sort [id#12991 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(id#12991, 200), ENSURE_REQUIREMENTS, [plan_id=30274]\n  +- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 776...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['s.superhero_name, 'r.race]\n+- 'Filter ('s.full_name = Charles Chandler)\n   +- 'Join Inner, ('s.race_id = 'r.id)\n      :- 'SubqueryAlias s\n      :  +- 'UnresolvedRelation [superhero], [], false\n      +- 'SubqueryAlias r\n         +- 'UnresolvedRelation [race], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [superhero_name#12994, race#12992]\n+- Join Inner, (race_id#13000 = id#12991)\n   :- Project [superhero_name#12994, race_id#13000]\n   :  +- Filter ((isnotnull(full_name#12995) AND (full_name#12995 = Charles Chandler)) AND isnotnull(race_id#13000))\n   :     +- Relation [id#12993,superhero_name#12994,full_name#12995,gender_id#12996,eye_colour_id#12997,hair_colour_id#12998,skin_colour_id#12999,race_id#13000,publisher_id#13001,alignment_id#13002,height_cm#13003,weight_kg#13004] JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1]\n   +- Filter isnotnull(id#12991)\n      +- Relation [id#12991,race#12992] JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [superhero_name#12994, race#12992]\n  +- SortMergeJoin [race_id#13000], [id#12991], Inner\n      :- Sort [race_id#13000 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(race_id#13000, 200), ENSURE_REQUIREMENTS, [plan_id=30303]\n      :     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>\n      +- Sort [id#12991 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(id#12991, 200), ENSURE_REQUIREMENTS, [plan_id=30304]\n            +- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [superhero_name#12994, race#12992]\n  +- SortMergeJoin [race_id#13000], [id#12991], Inner\n  :- Sort [race_id#13000 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(race_id#13000, 200), ENSURE_REQUIREMENTS, [plan_id=30333]\n  :     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>\n  +- Sort [id#12991 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(id#12991, 200), ENSURE_REQUIREMENTS, [plan_id=30334]\n  +- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/776/20251231_121139_ID_776_ITER_8_053ed395.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 2
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>",
+                    "filters": [
+                        "*IsNotNull(full_name)",
+                        "*EqualTo(full_name",
+                        "Charles Chandler)",
+                        "*IsNotNull(race_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>",
+                    "filters": [
+                        "*IsNotNull(id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>",
+                    "filters": [
+                        "*IsNotNull(full_name)",
+                        "*EqualTo(full_name",
+                        "Charles Chandler)",
+                        "*IsNotNull(race_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>",
+                    "filters": [
+                        "*IsNotNull(id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 2
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>",
+                    "filters": [
+                        "*IsNotNull(full_name)",
+                        "*EqualTo(full_name",
+                        "Charles Chandler)",
+                        "*IsNotNull(race_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>",
+                    "filters": [
+                        "*IsNotNull(id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"id\", \"superhero_name\", \"full_name\", \"gender_id\", \"eye_colour_id\", \"hair_colour_id\", \"skin_colour_id\", \"race_id\", \"publisher_id\", \"alignment_id\", \"height_cm\", \"weight_kg\" FROM \"superhero\") AS \"superhero\") [numPartitions=1] [superhero_name#12994,race_id#13000] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>",
+                    "filters": [
+                        "*IsNotNull(full_name)",
+                        "*EqualTo(full_name",
+                        "Charles Chandler)",
+                        "*IsNotNull(race_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"id\", \"race\" FROM \"race\") AS \"race\") [numPartitions=1] [id#12991,race#12992] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>",
+                    "filters": [
+                        "*IsNotNull(id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": true
+        }
+    }
+}

@@ -1,0 +1,267 @@
+{
+    "google_892": {
+        "llm": "google",
+        "query_id": 892,
+        "nl_query": "State the driver with the most points scored. Find his full name with that points. the most points scored refers to max(points); Full name of the driver refers to drivers.forename and drivers.surname;",
+        "golden_query": "SELECT T3.forename, T3.surname, T2.points FROM races AS T1 INNER JOIN driverStandings AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId ORDER BY T2.points DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+            "SELECT T1.forename, T1.surname, T2.points FROM drivers AS T1 JOIN driverstandings AS T2 ON T1.driverId = T2.driverId ORDER BY T2.points DESC LIMIT 1",
+            "SELECT `d`.`forename`, `d`.`surname`, SUM(`ds`.`points`) AS `total_points` FROM `drivers` AS `d` JOIN `driverstandings` AS `ds` ON `d`.`driverId` = `ds`.`driverId` GROUP BY `d`.`forename`, `d`.`surname` ORDER BY `total_points` DESC LIMIT 1;",
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+            "SELECT T1.forename, T1.surname, T2.points FROM drivers AS T1 JOIN driverstandings AS T2 ON T1.driverId = T2.driverId ORDER BY T2.points DESC LIMIT 1",
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+            "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Lewis",
+                    "Hamilton",
+                    "24509.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ],
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ],
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            11.148687362670898,
+            18.5227370262146,
+            10.139709711074829,
+            14.314213991165161,
+            18.7102530002594,
+            11.199675559997559,
+            11.18578839302063,
+            19.95075798034668,
+            16.01202702522278,
+            18.868233919143677
+        ],
+        "spark_time": [
+            0.0585474967956543,
+            0.07307934761047363,
+            0.057813167572021484,
+            0.31468677520751953,
+            0.06521129608154297,
+            0.0693669319152832,
+            0.22007203102111816,
+            0.05867433547973633,
+            0.0608668327331543,
+            0.07181453704833984
+        ],
+        "translation_time": [
+            11.090139865875244,
+            18.449657678604126,
+            10.081896543502808,
+            13.999527215957642,
+            18.645041704177856,
+            11.130308628082275,
+            10.965716361999512,
+            19.892083644866943,
+            15.951160192489624,
+            18.796419382095337
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 15.005208396911621,
+        "spark_time_avg": 0.10501327514648437,
+        "translation_time_avg": 14.900195121765137,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.9,
+        "exact_match_avg": 0.0
+    }
+}

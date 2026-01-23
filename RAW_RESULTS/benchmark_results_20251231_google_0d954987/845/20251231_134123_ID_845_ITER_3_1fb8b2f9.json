@@ -1,0 +1,2868 @@
+{
+    "llm": "google",
+    "sparksql_query": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)",
+    "query_id": 845,
+    "iteration": 3,
+    "difficulty": "moderate",
+    "execution_status": "VALID",
+    "query_result": [
+        [
+            "Resurrection"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Fire Resistance"
+        ],
+        [
+            "Self-Sustenance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Energy Absorption"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Magic"
+        ],
+        [
+            "Telekinesis"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Weapon-based Powers"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Weapons Master"
+        ],
+        [
+            "Energy Absorption"
+        ],
+        [
+            "Resurrection"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Energy Manipulation"
+        ],
+        [
+            "Levitation"
+        ],
+        [
+            "Molecular Manipulation"
+        ],
+        [
+            "Mind Control"
+        ],
+        [
+            "Psionic Powers"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Astral Projection"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Dimensional Travel"
+        ],
+        [
+            "Energy Beams"
+        ],
+        [
+            "Telekinesis"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Marksmanship"
+        ],
+        [
+            "Flight"
+        ],
+        [
+            "Dimensional Awareness"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Grim Reaping"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Enhanced Sight"
+        ],
+        [
+            "Fire Resistance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Magic"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Weapons Master"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Resurrection"
+        ],
+        [
+            "Energy Resistance"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Regeneration"
+        ],
+        [
+            "Adaptation"
+        ],
+        [
+            "Natural Armor"
+        ],
+        [
+            "Power Absorption"
+        ],
+        [
+            "Self-Sustenance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Energy Absorption"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Reality Warping"
+        ],
+        [
+            "Vision - X-Ray"
+        ],
+        [
+            "Magnetism"
+        ],
+        [
+            "Telepathy Resistance"
+        ],
+        [
+            "Illusions"
+        ],
+        [
+            "Mind Blast"
+        ],
+        [
+            "Intangibility"
+        ],
+        [
+            "Power Absorption"
+        ],
+        [
+            "Mind Control"
+        ],
+        [
+            "Psionic Powers"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Astral Projection"
+        ],
+        [
+            "Camouflage"
+        ],
+        [
+            "Telekinesis"
+        ],
+        [
+            "Astral Travel"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Flight"
+        ],
+        [
+            "Dimensional Awareness"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Self-Sustenance"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Symbiote Costume"
+        ],
+        [
+            "Web Creation"
+        ],
+        [
+            "Wallcrawling"
+        ],
+        [
+            "Mind Control Resistance"
+        ],
+        [
+            "Telepathy Resistance"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Regeneration"
+        ],
+        [
+            "Natural Armor"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Weapon-based Powers"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Weapons Master"
+        ],
+        [
+            "Marksmanship"
+        ],
+        [
+            "Danger Sense"
+        ],
+        [
+            "Stealth"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Dimensional Awareness"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Enhanced Smell"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Enhanced Hearing"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Stealth"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Vision - Night"
+        ],
+        [
+            "Vision - Telescopic"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Enhanced Hearing"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Natural Armor"
+        ],
+        [
+            "Self-Sustenance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Vitakinesis"
+        ],
+        [
+            "Resurrection"
+        ],
+        [
+            "Grim Reaping"
+        ],
+        [
+            "Portal Creation"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Power Cosmic"
+        ],
+        [
+            "Energy Manipulation"
+        ],
+        [
+            "Levitation"
+        ],
+        [
+            "Regeneration"
+        ],
+        [
+            "Molecular Manipulation"
+        ],
+        [
+            "Psionic Powers"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Dimensional Travel"
+        ],
+        [
+            "Energy Beams"
+        ],
+        [
+            "Telekinesis"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Marksmanship"
+        ],
+        [
+            "Flight"
+        ],
+        [
+            "Energy Absorption"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Dimensional Awareness"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Vision - Thermal"
+        ],
+        [
+            "Wallcrawling"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Natural Armor"
+        ],
+        [
+            "Substance Secretion"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Stealth"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Substance Secretion"
+        ],
+        [
+            "Shapeshifting"
+        ],
+        [
+            "Possession"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Flight"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Symbiote Costume"
+        ],
+        [
+            "Web Creation"
+        ],
+        [
+            "Wallcrawling"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Elasticity"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Camouflage"
+        ],
+        [
+            "Shapeshifting"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Danger Sense"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Magic"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Resurrection"
+        ],
+        [
+            "Matter Absorption"
+        ],
+        [
+            "Plant Control"
+        ],
+        [
+            "Regeneration"
+        ],
+        [
+            "Fire Resistance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Duplication"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Sub-Mariner"
+        ],
+        [
+            "Enhanced Smell"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Enhanced Sight"
+        ],
+        [
+            "Natural Armor"
+        ],
+        [
+            "Enhanced Hearing"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Energy Beams"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Danger Sense"
+        ],
+        [
+            "Energy Absorption"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Omnilingualism"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Regeneration"
+        ],
+        [
+            "Self-Sustenance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Duplication"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Vision - Thermal"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Shapeshifting"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Animal Attributes"
+        ],
+        [
+            "Vision - Thermal"
+        ],
+        [
+            "Vision - X-Ray"
+        ],
+        [
+            "Vision - Heat"
+        ],
+        [
+            "Vision - Night"
+        ],
+        [
+            "Super Breath"
+        ],
+        [
+            "Vision - Microscopic"
+        ],
+        [
+            "Invisibility"
+        ],
+        [
+            "Magnetism"
+        ],
+        [
+            "Vision - Telescopic"
+        ],
+        [
+            "Water Control"
+        ],
+        [
+            "Enhanced Smell"
+        ],
+        [
+            "Time Travel"
+        ],
+        [
+            "Enhanced Hearing"
+        ],
+        [
+            "Power Absorption"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Energy Constructs"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Enhanced Memory"
+        ],
+        [
+            "Fire Control"
+        ],
+        [
+            "Phasing"
+        ],
+        [
+            "Camouflage"
+        ],
+        [
+            "Shapeshifting"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Weapon-based Powers"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Duplication"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Cryokinesis"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Power Augmentation"
+        ],
+        [
+            "Marksmanship"
+        ],
+        [
+            "Underwater breathing"
+        ],
+        [
+            "Flight"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Lantern Power Ring"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Symbiote Costume"
+        ],
+        [
+            "Wallcrawling"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Camouflage"
+        ],
+        [
+            "Animal Oriented Powers"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Danger Sense"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Weather Control"
+        ],
+        [
+            "Resurrection"
+        ],
+        [
+            "Heat Generation"
+        ],
+        [
+            "Enhanced Sight"
+        ],
+        [
+            "Enhanced Hearing"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Fire Control"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Shapeshifting"
+        ],
+        [
+            "Magic"
+        ],
+        [
+            "Darkforce Manipulation"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Size Changing"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Weapons Master"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Illusions"
+        ],
+        [
+            "Levitation"
+        ],
+        [
+            "Heat Generation"
+        ],
+        [
+            "Technopath/Cyberpath"
+        ],
+        [
+            "Psionic Powers"
+        ],
+        [
+            "Empathy"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Telekinesis"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Intelligence"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Weapons Master"
+        ],
+        [
+            "Flight"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "The Force"
+        ],
+        [
+            "Mind Control Resistance"
+        ],
+        [
+            "Mind Control"
+        ],
+        [
+            "Telekinesis"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Immortality"
+        ],
+        [
+            "Cryokinesis"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Super Breath"
+        ],
+        [
+            "Radiation Absorption"
+        ],
+        [
+            "Mind Control Resistance"
+        ],
+        [
+            "Toxin and Disease Resistance"
+        ],
+        [
+            "Radiation Immunity"
+        ],
+        [
+            "Heat Resistance"
+        ],
+        [
+            "Self-Sustenance"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Jump"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Longevity"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Cold Resistance"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Magnetism"
+        ],
+        [
+            "Invulnerability"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Fire Control"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Weapon-based Powers"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Energy Blasts"
+        ],
+        [
+            "Cryokinesis"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Intangibility"
+        ],
+        [
+            "Force Fields"
+        ],
+        [
+            "Teleportation"
+        ],
+        [
+            "Darkforce Manipulation"
+        ],
+        [
+            "Dimensional Awareness"
+        ],
+        [
+            "Sub-Mariner"
+        ],
+        [
+            "Enhanced Smell"
+        ],
+        [
+            "Natural Weapons"
+        ],
+        [
+            "Natural Armor"
+        ],
+        [
+            "Enhanced Hearing"
+        ],
+        [
+            "Reflexes"
+        ],
+        [
+            "Enhanced Senses"
+        ],
+        [
+            "Super Speed"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Accelerated Healing"
+        ],
+        [
+            "Agility"
+        ],
+        [
+            "Stamina"
+        ],
+        [
+            "Telepathy"
+        ],
+        [
+            "Super Strength"
+        ],
+        [
+            "Underwater breathing"
+        ],
+        [
+            "Durability"
+        ],
+        [
+            "Lantern Power Ring"
+        ],
+        [
+            "Accelerated Healing"
+        ]
+    ],
+    "spark_error": null,
+    "total_time": 15.292887926101685,
+    "spark_time": 0.061060428619384766,
+    "translation_time": 15.2318274974823,
+    "llm_requests": 5,
+    "chain_of_thought": [
+        "Action: list_tables_sql_db\nAction Input: {}",
+        "Observation: content='account, alignment, attribute, badges, card, circuits, client, colour, comments, constructorresults, constructors, constructorstandings, disp, district, drivers, driverstandings, gender, hero_attribute, hero_power, laptimes, loan, order, pitstops, posthistory, postlinks, posts, publisher, qualifying, race, races, results, seasons, sqlite_sequence, status, superhero, superpower, tags, trans, users, votes' name='list_tables_sql_db' tool_call_id='b57ba88f-c373-4ba3-a4d3-33c7223e3ec8'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'superhero, hero_power, superpower'}",
+        "Observation: content='CREATE TABLE superhero (id int, superhero_name string, full_name string, gender_id int, eye_colour_id int, hair_colour_id int, skin_colour_id int, race_id int, publisher_id int, alignment_id int, height_cm int, weight_kg int);\\n\\nCREATE TABLE hero_power (hero_id int, power_id int);\\n\\nCREATE TABLE superpower (id int, power_name string);' name='schema_sql_db' tool_call_id='9b686529-3739-4999-9b38-795ecfbf0ff4'",
+        "Action: query_checker_sql_db\nAction Input: {'query': 'SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)'}",
+        "Observation: content='The provided Spark SQL query appears to be correct and does not contain any of the common mistakes listed.\\n\\n*   **`NOT IN` with `NULL`**: Not used.\\n*   **`UNION` when `UNION ALL` should have been used**: Not used.\\n*   **`BETWEEN` for exclusive ranges**: Not used.\\n*   **Data type mismatch in predicates**: The comparison `T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)` involves numeric types, which is appropriate.\\n*   **Properly quoting identifiers**: Identifiers like `power_name`, `id`, `hero_id`, `power_id`, `height_cm` are simple and do not require quoting with backticks in Spark SQL.\\n*   **Use `` ` `` for the in-query strings**: There are no string literals in the query.\\n*   **Using the correct number of arguments for functions**: `AVG(height_cm)` uses the correct number of arguments.\\n*   **Casting to the correct data type**: No explicit casting is used, and implicit casting for numeric operations is handled correctly.\\n*   **Using the proper columns for joins**: The joins `T1.id = T2.hero_id` and `T2.power_id = T3.id` correctly link the `superhero`, `hero_power`, and `superpower` tables based on their respective primary and foreign keys.\\n\\nThe query is well-formed and logically sound.\\n\\n```sql\\nSELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)\\n```' name='query_checker_sql_db' tool_call_id='71d184ed-211d-47e4-80f2-4420e0e160ec'",
+        "Action: query_sql_db\nAction Input: {'query': 'SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)'}"
+    ],
+    "input_tokens": 3775,
+    "output_tokens": 2233,
+    "cloudflare_neurons": null,
+    "prompt": "System: You are an agent designed to interact with Spark SQL.\nGiven an input question, create a syntactically correct Spark SQL query to run, then look at the results of the query and return the answer.\nDon't limit the result size.\nYou can order the results by a relevant column to return the most interesting examples in the database.\nNever query for all the columns from a specific table, only ask for the relevant columns given the question.\nYou have access to tools for interacting with the database.\nOnly use the below tools. Only use the information returned by the below tools to construct your final answer.\nYou MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.\n\nDO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.\n\nIf the question does not seem related to the database, just return \"I don't know\" as the answer.\n\nHuman: List the power of superheroes with height greater than 80% of the average height of all superheroes. power of superheroes refers to power_name; height greater than 80% of the average height of all superheroes = height_cm > MULTIPLY(AVG(height_cm), 0.8);\n\n\nAI: [{'name': 'list_tables_sql_db', 'args': {}, 'id': 'b57ba88f-c373-4ba3-a4d3-33c7223e3ec8', 'type': 'tool_call'}]\nTool: account, alignment, attribute, badges, card, circuits, client, colour, comments, constructorresults, constructors, constructorstandings, disp, district, drivers, driverstandings, gender, hero_attribute, hero_power, laptimes, loan, order, pitstops, posthistory, postlinks, posts, publisher, qualifying, race, races, results, seasons, sqlite_sequence, status, superhero, superpower, tags, trans, users, votes\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'superhero, hero_power, superpower'}, 'id': '9b686529-3739-4999-9b38-795ecfbf0ff4', 'type': 'tool_call'}]\nTool: CREATE TABLE superhero (id int, superhero_name string, full_name string, gender_id int, eye_colour_id int, hair_colour_id int, skin_colour_id int, race_id int, publisher_id int, alignment_id int, height_cm int, weight_kg int);\n\nCREATE TABLE hero_power (hero_id int, power_id int);\n\nCREATE TABLE superpower (id int, power_name string);\nAI: [{'name': 'query_checker_sql_db', 'args': {'query': 'SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)'}, 'id': '71d184ed-211d-47e4-80f2-4420e0e160ec', 'type': 'tool_call'}]\nTool: The provided Spark SQL query appears to be correct and does not contain any of the common mistakes listed.\n\n*   **`NOT IN` with `NULL`**: Not used.\n*   **`UNION` when `UNION ALL` should have been used**: Not used.\n*   **`BETWEEN` for exclusive ranges**: Not used.\n*   **Data type mismatch in predicates**: The comparison `T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)` involves numeric types, which is appropriate.\n*   **Properly quoting identifiers**: Identifiers like `power_name`, `id`, `hero_id`, `power_id`, `height_cm` are simple and do not require quoting with backticks in Spark SQL.\n*   **Use `` ` `` for the in-query strings**: There are no string literals in the query.\n*   **Using the correct number of arguments for functions**: `AVG(height_cm)` uses the correct number of arguments.\n*   **Casting to the correct data type**: No explicit casting is used, and implicit casting for numeric operations is handled correctly.\n*   **Using the proper columns for joins**: The joins `T1.id = T2.hero_id` and `T2.power_id = T3.id` correctly link the `superhero`, `hero_power`, and `superpower` tables based on their respective primary and foreign keys.\n\nThe query is well-formed and logically sound.\n\n```sql\nSELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)\n```",
+    "final_answer": "",
+    "golden_query": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm * 100 > (SELECT AVG(height_cm) FROM superhero) * 80",
+    "nl_query": "List the power of superheroes with height greater than 80% of the average height of all superheroes. power of superheroes refers to power_name; height greater than 80% of the average height of all superheroes = height_cm > MULTIPLY(AVG(height_cm), 0.8);",
+    "ground_truth": [
+        {
+            "power_name": "Resurrection"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Fire Resistance"
+        },
+        {
+            "power_name": "Self-Sustenance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Energy Absorption"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Magic"
+        },
+        {
+            "power_name": "Telekinesis"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Weapon-based Powers"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Weapons Master"
+        },
+        {
+            "power_name": "Energy Absorption"
+        },
+        {
+            "power_name": "Resurrection"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Energy Manipulation"
+        },
+        {
+            "power_name": "Levitation"
+        },
+        {
+            "power_name": "Molecular Manipulation"
+        },
+        {
+            "power_name": "Mind Control"
+        },
+        {
+            "power_name": "Psionic Powers"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Astral Projection"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Dimensional Travel"
+        },
+        {
+            "power_name": "Energy Beams"
+        },
+        {
+            "power_name": "Telekinesis"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Marksmanship"
+        },
+        {
+            "power_name": "Flight"
+        },
+        {
+            "power_name": "Dimensional Awareness"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Grim Reaping"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Enhanced Sight"
+        },
+        {
+            "power_name": "Fire Resistance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Magic"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Weapons Master"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Resurrection"
+        },
+        {
+            "power_name": "Energy Resistance"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Regeneration"
+        },
+        {
+            "power_name": "Adaptation"
+        },
+        {
+            "power_name": "Natural Armor"
+        },
+        {
+            "power_name": "Power Absorption"
+        },
+        {
+            "power_name": "Self-Sustenance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Energy Absorption"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Reality Warping"
+        },
+        {
+            "power_name": "Vision - X-Ray"
+        },
+        {
+            "power_name": "Magnetism"
+        },
+        {
+            "power_name": "Telepathy Resistance"
+        },
+        {
+            "power_name": "Illusions"
+        },
+        {
+            "power_name": "Mind Blast"
+        },
+        {
+            "power_name": "Intangibility"
+        },
+        {
+            "power_name": "Power Absorption"
+        },
+        {
+            "power_name": "Mind Control"
+        },
+        {
+            "power_name": "Psionic Powers"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Astral Projection"
+        },
+        {
+            "power_name": "Camouflage"
+        },
+        {
+            "power_name": "Telekinesis"
+        },
+        {
+            "power_name": "Astral Travel"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Flight"
+        },
+        {
+            "power_name": "Dimensional Awareness"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Self-Sustenance"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Symbiote Costume"
+        },
+        {
+            "power_name": "Web Creation"
+        },
+        {
+            "power_name": "Wallcrawling"
+        },
+        {
+            "power_name": "Mind Control Resistance"
+        },
+        {
+            "power_name": "Telepathy Resistance"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Regeneration"
+        },
+        {
+            "power_name": "Natural Armor"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Weapon-based Powers"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Weapons Master"
+        },
+        {
+            "power_name": "Marksmanship"
+        },
+        {
+            "power_name": "Danger Sense"
+        },
+        {
+            "power_name": "Stealth"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Dimensional Awareness"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Enhanced Smell"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Enhanced Hearing"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Stealth"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Vision - Night"
+        },
+        {
+            "power_name": "Vision - Telescopic"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Enhanced Hearing"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Natural Armor"
+        },
+        {
+            "power_name": "Self-Sustenance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Vitakinesis"
+        },
+        {
+            "power_name": "Resurrection"
+        },
+        {
+            "power_name": "Grim Reaping"
+        },
+        {
+            "power_name": "Portal Creation"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Power Cosmic"
+        },
+        {
+            "power_name": "Energy Manipulation"
+        },
+        {
+            "power_name": "Levitation"
+        },
+        {
+            "power_name": "Regeneration"
+        },
+        {
+            "power_name": "Molecular Manipulation"
+        },
+        {
+            "power_name": "Psionic Powers"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Dimensional Travel"
+        },
+        {
+            "power_name": "Energy Beams"
+        },
+        {
+            "power_name": "Telekinesis"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Marksmanship"
+        },
+        {
+            "power_name": "Flight"
+        },
+        {
+            "power_name": "Energy Absorption"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Dimensional Awareness"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Vision - Thermal"
+        },
+        {
+            "power_name": "Wallcrawling"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Natural Armor"
+        },
+        {
+            "power_name": "Substance Secretion"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Stealth"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Substance Secretion"
+        },
+        {
+            "power_name": "Shapeshifting"
+        },
+        {
+            "power_name": "Possession"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Flight"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Symbiote Costume"
+        },
+        {
+            "power_name": "Web Creation"
+        },
+        {
+            "power_name": "Wallcrawling"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Elasticity"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Camouflage"
+        },
+        {
+            "power_name": "Shapeshifting"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Danger Sense"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Magic"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Resurrection"
+        },
+        {
+            "power_name": "Matter Absorption"
+        },
+        {
+            "power_name": "Plant Control"
+        },
+        {
+            "power_name": "Regeneration"
+        },
+        {
+            "power_name": "Fire Resistance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Duplication"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Sub-Mariner"
+        },
+        {
+            "power_name": "Enhanced Smell"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Enhanced Sight"
+        },
+        {
+            "power_name": "Natural Armor"
+        },
+        {
+            "power_name": "Enhanced Hearing"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Energy Beams"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Danger Sense"
+        },
+        {
+            "power_name": "Energy Absorption"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Omnilingualism"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Regeneration"
+        },
+        {
+            "power_name": "Self-Sustenance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Duplication"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Vision - Thermal"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Shapeshifting"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Animal Attributes"
+        },
+        {
+            "power_name": "Vision - Thermal"
+        },
+        {
+            "power_name": "Vision - X-Ray"
+        },
+        {
+            "power_name": "Vision - Heat"
+        },
+        {
+            "power_name": "Vision - Night"
+        },
+        {
+            "power_name": "Super Breath"
+        },
+        {
+            "power_name": "Vision - Microscopic"
+        },
+        {
+            "power_name": "Invisibility"
+        },
+        {
+            "power_name": "Magnetism"
+        },
+        {
+            "power_name": "Vision - Telescopic"
+        },
+        {
+            "power_name": "Water Control"
+        },
+        {
+            "power_name": "Enhanced Smell"
+        },
+        {
+            "power_name": "Time Travel"
+        },
+        {
+            "power_name": "Enhanced Hearing"
+        },
+        {
+            "power_name": "Power Absorption"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Energy Constructs"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Enhanced Memory"
+        },
+        {
+            "power_name": "Fire Control"
+        },
+        {
+            "power_name": "Phasing"
+        },
+        {
+            "power_name": "Camouflage"
+        },
+        {
+            "power_name": "Shapeshifting"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Weapon-based Powers"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Duplication"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Cryokinesis"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Power Augmentation"
+        },
+        {
+            "power_name": "Marksmanship"
+        },
+        {
+            "power_name": "Underwater breathing"
+        },
+        {
+            "power_name": "Flight"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Lantern Power Ring"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Symbiote Costume"
+        },
+        {
+            "power_name": "Wallcrawling"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Camouflage"
+        },
+        {
+            "power_name": "Animal Oriented Powers"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Danger Sense"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Weather Control"
+        },
+        {
+            "power_name": "Resurrection"
+        },
+        {
+            "power_name": "Heat Generation"
+        },
+        {
+            "power_name": "Enhanced Sight"
+        },
+        {
+            "power_name": "Enhanced Hearing"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Fire Control"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Shapeshifting"
+        },
+        {
+            "power_name": "Magic"
+        },
+        {
+            "power_name": "Darkforce Manipulation"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Size Changing"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Weapons Master"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Illusions"
+        },
+        {
+            "power_name": "Levitation"
+        },
+        {
+            "power_name": "Heat Generation"
+        },
+        {
+            "power_name": "Technopath/Cyberpath"
+        },
+        {
+            "power_name": "Psionic Powers"
+        },
+        {
+            "power_name": "Empathy"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Telekinesis"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Intelligence"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Weapons Master"
+        },
+        {
+            "power_name": "Flight"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "The Force"
+        },
+        {
+            "power_name": "Mind Control Resistance"
+        },
+        {
+            "power_name": "Mind Control"
+        },
+        {
+            "power_name": "Telekinesis"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Immortality"
+        },
+        {
+            "power_name": "Cryokinesis"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Super Breath"
+        },
+        {
+            "power_name": "Radiation Absorption"
+        },
+        {
+            "power_name": "Mind Control Resistance"
+        },
+        {
+            "power_name": "Toxin and Disease Resistance"
+        },
+        {
+            "power_name": "Radiation Immunity"
+        },
+        {
+            "power_name": "Heat Resistance"
+        },
+        {
+            "power_name": "Self-Sustenance"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Jump"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Longevity"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Cold Resistance"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Magnetism"
+        },
+        {
+            "power_name": "Invulnerability"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Fire Control"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Weapon-based Powers"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Energy Blasts"
+        },
+        {
+            "power_name": "Cryokinesis"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Intangibility"
+        },
+        {
+            "power_name": "Force Fields"
+        },
+        {
+            "power_name": "Teleportation"
+        },
+        {
+            "power_name": "Darkforce Manipulation"
+        },
+        {
+            "power_name": "Dimensional Awareness"
+        },
+        {
+            "power_name": "Sub-Mariner"
+        },
+        {
+            "power_name": "Enhanced Smell"
+        },
+        {
+            "power_name": "Natural Weapons"
+        },
+        {
+            "power_name": "Natural Armor"
+        },
+        {
+            "power_name": "Enhanced Hearing"
+        },
+        {
+            "power_name": "Reflexes"
+        },
+        {
+            "power_name": "Enhanced Senses"
+        },
+        {
+            "power_name": "Super Speed"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "power_name": "Agility"
+        },
+        {
+            "power_name": "Stamina"
+        },
+        {
+            "power_name": "Telepathy"
+        },
+        {
+            "power_name": "Super Strength"
+        },
+        {
+            "power_name": "Underwater breathing"
+        },
+        {
+            "power_name": "Durability"
+        },
+        {
+            "power_name": "Lantern Power Ring"
+        },
+        {
+            "power_name": "Accelerated Healing"
+        }
+    ],
+    "jaccard_index": 1.0,
+    "exact_match": 0,
+    "jaccard_index_new": 1.0
+}

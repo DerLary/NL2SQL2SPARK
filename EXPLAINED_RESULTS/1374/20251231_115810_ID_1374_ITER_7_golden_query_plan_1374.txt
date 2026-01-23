@@ -1,0 +1,60 @@
+
+Execution Plan for: Golden Query ID 1374...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias('COUNT('T2.link_to_event))]
++- 'Filter ('T1.phone = 954-555-6240)
+   +- 'Join Inner, ('T1.member_id = 'T2.link_to_member)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [member], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [attendance], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [count(link_to_event#10083) AS count(link_to_event)#10115L]
++- Project [link_to_event#10083]
+   +- Join Inner, (member_id#10105 = link_to_member#10084)
+      :- Project [member_id#10105]
+      :  +- Filter ((isnotnull(phone#10111) AND (phone#10111 = 954-555-6240)) AND isnotnull(member_id#10105))
+      :     +- Relation [member_id#10105,first_name#10106,last_name#10107,email#10108,position#10109,t_shirt_size#10110,phone#10111,zip#10112,link_to_major#10113] JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1]
+      +- Filter isnotnull(link_to_member#10084)
+         +- Relation [link_to_event#10083,link_to_member#10084] JDBCRelation((SELECT "link_to_event", "link_to_member" FROM "attendance") AS "attendance") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[count(link_to_event#10083)], output=[count(link_to_event)#10115L])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=23942]
+      +- HashAggregate(keys=[], functions=[partial_count(link_to_event#10083)], output=[count#10117L])
+        +- Project [link_to_event#10083]
+            +- SortMergeJoin [member_id#10105], [link_to_member#10084], Inner
+              :- Sort [member_id#10105 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(member_id#10105, 200), ENSURE_REQUIREMENTS, [plan_id=23934]
+              :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#10105] PushedFilters: [*IsNotNull(phone), *EqualTo(phone,954-555-6240), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>
+              +- Sort [link_to_member#10084 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(link_to_member#10084, 200), ENSURE_REQUIREMENTS, [plan_id=23935]
+                    +- Scan JDBCRelation((SELECT "link_to_event", "link_to_member" FROM "attendance") AS "attendance") [numPartitions=1] [link_to_event#10083,link_to_member#10084] PushedFilters: [*IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[count(link_to_event#10083)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=23985]
+  +- HashAggregate(keys=[], functions=[partial_count(link_to_event#10083)])
+  +- Project [link_to_event#10083]
+  +- SortMergeJoin [member_id#10105], [link_to_member#10084], Inner
+  :- Sort [member_id#10105 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(member_id#10105, 200), ENSURE_REQUIREMENTS, [plan_id=23977]
+  :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#10105] PushedFilters: [*IsNotNull(phone), *EqualTo(phone,954-555-6240), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>
+  +- Sort [link_to_member#10084 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(link_to_member#10084, 200), ENSURE_REQUIREMENTS, [plan_id=23978]
+  +- Scan JDBCRelation((SELECT "link_to_event", "link_to_member" FROM "attendance") AS "attendance") [numPartitions=1] [link_to_event#10083,link_to_member#10084] PushedFilters: [*IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>
+================================================================================

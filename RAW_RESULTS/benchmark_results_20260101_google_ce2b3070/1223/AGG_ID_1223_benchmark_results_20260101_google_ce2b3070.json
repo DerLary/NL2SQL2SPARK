@@ -1,0 +1,236 @@
+{
+    "google_1223": {
+        "llm": "google",
+        "query_id": 1223,
+        "nl_query": "Are there more male patients with creatinine not within the normal range than female? True or False? creatinine (CRE) not within the normal range refers to CRE > = 1.5; male refers to Sex = 'M'; female refers to Sex = 'F'; calculation = (SUM(SEX = 'M') > SUM(SEX = 'F')) where CRE > = 1.5",
+        "golden_query": "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5",
+        "sparksql_query": [
+            "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END AS more_male_than_female FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5;",
+            "SELECT SUM(CASE WHEN P.SEX = 'M' THEN 1 ELSE 0 END) AS MaleCount, SUM(CASE WHEN P.SEX = 'F' THEN 1 ELSE 0 END) AS FemaleCount FROM patient AS P JOIN laboratory AS L ON P.ID = L.ID WHERE L.CRE >= 1.5;",
+            "SELECT SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) AS male_count, SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS female_count FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5;",
+            "SELECT SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) AS MaleCount, SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS FemaleCount FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5",
+            "SELECT SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) AS male_count, SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS female_count FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5;",
+            "SELECT SUM(CASE WHEN P.SEX = 'M' THEN 1 ELSE 0 END) AS MaleCount, SUM(CASE WHEN P.SEX = 'F' THEN 1 ELSE 0 END) AS FemaleCount FROM patient AS P JOIN laboratory AS L ON P.ID = L.ID WHERE L.CRE >= 1.5",
+            "SELECT SUM(CASE WHEN `T1`.`SEX` = 'M' THEN 1 ELSE 0 END) AS `MaleCount`, SUM(CASE WHEN `T1`.`SEX` = 'F' THEN 1 ELSE 0 END) AS `FemaleCount` FROM `patient` AS `T1` INNER JOIN `laboratory` AS `T2` ON `T1`.`ID` = `T2`.`ID` WHERE `T2`.`CRE` >= 1.5;",
+            "SELECT SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) AS male_count, SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS female_count FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5;",
+            "SELECT SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) AS MaleCount, SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) AS FemaleCount FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5",
+            "SELECT SUM(CASE WHEN `P`.`SEX` = 'M' THEN 1 ELSE 0 END) AS `MaleCount`, SUM(CASE WHEN `P`.`SEX` = 'F' THEN 1 ELSE 0 END) AS `FemaleCount` FROM `patient` AS `P` JOIN `laboratory` AS `L` ON `P`.`ID` = `L`.`ID` WHERE `L`.`CRE` >= 1.5;"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "True"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "41"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ],
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            15.417992115020752,
+            10.302599906921387,
+            18.330172777175903,
+            17.46669578552246,
+            12.956366777420044,
+            24.616142988204956,
+            19.173097610473633,
+            18.275904655456543,
+            15.152624130249023,
+            19.484768867492676
+        ],
+        "spark_time": [
+            0.0788886547088623,
+            0.11790037155151367,
+            0.09984636306762695,
+            0.11550211906433105,
+            0.2718238830566406,
+            0.12676525115966797,
+            0.14392447471618652,
+            0.06242799758911133,
+            0.13849949836730957,
+            0.12085294723510742
+        ],
+        "translation_time": [
+            15.33910346031189,
+            10.184699535369873,
+            18.230326414108276,
+            17.35119366645813,
+            12.684542894363403,
+            24.489377737045288,
+            19.029173135757446,
+            18.21347665786743,
+            15.014124631881714,
+            19.36391592025757
+        ],
+        "jaccard_index": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 17.117636561393738,
+        "spark_time_avg": 0.12764315605163573,
+        "translation_time_avg": 16.9899934053421,
+        "jaccard_index_avg": 0.1,
+        "jaccard_index_new_avg": 0.1,
+        "exact_match_avg": 0.1
+    }
+}

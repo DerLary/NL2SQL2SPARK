@@ -1,0 +1,119 @@
+{
+    "google_1169": {
+        "llm": "google",
+        "query_id": 1169,
+        "nl_query": null,
+        "golden_query": "SELECT CAST(SUM(CASE WHEN T2.UA <= 8.0 AND T1.SEX = 'M' THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN T2.UA <= 6.5 AND T1.SEX = 'F' THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID",
+        "sparksql_query": [
+            "SELECT CAST(SUM(CASE WHEN p.SEX = 'M' AND l.UA <= 8.0 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN p.SEX = 'F' AND l.UA <= 6.5 THEN 1 ELSE 0 END) FROM patient p INNER JOIN laboratory l ON p.id = l.id",
+            "SELECT CAST(SUM(CASE WHEN p.SEX = 'M' AND l.UA <= 8.0 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN p.SEX = 'F' AND l.UA <= 6.5 THEN 1 ELSE 0 END) FROM patient AS p JOIN laboratory AS l ON p.ID = l.ID",
+            "SELECT CAST(SUM(CASE WHEN T1.SEX = 'M' AND T2.UA <= 8.0 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN T1.SEX = 'F' AND T2.UA <= 6.5 THEN 1 ELSE 0 END) AS ratio FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID",
+            "SELECT CAST(SUM(CASE WHEN T2.UA <= 8.0 AND T1.SEX = 'M' THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN T2.UA <= 6.5 AND T1.SEX = 'F' THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F')).Return exactly one value: the ratio (male_count / female_count), not the two counts separately. Only Cast the sum of male patients to float. Use an inner join.",
+            "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F')).Return exactly one value: the ratio (male_count / female_count), not the two counts separately. Only Cast the sum of male patients to float",
+            "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F')).Return exactly one value: the ratio (male_count / female_count), not the two counts separately. Only Cast the sum of male patients to float. Use an inner join. Use exactly the following and not other ! aliases: Patient AS T1, Laboratory AS T2 and reference columns with those aliases. Do not use backticks. Pateint id is only 'ID'.",
+            "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F')).Return exactly one value: the ratio (male_count / female_count), not the two counts separately. Only Cast the sum of male patients to float. Use an inner join. Use exactly the following and not other ! aliases: Patient AS T1, Laboratory AS T2 and reference columns with those aliases. Do not use backticks. Pateint id is only 'ID'. Use CASE WHEN (UA and SEX), so first state the condition for UA and then for sex."
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            19.088390111923218,
+            17.11519479751587,
+            20.81485342979431,
+            16.819053411483765
+        ],
+        "spark_time": [
+            0.6296262741088867,
+            0.6419305801391602,
+            0.7254331111907959,
+            0.649925947189331
+        ],
+        "translation_time": [
+            18.45876383781433,
+            16.47326421737671,
+            20.089420318603516,
+            16.169127464294434
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            1
+        ],
+        "total_time_avg": 18.45937293767929,
+        "spark_time_avg": 0.6617289781570435,
+        "translation_time_avg": 17.797643959522247,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.25
+    }
+}

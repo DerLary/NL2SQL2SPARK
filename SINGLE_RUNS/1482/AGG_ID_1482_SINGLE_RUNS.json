@@ -1,0 +1,135 @@
+{
+    "google_1482": {
+        "llm": "google",
+        "query_id": 1482,
+        "nl_query": null,
+        "golden_query": "SELECT CAST((SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST(SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST(SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID",
+        "sparksql_query": [
+            "SELECT CAST((SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST((SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST((SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID",
+            "SELECT\n  CAST((SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS SME_Percentage_Increase,\n  CAST(SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS LAM_Percentage_Increase,\n  CAST(SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS KAM_Percentage_Increase\nFROM\n  customers AS T1\nINNER JOIN\n  yearmonth AS T2\nON\n  T1.CustomerID = T2.CustomerID;",
+            "SELECT CAST((SUM(IF(c.Segment = 'SME' AND ym.Date LIKE '2013%', ym.Consumption, 0)) - SUM(IF(c.Segment = 'SME' AND ym.Date LIKE '2012%', ym.Consumption, 0))) * 100.0 / NULLIF(SUM(IF(c.Segment = 'SME' AND ym.Date LIKE '2012%', ym.Consumption, 0)), 0) AS FLOAT) AS SME_Percentage_Increase, CAST((SUM(IF(c.Segment = 'LAM' AND ym.Date LIKE '2013%', ym.Consumption, 0)) - SUM(IF(c.Segment = 'LAM' AND ym.Date LIKE '2012%', ym.Consumption, 0))) * 100.0 / NULLIF(SUM(IF(c.Segment = 'LAM' AND ym.Date LIKE '2012%', ym.Consumption, 0)), 0) AS FLOAT) AS LAM_Percentage_Increase, CAST((SUM(IF(c.Segment = 'KAM' AND ym.Date LIKE '2013%', ym.Consumption, 0)) - SUM(IF(c.Segment = 'KAM' AND ym.Date LIKE '2012%', ym.Consumption, 0))) * 100.0 / NULLIF(SUM(IF(c.Segment = 'KAM' AND ym.Date LIKE '2012%', ym.Consumption, 0)), 0) AS FLOAT) AS KAM_Percentage_Increase FROM customers AS c JOIN yearmonth AS ym ON c.CustomerID = ym.CustomerID;",
+            "SELECT CAST(CASE WHEN SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)) = 0 THEN NULL ELSE ((SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) * 100.0 / SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) END AS FLOAT) AS SME_percentage_increase, CAST(CASE WHEN SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) = 0 THEN NULL ELSE ((SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0))) * 100.0 / SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0))) END AS FLOAT) AS LAM_percentage_increase, CAST(CASE WHEN SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) = 0 THEN NULL ELSE ((SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0))) * 100.0 / SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0))) END AS FLOAT) AS KAM_percentage_increase FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "545.4018808857362",
+                    "681.5824507359694",
+                    "708.1124296835188"
+                ]
+            ],
+            [
+                [
+                    "545.4018808857362",
+                    "681.5824507359694",
+                    "708.1124296835188"
+                ]
+            ],
+            [
+                [
+                    "545.4019165039062",
+                    "681.5824584960938",
+                    "708.1124267578125"
+                ]
+            ],
+            [
+                [
+                    "545.4019165039062",
+                    "681.5824584960938",
+                    "708.1124267578125"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "((CAST((sum((IF(((Segment = SME) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0))))": 545.4018808857362,
+                    "((CAST((sum((IF(((Segment = LAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0))))": 681.5824507359694,
+                    "((CAST((sum((IF(((Segment = KAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0))))": 708.1124296835188
+                }
+            ],
+            [
+                {
+                    "((CAST((sum((IF(((Segment = SME) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0))))": 545.4018808857362,
+                    "((CAST((sum((IF(((Segment = LAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0))))": 681.5824507359694,
+                    "((CAST((sum((IF(((Segment = KAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0))))": 708.1124296835188
+                }
+            ],
+            [
+                {
+                    "((CAST((sum((IF(((Segment = SME) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0))))": 545.4018808857362,
+                    "((CAST((sum((IF(((Segment = LAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0))))": 681.5824507359694,
+                    "((CAST((sum((IF(((Segment = KAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0))))": 708.1124296835188
+                }
+            ],
+            [
+                {
+                    "((CAST((sum((IF(((Segment = SME) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0))))": 545.4018808857362,
+                    "((CAST((sum((IF(((Segment = LAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0))))": 681.5824507359694,
+                    "((CAST((sum((IF(((Segment = KAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0))))": 708.1124296835188
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "Compute the percentage increase of the three segments SME, LAM and KAM in consumption between 2012 and 2013? Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2012) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year. Return exactly one row with three columns: percentage increase for SME, for LAM, and for KAM (in this order). Use customers joined with yearmonth on CustomerID; Do not use subqueries or CTEs. Use one single SELECT with three conditional aggregations using SUM(IF(...)) and Date LIKE '2012%' / '2013%'. Return only the three percentage columns in the order SME, LAM, KAM. Do not use backticks. Cast only the difference term to float: CAST((SUM2013 - SUM2012) AS FLOAT) * 100 / SUM2012 for each segment (do not cast the full division). Use exactly these aliases and nothing else: customers AS T1 and yearmonth AS T2. Use INNER JOIN (not JOIN). Do not use backticks anywhere.",
+            "Compute the percentage increase of the three segments SME, LAM and KAM in consumption between 2012 and 2013? Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2012) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year. Return exactly one row with three columns: percentage increase for SME, for LAM, and for KAM (in this order). Use customers joined with yearmonth on CustomerID; Do not use subqueries or CTEs. Use one single SELECT with three conditional aggregations using SUM(IF(...)) and Date LIKE '2012%' / '2013%'. Return only the three percentage columns in the order SME, LAM, KAM. Do not use backticks. Cast only the difference term to float: CAST((SUM2013 - SUM2012) AS FLOAT) * 100 / SUM2012 for each segment (do not cast the full division). Use exactly these aliases and nothing else: customers AS T1 and yearmonth AS T2. Use INNER JOIN (not JOIN). Do not use backticks anywhere. Match the CAST parentheses exactly like this:\nSME must be CAST((SUM2013 - SUM2012) AS FLOAT) * 100 / SUM2012, but LAM and KAM must be CAST(SUM2013 - SUM2012 AS FLOAT) * 100 / SUM2012 (do not wrap the LAM/KAM difference in extra parentheses). Also, CAST must end right after AS FLOAT)\u2014it must not include * 100 / SUM2012",
+            "Compute the percentage increase of the three segments SME, LAM and KAM in consumption between 2012 and 2013? Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2012) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year. Return exactly one row with three columns: percentage increase for SME, for LAM, and for KAM (in this order). Use customers joined with yearmonth on CustomerID; Do not use subqueries or CTEs. Use one single SELECT with three conditional aggregations using SUM(IF(...)) and Date LIKE '2012%' / '2013%'. Return only the three percentage columns in the order SME, LAM, KAM. Do not use backticks. Cast the percentage as float.",
+            "Compute the percentage increase of the three segments SME, LAM and KAM in consumption between 2012 and 2013? Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2012) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year. Return exactly one row with three columns: percentage increase for SME, for LAM, and for KAM (in this order). Use customers joined with yearmonth on CustomerID; Do not use subqueries or CTEs. Use one single SELECT with three conditional aggregations using SUM(IF(...)) and Date LIKE '2012%' / '2013%'. Return only the three percentage columns in the order SME, LAM, KAM. Do not use backticks. Cast the percentage as float. Use exactly these aliases and nothing else: customers AS T1 and yearmonth AS T2. Use INNER JOIN (not JOIN). Do not use backticks anywhere."
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            35.151371717453,
+            27.797640323638916,
+            58.15431094169617,
+            36.68948793411255
+        ],
+        "spark_time": [
+            0.8652451038360596,
+            0.8404974937438965,
+            0.9052817821502686,
+            0.9017918109893799
+        ],
+        "translation_time": [
+            34.28612661361694,
+            26.95714282989502,
+            57.2490291595459,
+            35.78769612312317
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            1,
+            0,
+            0
+        ],
+        "total_time_avg": 39.44820272922516,
+        "spark_time_avg": 0.8782040476799011,
+        "translation_time_avg": 38.56999868154526,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.5,
+        "exact_match_avg": 0.25
+    }
+}

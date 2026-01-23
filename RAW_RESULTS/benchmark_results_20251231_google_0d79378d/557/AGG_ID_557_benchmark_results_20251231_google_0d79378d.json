@@ -1,0 +1,227 @@
+{
+    "google_557": {
+        "llm": "google",
+        "query_id": 557,
+        "nl_query": "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65), Count(Id)) * 100",
+        "golden_query": "SELECT CAST(SUM(IF(T2.Age > 65, 1, 0)) AS FLOAT) * 100 / COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+        "sparksql_query": [
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (CAST(SUM(CASE WHEN T2.Age > 65 THEN 1 ELSE 0 END) AS REAL) * 100.0) / COUNT(T1.Id) FROM posts AS T1 JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+            "SELECT (CAST(SUM(CASE WHEN T2.Age > 65 THEN 1 ELSE 0 END) AS REAL) * 100.0) / COUNT(T1.Id) FROM posts AS T1 JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+            "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073646"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            25.00260853767395,
+            19.380088806152344,
+            22.191978454589844,
+            19.542800903320312,
+            16.910192489624023,
+            22.95081353187561,
+            19.780727863311768,
+            20.016221284866333,
+            16.03217387199402,
+            20.352598667144775
+        ],
+        "spark_time": [
+            0.10099482536315918,
+            0.1064307689666748,
+            0.6964306831359863,
+            0.12694883346557617,
+            0.09953665733337402,
+            0.11315703392028809,
+            0.12557387351989746,
+            0.16457033157348633,
+            0.13474154472351074,
+            0.1188199520111084
+        ],
+        "translation_time": [
+            24.90161371231079,
+            19.27365803718567,
+            21.495547771453857,
+            19.415852069854736,
+            16.81065583229065,
+            22.837656497955322,
+            19.65515398979187,
+            19.851650953292847,
+            15.897432327270508,
+            20.233778715133667
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 20.2160204410553,
+        "spark_time_avg": 0.17872045040130616,
+        "translation_time_avg": 20.03729999065399,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.2,
+        "exact_match_avg": 0.0
+    }
+}

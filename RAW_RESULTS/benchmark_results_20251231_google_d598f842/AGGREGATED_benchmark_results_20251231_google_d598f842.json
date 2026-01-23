@@ -1,0 +1,3909 @@
+{
+    "google_1532": {
+        "llm": "google",
+        "query_id": 1532,
+        "nl_query": "Which country had the gas station that sold the most expensive product id No.2 for one unit? ",
+        "golden_query": "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1",
+            "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1;"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR",
+            "ERROR"
+        ],
+        "query_result": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "ground_truth": [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ],
+        "spark_error": [
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 144) ==\n...WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 139) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 144) ==\n...WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 144) ==\n...WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 139) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 139) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 139) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 139) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 139) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1\n                                   ^^^^^^^^^^^^^^^^^^^^\n",
+            "[DIVIDE_BY_ZERO] Division by zero. Use `try_divide` to tolerate divisor being 0 and return NULL instead. If necessary set \"spark.sql.ansi.enabled\" to \"false\" to bypass this error. SQLSTATE: 22012\n== SQL (line 1, position 145) ==\n...HERE T1.ProductID = 2 ORDER BY (T1.Price / T1.Amount) DESC LIMIT 1;\n                                   ^^^^^^^^^^^^^^^^^^^^\n"
+        ],
+        "total_time": [
+            12.320983409881592,
+            14.949013948440552,
+            13.52613639831543,
+            10.840104579925537,
+            15.988335609436035,
+            16.427463054656982,
+            15.745773077011108,
+            15.341989278793335,
+            17.99654221534729,
+            13.3047194480896
+        ],
+        "spark_time": [
+            0.11591291427612305,
+            0.08591198921203613,
+            0.37750983238220215,
+            0.12072181701660156,
+            0.08609867095947266,
+            0.11795711517333984,
+            0.10862278938293457,
+            0.08690452575683594,
+            0.10298800468444824,
+            0.10278725624084473
+        ],
+        "translation_time": [
+            12.205070495605469,
+            14.863101959228516,
+            13.148626565933228,
+            10.719382762908936,
+            15.902236938476562,
+            16.309505939483643,
+            15.637150287628174,
+            15.255084753036499,
+            17.893554210662842,
+            13.201932191848755
+        ],
+        "jaccard_index": [],
+        "jaccard_index_new": [],
+        "exact_match": [],
+        "total_time_avg": 14.644106101989745,
+        "spark_time_avg": 0.13054149150848388,
+        "translation_time_avg": 14.513564610481263,
+        "jaccard_index_avg": null,
+        "jaccard_index_new_avg": null,
+        "exact_match_avg": null,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1532/AGG_ID_1532_benchmark_results_20251231_google_d598f842.json"
+        ]
+    },
+    "google_1374": {
+        "llm": "google",
+        "query_id": 1374,
+        "nl_query": "How many events did the member with the phone number \"954-555-6240\" attend? ",
+        "golden_query": "SELECT COUNT(T2.link_to_event) FROM member AS T1 INNER JOIN attendance AS T2 ON T1.member_id = T2.link_to_member WHERE T1.phone = '954-555-6240'",
+        "sparksql_query": [
+            "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = '954-555-6240';\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "\nSELECT\n  COUNT(T1.link_to_event)\nFROM attendance AS T1\nINNER JOIN member AS T2\n  ON T1.link_to_member = T2.member_id\nWHERE\n  T2.phone = \"954-555-6240\";\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = '954-555-6240';\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = \"954-555-6240\";\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            17.174961805343628,
+            13.195545673370361,
+            26.897483587265015,
+            10.632525444030762,
+            10.461965084075928,
+            18.602643728256226,
+            10.349784135818481,
+            11.956676721572876,
+            10.785505056381226,
+            12.401479721069336
+        ],
+        "spark_time": [
+            0.08623266220092773,
+            0.09597611427307129,
+            0.09622049331665039,
+            0.10767841339111328,
+            0.10433697700500488,
+            0.8636438846588135,
+            0.1062006950378418,
+            0.11792564392089844,
+            0.10552787780761719,
+            0.15087056159973145
+        ],
+        "translation_time": [
+            17.0887291431427,
+            13.09956955909729,
+            26.801263093948364,
+            10.524847030639648,
+            10.357628107070923,
+            17.738999843597412,
+            10.24358344078064,
+            11.838751077651978,
+            10.679977178573608,
+            12.250609159469604
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 14.245857095718383,
+        "spark_time_avg": 0.183461332321167,
+        "translation_time_avg": 14.062395763397216,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1374/AGG_ID_1374_benchmark_results_20251231_google_d598f842.json"
+        ]
+    },
+    "google_1326": {
+        "llm": "google",
+        "query_id": 1326,
+        "nl_query": "How many members of the Student_Club have majored Environmental Engineering?\n 'Environmental Engineering' is the major name",
+        "golden_query": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+        "sparksql_query": [
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.major_id = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.major_id = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.major_id = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "2"
+                ]
+            ],
+            null,
+            [
+                [
+                    "2"
+                ]
+            ],
+            [
+                [
+                    "2"
+                ]
+            ],
+            [
+                [
+                    "2"
+                ]
+            ],
+            null,
+            [
+                [
+                    "2"
+                ]
+            ],
+            null,
+            [
+                [
+                    "2"
+                ]
+            ],
+            [
+                [
+                    "2"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            "[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.major_id = major_id#10086)\n      :- SubqueryAlias T1\n      :  +- SubqueryAlias member\n      :     +- View (`member`, [member_id#10118, first_name#10119, last_name#10120, email#10121, position#10122, t_shirt_size#10123, phone#10124, zip#10125, link_to_major#10126])\n      :        +- Relation [member_id#10118,first_name#10119,last_name#10120,email#10121,position#10122,t_shirt_size#10123,phone#10124,zip#10125,link_to_major#10126] JDBCRelation(member) [numPartitions=1]\n      +- SubqueryAlias T2\n         +- SubqueryAlias major\n            +- View (`major`, [major_id#10086, major_name#10087, department#10088, college#10089])\n               +- Relation [major_id#10086,major_name#10087,department#10088,college#10089] JDBCRelation(major) [numPartitions=1]\n",
+            null,
+            null,
+            null,
+            "[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.major_id = major_id#10564)\n      :- SubqueryAlias T1\n      :  +- SubqueryAlias member\n      :     +- View (`member`, [member_id#10596, first_name#10597, last_name#10598, email#10599, position#10600, t_shirt_size#10601, phone#10602, zip#10603, link_to_major#10604])\n      :        +- Relation [member_id#10596,first_name#10597,last_name#10598,email#10599,position#10600,t_shirt_size#10601,phone#10602,zip#10603,link_to_major#10604] JDBCRelation(member) [numPartitions=1]\n      +- SubqueryAlias T2\n         +- SubqueryAlias major\n            +- View (`major`, [major_id#10564, major_name#10565, department#10566, college#10567])\n               +- Relation [major_id#10564,major_name#10565,department#10566,college#10567] JDBCRelation(major) [numPartitions=1]\n",
+            null,
+            "[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.major_id = major_id#10147)\n      :- SubqueryAlias T1\n      :  +- SubqueryAlias member\n      :     +- View (`member`, [member_id#10179, first_name#10180, last_name#10181, email#10182, position#10183, t_shirt_size#10184, phone#10185, zip#10186, link_to_major#10187])\n      :        +- Relation [member_id#10179,first_name#10180,last_name#10181,email#10182,position#10183,t_shirt_size#10184,phone#10185,zip#10186,link_to_major#10187] JDBCRelation(member) [numPartitions=1]\n      +- SubqueryAlias T2\n         +- SubqueryAlias major\n            +- View (`major`, [major_id#10147, major_name#10148, department#10149, college#10150])\n               +- Relation [major_id#10147,major_name#10148,department#10149,college#10150] JDBCRelation(major) [numPartitions=1]\n",
+            null,
+            null
+        ],
+        "total_time": [
+            14.953884840011597,
+            13.749391794204712,
+            13.525371074676514,
+            13.340104818344116,
+            14.032371044158936,
+            19.539926052093506,
+            16.771220922470093,
+            17.43777894973755,
+            10.275093078613281,
+            11.180593252182007
+        ],
+        "spark_time": [
+            0.07577896118164062,
+            0.1439986228942871,
+            0.07243919372558594,
+            0.05283164978027344,
+            0.07486677169799805,
+            0.10285520553588867,
+            0.09729146957397461,
+            0.10544252395629883,
+            0.07774972915649414,
+            0.07596421241760254
+        ],
+        "translation_time": [
+            14.878105878829956,
+            13.605393171310425,
+            13.452931880950928,
+            13.287273168563843,
+            13.957504272460938,
+            19.437070846557617,
+            16.673929452896118,
+            17.33233642578125,
+            10.197343349456787,
+            11.104629039764404
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 14.480573582649232,
+        "spark_time_avg": 0.0879218339920044,
+        "translation_time_avg": 14.392651748657226,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1326/AGG_ID_1326_benchmark_results_20251231_google_d598f842.json"
+        ]
+    },
+    "google_30": {
+        "llm": "google",
+        "query_id": 30,
+        "nl_query": "Which cities have the top 5 lowest enrollment number for students in grades 1 through 12? K-12 refers to students in grades 1 through 12.",
+        "golden_query": "SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY SUM(T1.`Enrollment (K-12)`) ASC LIMIT 5",
+        "sparksql_query": [
+            "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode GROUP BY s.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` IS NOT NULL GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollmentK12 FROM frpm f JOIN schools s ON f.CDSCode = s.CDSCode WHERE f.`Enrollment (K-12)` > 0 GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5",
+            "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm f JOIN schools s ON f.CDSCode = s.CDSCode GROUP BY s.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` IS NOT NULL GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollmentK12 FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT s.City, SUM(f.\"Enrollment (K-12)\") AS TotalEnrollmentK12 FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode WHERE f.\"Enrollment (K-12)\" IS NOT NULL GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5;",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            null,
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "\n[PARSE_SYNTAX_ERROR] Syntax error at or near '\"Enrollment (K-12)\"'. SQLSTATE: 42601 (line 1, pos 21)\n\n== SQL ==\nSELECT s.City, SUM(f.\"Enrollment (K-12)\") AS TotalEnrollmentK12 FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode WHERE f.\"Enrollment (K-12)\" IS NOT NULL GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5;\n---------------------^^^\n",
+            null,
+            null
+        ],
+        "total_time": [
+            12.851019620895386,
+            17.44121766090393,
+            14.334566593170166,
+            13.077836990356445,
+            13.73051118850708,
+            12.8793363571167,
+            13.656980752944946,
+            16.118194103240967,
+            12.91620683670044,
+            15.75732135772705
+        ],
+        "spark_time": [
+            0.18703818321228027,
+            0.2270512580871582,
+            0.22883176803588867,
+            0.6505043506622314,
+            0.13409900665283203,
+            0.15253472328186035,
+            0.19927144050598145,
+            0.031932830810546875,
+            0.18793034553527832,
+            0.19185090065002441
+        ],
+        "translation_time": [
+            12.663981437683105,
+            17.214166402816772,
+            14.105734825134277,
+            12.427332639694214,
+            13.596412181854248,
+            12.726801633834839,
+            13.457709312438965,
+            16.08626127243042,
+            12.728276491165161,
+            15.565470457077026
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 14.276319146156311,
+        "spark_time_avg": 0.21910448074340821,
+        "translation_time_avg": 14.057214665412904,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/30/AGG_ID_30_benchmark_results_20251231_google_d598f842.json"
+        ]
+    },
+    "google_1385": {
+        "llm": "google",
+        "query_id": 1385,
+        "nl_query": "Which student was able to generate income more than $40? name of students means the full name; full name refers to first_name, last_name; generate income more than $50 refers to income.amount > 40",
+        "golden_query": "SELECT T1.first_name, T1.last_name FROM member AS T1 INNER JOIN income AS T2 ON T1.member_id = T2.link_to_member WHERE T2.amount > 40",
+        "sparksql_query": [
+            "SELECT CONCAT(m.first_name, ' ', m.last_name) AS full_name FROM member AS m JOIN income AS i ON m.member_id = i.link_to_member WHERE i.amount > 40",
+            "SELECT CONCAT(`m`.`first_name`, ' ', `m`.`last_name`) AS `full_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT T1.first_name, T1.last_name FROM member AS T1 JOIN income AS T2 ON T1.member_id = T2.link_to_member WHERE T2.amount > 40",
+            "SELECT `m`.`first_name`, `m`.`last_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT `m`.`first_name`, `m`.`last_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT `m`.`first_name`, `m`.`last_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT CONCAT(`m`.`first_name`, ' ', `m`.`last_name`) AS `full_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT CONCAT(`m`.`first_name`, ' ', `m`.`last_name`) AS `full_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT CONCAT(`m`.`first_name`, ' ', `m`.`last_name`) AS `full_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+            "SELECT T1.first_name, T1.last_name FROM member AS T1 JOIN income AS T2 ON T1.member_id = T2.link_to_member WHERE T2.amount > 40"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Angela Sanders"
+                ],
+                [
+                    "Grant Gilmour"
+                ],
+                [
+                    "Luisa Guidi"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Christof Nielson"
+                ],
+                [
+                    "Carlo Jacobs"
+                ],
+                [
+                    "Phillip Cullen"
+                ],
+                [
+                    "Matthew Snay"
+                ],
+                [
+                    "Adele Deleon"
+                ],
+                [
+                    "Casey Mason"
+                ],
+                [
+                    "Trent Smith"
+                ],
+                [
+                    "Rafi Mckee"
+                ],
+                [
+                    "Katy Balentine"
+                ],
+                [
+                    "Dean O'Reilly"
+                ],
+                [
+                    "Emily Jaquith"
+                ],
+                [
+                    "Edwardo Ing"
+                ],
+                [
+                    "Amy Firth"
+                ],
+                [
+                    "Mccauley Nash"
+                ],
+                [
+                    "Tyler Hewitt"
+                ],
+                [
+                    "Maya Mclean"
+                ],
+                [
+                    "Brent Thomason"
+                ],
+                [
+                    "Vincent Ratcliffe"
+                ],
+                [
+                    "Adela O'Gallagher"
+                ],
+                [
+                    "Garrett Gerke"
+                ],
+                [
+                    "Keaton Mccray"
+                ],
+                [
+                    "Elijah Allen"
+                ],
+                [
+                    "Madelyn Nicholson"
+                ],
+                [
+                    "Annabella Warren"
+                ],
+                [
+                    "Kevin Pierce"
+                ],
+                [
+                    "Sherri Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela Sanders"
+                ],
+                [
+                    "Grant Gilmour"
+                ],
+                [
+                    "Luisa Guidi"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Christof Nielson"
+                ],
+                [
+                    "Carlo Jacobs"
+                ],
+                [
+                    "Phillip Cullen"
+                ],
+                [
+                    "Matthew Snay"
+                ],
+                [
+                    "Adele Deleon"
+                ],
+                [
+                    "Casey Mason"
+                ],
+                [
+                    "Trent Smith"
+                ],
+                [
+                    "Rafi Mckee"
+                ],
+                [
+                    "Katy Balentine"
+                ],
+                [
+                    "Dean O'Reilly"
+                ],
+                [
+                    "Emily Jaquith"
+                ],
+                [
+                    "Edwardo Ing"
+                ],
+                [
+                    "Amy Firth"
+                ],
+                [
+                    "Mccauley Nash"
+                ],
+                [
+                    "Tyler Hewitt"
+                ],
+                [
+                    "Maya Mclean"
+                ],
+                [
+                    "Brent Thomason"
+                ],
+                [
+                    "Vincent Ratcliffe"
+                ],
+                [
+                    "Adela O'Gallagher"
+                ],
+                [
+                    "Garrett Gerke"
+                ],
+                [
+                    "Keaton Mccray"
+                ],
+                [
+                    "Elijah Allen"
+                ],
+                [
+                    "Madelyn Nicholson"
+                ],
+                [
+                    "Annabella Warren"
+                ],
+                [
+                    "Kevin Pierce"
+                ],
+                [
+                    "Sherri Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela",
+                    "Sanders"
+                ],
+                [
+                    "Grant",
+                    "Gilmour"
+                ],
+                [
+                    "Luisa",
+                    "Guidi"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Christof",
+                    "Nielson"
+                ],
+                [
+                    "Carlo",
+                    "Jacobs"
+                ],
+                [
+                    "Phillip",
+                    "Cullen"
+                ],
+                [
+                    "Matthew",
+                    "Snay"
+                ],
+                [
+                    "Adele",
+                    "Deleon"
+                ],
+                [
+                    "Casey",
+                    "Mason"
+                ],
+                [
+                    "Trent",
+                    "Smith"
+                ],
+                [
+                    "Rafi",
+                    "Mckee"
+                ],
+                [
+                    "Katy",
+                    "Balentine"
+                ],
+                [
+                    "Dean",
+                    "O'Reilly"
+                ],
+                [
+                    "Emily",
+                    "Jaquith"
+                ],
+                [
+                    "Edwardo",
+                    "Ing"
+                ],
+                [
+                    "Amy",
+                    "Firth"
+                ],
+                [
+                    "Mccauley",
+                    "Nash"
+                ],
+                [
+                    "Tyler",
+                    "Hewitt"
+                ],
+                [
+                    "Maya",
+                    "Mclean"
+                ],
+                [
+                    "Brent",
+                    "Thomason"
+                ],
+                [
+                    "Vincent",
+                    "Ratcliffe"
+                ],
+                [
+                    "Adela",
+                    "O'Gallagher"
+                ],
+                [
+                    "Garrett",
+                    "Gerke"
+                ],
+                [
+                    "Keaton",
+                    "Mccray"
+                ],
+                [
+                    "Elijah",
+                    "Allen"
+                ],
+                [
+                    "Madelyn",
+                    "Nicholson"
+                ],
+                [
+                    "Annabella",
+                    "Warren"
+                ],
+                [
+                    "Kevin",
+                    "Pierce"
+                ],
+                [
+                    "Sherri",
+                    "Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela",
+                    "Sanders"
+                ],
+                [
+                    "Grant",
+                    "Gilmour"
+                ],
+                [
+                    "Luisa",
+                    "Guidi"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Christof",
+                    "Nielson"
+                ],
+                [
+                    "Carlo",
+                    "Jacobs"
+                ],
+                [
+                    "Phillip",
+                    "Cullen"
+                ],
+                [
+                    "Matthew",
+                    "Snay"
+                ],
+                [
+                    "Adele",
+                    "Deleon"
+                ],
+                [
+                    "Casey",
+                    "Mason"
+                ],
+                [
+                    "Trent",
+                    "Smith"
+                ],
+                [
+                    "Rafi",
+                    "Mckee"
+                ],
+                [
+                    "Katy",
+                    "Balentine"
+                ],
+                [
+                    "Dean",
+                    "O'Reilly"
+                ],
+                [
+                    "Emily",
+                    "Jaquith"
+                ],
+                [
+                    "Edwardo",
+                    "Ing"
+                ],
+                [
+                    "Amy",
+                    "Firth"
+                ],
+                [
+                    "Mccauley",
+                    "Nash"
+                ],
+                [
+                    "Tyler",
+                    "Hewitt"
+                ],
+                [
+                    "Maya",
+                    "Mclean"
+                ],
+                [
+                    "Brent",
+                    "Thomason"
+                ],
+                [
+                    "Vincent",
+                    "Ratcliffe"
+                ],
+                [
+                    "Adela",
+                    "O'Gallagher"
+                ],
+                [
+                    "Garrett",
+                    "Gerke"
+                ],
+                [
+                    "Keaton",
+                    "Mccray"
+                ],
+                [
+                    "Elijah",
+                    "Allen"
+                ],
+                [
+                    "Madelyn",
+                    "Nicholson"
+                ],
+                [
+                    "Annabella",
+                    "Warren"
+                ],
+                [
+                    "Kevin",
+                    "Pierce"
+                ],
+                [
+                    "Sherri",
+                    "Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela",
+                    "Sanders"
+                ],
+                [
+                    "Grant",
+                    "Gilmour"
+                ],
+                [
+                    "Luisa",
+                    "Guidi"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Christof",
+                    "Nielson"
+                ],
+                [
+                    "Carlo",
+                    "Jacobs"
+                ],
+                [
+                    "Phillip",
+                    "Cullen"
+                ],
+                [
+                    "Matthew",
+                    "Snay"
+                ],
+                [
+                    "Adele",
+                    "Deleon"
+                ],
+                [
+                    "Casey",
+                    "Mason"
+                ],
+                [
+                    "Trent",
+                    "Smith"
+                ],
+                [
+                    "Rafi",
+                    "Mckee"
+                ],
+                [
+                    "Katy",
+                    "Balentine"
+                ],
+                [
+                    "Dean",
+                    "O'Reilly"
+                ],
+                [
+                    "Emily",
+                    "Jaquith"
+                ],
+                [
+                    "Edwardo",
+                    "Ing"
+                ],
+                [
+                    "Amy",
+                    "Firth"
+                ],
+                [
+                    "Mccauley",
+                    "Nash"
+                ],
+                [
+                    "Tyler",
+                    "Hewitt"
+                ],
+                [
+                    "Maya",
+                    "Mclean"
+                ],
+                [
+                    "Brent",
+                    "Thomason"
+                ],
+                [
+                    "Vincent",
+                    "Ratcliffe"
+                ],
+                [
+                    "Adela",
+                    "O'Gallagher"
+                ],
+                [
+                    "Garrett",
+                    "Gerke"
+                ],
+                [
+                    "Keaton",
+                    "Mccray"
+                ],
+                [
+                    "Elijah",
+                    "Allen"
+                ],
+                [
+                    "Madelyn",
+                    "Nicholson"
+                ],
+                [
+                    "Annabella",
+                    "Warren"
+                ],
+                [
+                    "Kevin",
+                    "Pierce"
+                ],
+                [
+                    "Sherri",
+                    "Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela",
+                    "Sanders"
+                ],
+                [
+                    "Grant",
+                    "Gilmour"
+                ],
+                [
+                    "Luisa",
+                    "Guidi"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Christof",
+                    "Nielson"
+                ],
+                [
+                    "Carlo",
+                    "Jacobs"
+                ],
+                [
+                    "Phillip",
+                    "Cullen"
+                ],
+                [
+                    "Matthew",
+                    "Snay"
+                ],
+                [
+                    "Adele",
+                    "Deleon"
+                ],
+                [
+                    "Casey",
+                    "Mason"
+                ],
+                [
+                    "Trent",
+                    "Smith"
+                ],
+                [
+                    "Rafi",
+                    "Mckee"
+                ],
+                [
+                    "Katy",
+                    "Balentine"
+                ],
+                [
+                    "Dean",
+                    "O'Reilly"
+                ],
+                [
+                    "Emily",
+                    "Jaquith"
+                ],
+                [
+                    "Edwardo",
+                    "Ing"
+                ],
+                [
+                    "Amy",
+                    "Firth"
+                ],
+                [
+                    "Mccauley",
+                    "Nash"
+                ],
+                [
+                    "Tyler",
+                    "Hewitt"
+                ],
+                [
+                    "Maya",
+                    "Mclean"
+                ],
+                [
+                    "Brent",
+                    "Thomason"
+                ],
+                [
+                    "Vincent",
+                    "Ratcliffe"
+                ],
+                [
+                    "Adela",
+                    "O'Gallagher"
+                ],
+                [
+                    "Garrett",
+                    "Gerke"
+                ],
+                [
+                    "Keaton",
+                    "Mccray"
+                ],
+                [
+                    "Elijah",
+                    "Allen"
+                ],
+                [
+                    "Madelyn",
+                    "Nicholson"
+                ],
+                [
+                    "Annabella",
+                    "Warren"
+                ],
+                [
+                    "Kevin",
+                    "Pierce"
+                ],
+                [
+                    "Sherri",
+                    "Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela Sanders"
+                ],
+                [
+                    "Grant Gilmour"
+                ],
+                [
+                    "Luisa Guidi"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Christof Nielson"
+                ],
+                [
+                    "Carlo Jacobs"
+                ],
+                [
+                    "Phillip Cullen"
+                ],
+                [
+                    "Matthew Snay"
+                ],
+                [
+                    "Adele Deleon"
+                ],
+                [
+                    "Casey Mason"
+                ],
+                [
+                    "Trent Smith"
+                ],
+                [
+                    "Rafi Mckee"
+                ],
+                [
+                    "Katy Balentine"
+                ],
+                [
+                    "Dean O'Reilly"
+                ],
+                [
+                    "Emily Jaquith"
+                ],
+                [
+                    "Edwardo Ing"
+                ],
+                [
+                    "Amy Firth"
+                ],
+                [
+                    "Mccauley Nash"
+                ],
+                [
+                    "Tyler Hewitt"
+                ],
+                [
+                    "Maya Mclean"
+                ],
+                [
+                    "Brent Thomason"
+                ],
+                [
+                    "Vincent Ratcliffe"
+                ],
+                [
+                    "Adela O'Gallagher"
+                ],
+                [
+                    "Garrett Gerke"
+                ],
+                [
+                    "Keaton Mccray"
+                ],
+                [
+                    "Elijah Allen"
+                ],
+                [
+                    "Madelyn Nicholson"
+                ],
+                [
+                    "Annabella Warren"
+                ],
+                [
+                    "Kevin Pierce"
+                ],
+                [
+                    "Sherri Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela Sanders"
+                ],
+                [
+                    "Grant Gilmour"
+                ],
+                [
+                    "Luisa Guidi"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Christof Nielson"
+                ],
+                [
+                    "Carlo Jacobs"
+                ],
+                [
+                    "Phillip Cullen"
+                ],
+                [
+                    "Matthew Snay"
+                ],
+                [
+                    "Adele Deleon"
+                ],
+                [
+                    "Casey Mason"
+                ],
+                [
+                    "Trent Smith"
+                ],
+                [
+                    "Rafi Mckee"
+                ],
+                [
+                    "Katy Balentine"
+                ],
+                [
+                    "Dean O'Reilly"
+                ],
+                [
+                    "Emily Jaquith"
+                ],
+                [
+                    "Edwardo Ing"
+                ],
+                [
+                    "Amy Firth"
+                ],
+                [
+                    "Mccauley Nash"
+                ],
+                [
+                    "Tyler Hewitt"
+                ],
+                [
+                    "Maya Mclean"
+                ],
+                [
+                    "Brent Thomason"
+                ],
+                [
+                    "Vincent Ratcliffe"
+                ],
+                [
+                    "Adela O'Gallagher"
+                ],
+                [
+                    "Garrett Gerke"
+                ],
+                [
+                    "Keaton Mccray"
+                ],
+                [
+                    "Elijah Allen"
+                ],
+                [
+                    "Madelyn Nicholson"
+                ],
+                [
+                    "Annabella Warren"
+                ],
+                [
+                    "Kevin Pierce"
+                ],
+                [
+                    "Sherri Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela Sanders"
+                ],
+                [
+                    "Grant Gilmour"
+                ],
+                [
+                    "Luisa Guidi"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Connor Hilton"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Sacha Harrison"
+                ],
+                [
+                    "Christof Nielson"
+                ],
+                [
+                    "Carlo Jacobs"
+                ],
+                [
+                    "Phillip Cullen"
+                ],
+                [
+                    "Matthew Snay"
+                ],
+                [
+                    "Adele Deleon"
+                ],
+                [
+                    "Casey Mason"
+                ],
+                [
+                    "Trent Smith"
+                ],
+                [
+                    "Rafi Mckee"
+                ],
+                [
+                    "Katy Balentine"
+                ],
+                [
+                    "Dean O'Reilly"
+                ],
+                [
+                    "Emily Jaquith"
+                ],
+                [
+                    "Edwardo Ing"
+                ],
+                [
+                    "Amy Firth"
+                ],
+                [
+                    "Mccauley Nash"
+                ],
+                [
+                    "Tyler Hewitt"
+                ],
+                [
+                    "Maya Mclean"
+                ],
+                [
+                    "Brent Thomason"
+                ],
+                [
+                    "Vincent Ratcliffe"
+                ],
+                [
+                    "Adela O'Gallagher"
+                ],
+                [
+                    "Garrett Gerke"
+                ],
+                [
+                    "Keaton Mccray"
+                ],
+                [
+                    "Elijah Allen"
+                ],
+                [
+                    "Madelyn Nicholson"
+                ],
+                [
+                    "Annabella Warren"
+                ],
+                [
+                    "Kevin Pierce"
+                ],
+                [
+                    "Sherri Ramsey"
+                ]
+            ],
+            [
+                [
+                    "Angela",
+                    "Sanders"
+                ],
+                [
+                    "Grant",
+                    "Gilmour"
+                ],
+                [
+                    "Luisa",
+                    "Guidi"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Connor",
+                    "Hilton"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Sacha",
+                    "Harrison"
+                ],
+                [
+                    "Christof",
+                    "Nielson"
+                ],
+                [
+                    "Carlo",
+                    "Jacobs"
+                ],
+                [
+                    "Phillip",
+                    "Cullen"
+                ],
+                [
+                    "Matthew",
+                    "Snay"
+                ],
+                [
+                    "Adele",
+                    "Deleon"
+                ],
+                [
+                    "Casey",
+                    "Mason"
+                ],
+                [
+                    "Trent",
+                    "Smith"
+                ],
+                [
+                    "Rafi",
+                    "Mckee"
+                ],
+                [
+                    "Katy",
+                    "Balentine"
+                ],
+                [
+                    "Dean",
+                    "O'Reilly"
+                ],
+                [
+                    "Emily",
+                    "Jaquith"
+                ],
+                [
+                    "Edwardo",
+                    "Ing"
+                ],
+                [
+                    "Amy",
+                    "Firth"
+                ],
+                [
+                    "Mccauley",
+                    "Nash"
+                ],
+                [
+                    "Tyler",
+                    "Hewitt"
+                ],
+                [
+                    "Maya",
+                    "Mclean"
+                ],
+                [
+                    "Brent",
+                    "Thomason"
+                ],
+                [
+                    "Vincent",
+                    "Ratcliffe"
+                ],
+                [
+                    "Adela",
+                    "O'Gallagher"
+                ],
+                [
+                    "Garrett",
+                    "Gerke"
+                ],
+                [
+                    "Keaton",
+                    "Mccray"
+                ],
+                [
+                    "Elijah",
+                    "Allen"
+                ],
+                [
+                    "Madelyn",
+                    "Nicholson"
+                ],
+                [
+                    "Annabella",
+                    "Warren"
+                ],
+                [
+                    "Kevin",
+                    "Pierce"
+                ],
+                [
+                    "Sherri",
+                    "Ramsey"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ],
+            [
+                {
+                    "first_name": "Angela",
+                    "last_name": "Sanders"
+                },
+                {
+                    "first_name": "Grant",
+                    "last_name": "Gilmour"
+                },
+                {
+                    "first_name": "Luisa",
+                    "last_name": "Guidi"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Connor",
+                    "last_name": "Hilton"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Sacha",
+                    "last_name": "Harrison"
+                },
+                {
+                    "first_name": "Christof",
+                    "last_name": "Nielson"
+                },
+                {
+                    "first_name": "Carlo",
+                    "last_name": "Jacobs"
+                },
+                {
+                    "first_name": "Phillip",
+                    "last_name": "Cullen"
+                },
+                {
+                    "first_name": "Matthew",
+                    "last_name": "Snay"
+                },
+                {
+                    "first_name": "Adele",
+                    "last_name": "Deleon"
+                },
+                {
+                    "first_name": "Casey",
+                    "last_name": "Mason"
+                },
+                {
+                    "first_name": "Trent",
+                    "last_name": "Smith"
+                },
+                {
+                    "first_name": "Rafi",
+                    "last_name": "Mckee"
+                },
+                {
+                    "first_name": "Katy",
+                    "last_name": "Balentine"
+                },
+                {
+                    "first_name": "Dean",
+                    "last_name": "O'Reilly"
+                },
+                {
+                    "first_name": "Emily",
+                    "last_name": "Jaquith"
+                },
+                {
+                    "first_name": "Edwardo",
+                    "last_name": "Ing"
+                },
+                {
+                    "first_name": "Amy",
+                    "last_name": "Firth"
+                },
+                {
+                    "first_name": "Mccauley",
+                    "last_name": "Nash"
+                },
+                {
+                    "first_name": "Tyler",
+                    "last_name": "Hewitt"
+                },
+                {
+                    "first_name": "Maya",
+                    "last_name": "Mclean"
+                },
+                {
+                    "first_name": "Brent",
+                    "last_name": "Thomason"
+                },
+                {
+                    "first_name": "Vincent",
+                    "last_name": "Ratcliffe"
+                },
+                {
+                    "first_name": "Adela",
+                    "last_name": "O'Gallagher"
+                },
+                {
+                    "first_name": "Garrett",
+                    "last_name": "Gerke"
+                },
+                {
+                    "first_name": "Keaton",
+                    "last_name": "Mccray"
+                },
+                {
+                    "first_name": "Elijah",
+                    "last_name": "Allen"
+                },
+                {
+                    "first_name": "Madelyn",
+                    "last_name": "Nicholson"
+                },
+                {
+                    "first_name": "Annabella",
+                    "last_name": "Warren"
+                },
+                {
+                    "first_name": "Kevin",
+                    "last_name": "Pierce"
+                },
+                {
+                    "first_name": "Sherri",
+                    "last_name": "Ramsey"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            12.621373176574707,
+            28.885607481002808,
+            10.16068983078003,
+            17.339168071746826,
+            16.1534161567688,
+            17.83756947517395,
+            30.01927375793457,
+            24.65205216407776,
+            22.47494912147522,
+            12.829059839248657
+        ],
+        "spark_time": [
+            0.10435652732849121,
+            0.06881141662597656,
+            0.07384586334228516,
+            0.08804774284362793,
+            0.19135403633117676,
+            0.0949091911315918,
+            0.18091368675231934,
+            0.10181784629821777,
+            0.08803963661193848,
+            0.08202075958251953
+        ],
+        "translation_time": [
+            12.517016649246216,
+            28.81679606437683,
+            10.086843967437744,
+            17.2511203289032,
+            15.962062120437622,
+            17.74266028404236,
+            29.83836007118225,
+            24.55023431777954,
+            22.38690948486328,
+            12.747039079666138
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+        ],
+        "total_time_avg": 19.297315907478332,
+        "spark_time_avg": 0.10741167068481446,
+        "translation_time_avg": 19.189904236793517,
+        "jaccard_index_avg": 0.5,
+        "jaccard_index_new_avg": 0.5,
+        "exact_match_avg": 0.2,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1385/AGG_ID_1385_benchmark_results_20251231_google_d598f842.json"
+        ]
+    },
+    "google_776": {
+        "llm": "google",
+        "query_id": 776,
+        "nl_query": "Provide the hero name and race of Charles Chandler. hero name refers to superhero_name; Charles Chandler is the full name of superhero;",
+        "golden_query": "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+        "sparksql_query": [
+            "SELECT T1.superhero_name, T2.race FROM superhero AS T1 JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.`superhero_name`, r.`race` FROM `superhero` AS s JOIN `race` AS r ON s.`race_id` = r.`id` WHERE s.`full_name` = 'Charles Chandler'",
+            "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.`superhero_name`, r.`race` FROM `superhero` AS s JOIN `race` AS r ON s.`race_id` = r.`id` WHERE s.`full_name` = 'Charles Chandler'",
+            "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            8.73984694480896,
+            8.89984393119812,
+            10.705979585647583,
+            8.239360809326172,
+            9.179917097091675,
+            9.34341835975647,
+            12.515836477279663,
+            10.326587200164795,
+            11.369319915771484,
+            9.086520910263062
+        ],
+        "spark_time": [
+            0.08393239974975586,
+            0.09273934364318848,
+            0.0747528076171875,
+            0.061046600341796875,
+            0.06409454345703125,
+            0.05232119560241699,
+            0.07121777534484863,
+            0.04494762420654297,
+            0.06346440315246582,
+            0.07452535629272461
+        ],
+        "translation_time": [
+            8.655914545059204,
+            8.807104587554932,
+            10.631226778030396,
+            8.178314208984375,
+            9.115822553634644,
+            9.291097164154053,
+            12.444618701934814,
+            10.281639575958252,
+            11.305855512619019,
+            9.011995553970337
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 9.840663123130799,
+        "spark_time_avg": 0.06830420494079589,
+        "translation_time_avg": 9.772358918190003,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/776/AGG_ID_776_benchmark_results_20251231_google_d598f842.json"
+        ]
+    }
+}

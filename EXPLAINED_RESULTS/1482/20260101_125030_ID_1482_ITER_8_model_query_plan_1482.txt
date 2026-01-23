@@ -1,0 +1,22 @@
+
+Execution Plan for: Model Query ID 1482...
+================================================================================
+Could not create DataFrame for the query: [DATATYPE_MISMATCH.UNEXPECTED_INPUT_TYPE] Cannot resolve "year(Date)" due to data type mismatch: The first parameter requires the "DATE" type, however "Date" has the type "DECIMAL(38,18)". SQLSTATE: 42K09; line 1 pos 220;
+'Sort ['PercentageIncrease DESC NULLS LAST], true
++- 'Project ['Segment, 'Consumption2012, 'Consumption2013, ('Consumption2013 - 'Consumption2012) AS IncreaseDecrease#28919, ((cast(('Consumption2013 - 'Consumption2012) as double) / 'NULLIF('Consumption2013, 0)) * 100) AS PercentageIncrease#28920]
+   +- 'SubqueryAlias SegmentConsumption
+      +- 'SubqueryAlias SegmentConsumption
+         +- 'Aggregate ['Segment], ['Segment, 'SUM(CASE WHEN ('Year = 2012) THEN 'TotalConsumption ELSE 0 END) AS Consumption2012#28923, 'SUM(CASE WHEN ('Year = 2013) THEN 'TotalConsumption ELSE 0 END) AS Consumption2013#28924]
+            +- 'SubqueryAlias ConsumptionByYear
+               +- 'SubqueryAlias ConsumptionByYear
+                  +- 'Aggregate ['c.Segment, 'YEAR('t.Date)], ['c.Segment, 'YEAR('t.Date) AS Year#28921, 'SUM('t.Price) AS TotalConsumption#28922]
+                     +- 'Filter ((Currency#28846 = EUR) AND year(Date#28854) IN (2012,2013))
+                        +- Join Inner, (CustomerID#28844 = CustomerID#28856)
+                           :- SubqueryAlias c
+                           :  +- SubqueryAlias customers
+                           :     +- View (`customers`, [CustomerID#28844, Segment#28845, Currency#28846])
+                           :        +- Relation [CustomerID#28844,Segment#28845,Currency#28846] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]
+                           +- SubqueryAlias t
+                              +- SubqueryAlias transactions_1k
+                                 +- View (`transactions_1k`, [TransactionID#28853, Date#28854, Time#28855, CustomerID#28856, CardID#28857, GasStationID#28858, ProductID#28859, Amount#28860, Price#28861])
+                                    +- Relation [TransactionID#28853,Date#28854,Time#28855,CustomerID#28856,CardID#28857,GasStationID#28858,ProductID#28859,Amount#28860,Price#28861] JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1]

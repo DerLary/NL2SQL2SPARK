@@ -1,0 +1,9 @@
+
+Execution Plan for: Model Query ID 83...
+================================================================================
+Could not create DataFrame for the query: 
+[PARSE_SYNTAX_ERROR] Syntax error at or near '"NSLP Provision Status"'. SQLSTATE: 42601 (line 1, pos 139)
+
+== SQL ==
+SELECT COUNT(DISTINCT s.CDSCode) FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND s.GSserved = 'K-8' AND f."NSLP Provision Status" = 'Multiple Provision Types'
+-------------------------------------------------------------------------------------------------------------------------------------------^^^

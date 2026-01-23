@@ -1,0 +1,227 @@
+{
+    "google_150": {
+        "llm": "google",
+        "query_id": 150,
+        "nl_query": "How many accounts in North Bohemia has made a transaction with the partner's bank being AB? A3 contains the region names; North Bohemia is a region.",
+        "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T3.bank = 'AB' AND T1.A3 = 'north Bohemia'",
+        "sparksql_query": [
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT `T1`.`account_id`) FROM `account` AS `T1` INNER JOIN `district` AS `T2` ON `T1`.`district_id` = `T2`.`district_id` INNER JOIN `trans` AS `T3` ON `T1`.`account_id` = `T3`.`account_id` WHERE `T2`.`A3` = 'north Bohemia' AND `T3`.`bank` = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT T1.`account_id`) FROM `account` AS T1 INNER JOIN `district` AS T2 ON T1.`district_id` = T2.`district_id` INNER JOIN `trans` AS T3 ON T1.`account_id` = T3.`account_id` WHERE T2.`A3` = 'north bohemia' AND T3.`bank` = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north bohemia' AND T3.bank = 'AB'"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "55"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            11.74813199043274,
+            12.90685772895813,
+            8.516208171844482,
+            13.928636312484741,
+            19.52647876739502,
+            18.32345986366272,
+            10.934922933578491,
+            12.291573524475098,
+            17.414747714996338,
+            13.022439002990723
+        ],
+        "spark_time": [
+            0.10521626472473145,
+            0.10654425621032715,
+            0.11435985565185547,
+            0.11606168746948242,
+            0.12295818328857422,
+            0.3821563720703125,
+            0.11274313926696777,
+            0.0872490406036377,
+            0.11087727546691895,
+            0.03992652893066406
+        ],
+        "translation_time": [
+            11.642915725708008,
+            12.800313472747803,
+            8.401848316192627,
+            13.812574625015259,
+            19.403520584106445,
+            17.941303491592407,
+            10.822179794311523,
+            12.20432448387146,
+            17.30387043952942,
+            12.982512474060059
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 13.861345601081847,
+        "spark_time_avg": 0.12980926036834717,
+        "translation_time_avg": 13.7315363407135,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

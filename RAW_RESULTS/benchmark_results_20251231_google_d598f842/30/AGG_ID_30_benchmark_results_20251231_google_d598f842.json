@@ -1,0 +1,477 @@
+{
+    "google_30": {
+        "llm": "google",
+        "query_id": 30,
+        "nl_query": "Which cities have the top 5 lowest enrollment number for students in grades 1 through 12? K-12 refers to students in grades 1 through 12.",
+        "golden_query": "SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY SUM(T1.`Enrollment (K-12)`) ASC LIMIT 5",
+        "sparksql_query": [
+            "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode GROUP BY s.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` IS NOT NULL GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollmentK12 FROM frpm f JOIN schools s ON f.CDSCode = s.CDSCode WHERE f.`Enrollment (K-12)` > 0 GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5",
+            "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm f JOIN schools s ON f.CDSCode = s.CDSCode GROUP BY s.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.`Enrollment (K-12)` IS NOT NULL GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollmentK12 FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT s.City, SUM(f.\"Enrollment (K-12)\") AS TotalEnrollmentK12 FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode WHERE f.\"Enrollment (K-12)\" IS NOT NULL GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5;",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5",
+            "SELECT T2.City, SUM(T1.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS T1 JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY TotalEnrollment ASC LIMIT 5"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            null,
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ],
+            [
+                [
+                    "Coulterville",
+                    "2.0"
+                ],
+                [
+                    "Shaver Lake",
+                    "4.0"
+                ],
+                [
+                    "Pinecrest",
+                    "4.0"
+                ],
+                [
+                    "Emigrant Gap",
+                    "5.0"
+                ],
+                [
+                    "Woody",
+                    "5.0"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ],
+            [
+                {
+                    "City": "Coulterville"
+                },
+                {
+                    "City": "Shaver Lake"
+                },
+                {
+                    "City": "Pinecrest"
+                },
+                {
+                    "City": "Emigrant Gap"
+                },
+                {
+                    "City": "Woody"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "\n[PARSE_SYNTAX_ERROR] Syntax error at or near '\"Enrollment (K-12)\"'. SQLSTATE: 42601 (line 1, pos 21)\n\n== SQL ==\nSELECT s.City, SUM(f.\"Enrollment (K-12)\") AS TotalEnrollmentK12 FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode WHERE f.\"Enrollment (K-12)\" IS NOT NULL GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5;\n---------------------^^^\n",
+            null,
+            null
+        ],
+        "total_time": [
+            12.851019620895386,
+            17.44121766090393,
+            14.334566593170166,
+            13.077836990356445,
+            13.73051118850708,
+            12.8793363571167,
+            13.656980752944946,
+            16.118194103240967,
+            12.91620683670044,
+            15.75732135772705
+        ],
+        "spark_time": [
+            0.18703818321228027,
+            0.2270512580871582,
+            0.22883176803588867,
+            0.6505043506622314,
+            0.13409900665283203,
+            0.15253472328186035,
+            0.19927144050598145,
+            0.031932830810546875,
+            0.18793034553527832,
+            0.19185090065002441
+        ],
+        "translation_time": [
+            12.663981437683105,
+            17.214166402816772,
+            14.105734825134277,
+            12.427332639694214,
+            13.596412181854248,
+            12.726801633834839,
+            13.457709312438965,
+            16.08626127243042,
+            12.728276491165161,
+            15.565470457077026
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 14.276319146156311,
+        "spark_time_avg": 0.21910448074340821,
+        "translation_time_avg": 14.057214665412904,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

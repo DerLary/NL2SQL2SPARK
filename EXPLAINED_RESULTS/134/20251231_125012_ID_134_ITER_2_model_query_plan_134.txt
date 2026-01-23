@@ -1,0 +1,36 @@
+
+Execution Plan for: Model Query ID 134...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 1
++- 'LocalLimit 1
+   +- 'Sort ['A16 DESC NULLS LAST], true
+      +- 'Project ['district_id]
+         +- 'UnresolvedRelation [district], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 1
++- LocalLimit 1
+   +- Project [district_id#4372]
+      +- Sort [A16#4387 DESC NULLS LAST], true
+         +- Project [district_id#4372, A16#4387]
+            +- Relation [district_id#4372,A2#4373,A3#4374,A4#4375,A5#4376,A6#4377,A7#4378,A8#4379,A9#4380,A10#4381,A11#4382,A12#4383,A13#4384,A14#4385,A15#4386,A16#4387] JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+TakeOrderedAndProject(limit=1, orderBy=[A16#4387 DESC NULLS LAST], output=[district_id#4372])
++- *(1) Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#4372,A16#4387] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  TakeOrderedAndProject(limit=1, orderBy=[A16#4387 DESC NULLS LAST], output=[district_id#4372])
+  +- *(1) Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#4372,A16#4387] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>
+================================================================================

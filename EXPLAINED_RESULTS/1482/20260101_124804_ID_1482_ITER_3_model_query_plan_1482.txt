@@ -1,0 +1,71 @@
+
+Execution Plan for: Model Query ID 1482...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Sort ['Percentage_Increase DESC NULLS LAST], true
++- 'Aggregate ['c.Segment], ['c.Segment, 'SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2012) THEN 'y.Consumption ELSE 0 END) AS Consumption_2012#29632, 'SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2013) THEN 'y.Consumption ELSE 0 END) AS Consumption_2013#29633, ('SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2013) THEN 'y.Consumption ELSE 0 END) - 'SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2012) THEN 'y.Consumption ELSE 0 END)) AS Increase_Decrease#29634, (((cast('SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2013) THEN 'y.Consumption ELSE 0 END) as double) - 'SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2012) THEN 'y.Consumption ELSE 0 END)) / 'NULLIF('SUM(CASE WHEN ('SUBSTRING('y.Date, 1, 4) = 2012) THEN 'y.Consumption ELSE 0 END), 0)) * 100) AS Percentage_Increase#29635]
+   +- 'Filter 'SUBSTRING('y.Date, 1, 4) IN (2012,2013)
+      +- 'Join Inner, ('y.CustomerID = 'c.CustomerID)
+         :- 'SubqueryAlias y
+         :  +- 'UnresolvedRelation [yearmonth], [], false
+         +- 'SubqueryAlias c
+            +- 'UnresolvedRelation [customers], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Sort [Percentage_Increase#29635 DESC NULLS LAST], true
++- Project [Segment#29558, _aggregateexpression#29636 AS Consumption_2012#29632, _aggregateexpression#29637 AS Consumption_2013#29633, (_aggregateexpression#29637 - _aggregateexpression#29636) AS Increase_Decrease#29634, (((_aggregateexpression#29637 - _aggregateexpression#29636) / if ((_aggregateexpression#29636 = 0.0)) null else _aggregateexpression#29636) * 100.0) AS Percentage_Increase#29635]
+   +- Aggregate [Segment#29558], [Segment#29558, sum(CASE WHEN (substring(Date#29578, 1, 4) = 2012) THEN Consumption#29579 ELSE 0.0 END) AS _aggregateexpression#29636, sum(CASE WHEN (substring(Date#29578, 1, 4) = 2013) THEN Consumption#29579 ELSE 0.0 END) AS _aggregateexpression#29637]
+      +- Project [Date#29578, Consumption#29579, Segment#29558]
+         +- Join Inner, (CustomerID#29577 = CustomerID#29557)
+            :- Filter (substring(Date#29578, 1, 4) IN (2012,2013) AND isnotnull(CustomerID#29577))
+            :  +- Relation [CustomerID#29577,Date#29578,Consumption#29579] JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1]
+            +- Project [CustomerID#29557, Segment#29558]
+               +- Filter isnotnull(CustomerID#29557)
+                  +- Relation [CustomerID#29557,Segment#29558,Currency#29559] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [Percentage_Increase#29635 DESC NULLS LAST], true, 0
+  +- Exchange rangepartitioning(Percentage_Increase#29635 DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [plan_id=48814]
+      +- Project [Segment#29558, _aggregateexpression#29636 AS Consumption_2012#29632, _aggregateexpression#29637 AS Consumption_2013#29633, (_aggregateexpression#29637 - _aggregateexpression#29636) AS Increase_Decrease#29634, (((_aggregateexpression#29637 - _aggregateexpression#29636) / if ((_aggregateexpression#29636 = 0.0)) null else _aggregateexpression#29636) * 100.0) AS Percentage_Increase#29635]
+        +- HashAggregate(keys=[Segment#29558], functions=[sum(CASE WHEN (substring(Date#29578, 1, 4) = 2012) THEN Consumption#29579 ELSE 0.0 END), sum(CASE WHEN (substring(Date#29578, 1, 4) = 2013) THEN Consumption#29579 ELSE 0.0 END)], output=[Segment#29558, _aggregateexpression#29636, _aggregateexpression#29637])
+            +- Exchange hashpartitioning(Segment#29558, 200), ENSURE_REQUIREMENTS, [plan_id=48810]
+              +- HashAggregate(keys=[Segment#29558], functions=[partial_sum(CASE WHEN (substring(Date#29578, 1, 4) = 2012) THEN Consumption#29579 ELSE 0.0 END), partial_sum(CASE WHEN (substring(Date#29578, 1, 4) = 2013) THEN Consumption#29579 ELSE 0.0 END)], output=[Segment#29558, sum#29645, sum#29646])
+                  +- Project [Date#29578, Consumption#29579, Segment#29558]
+                    +- SortMergeJoin [CustomerID#29577], [CustomerID#29557], Inner
+                        :- Sort [CustomerID#29577 ASC NULLS FIRST], false, 0
+                        :  +- Exchange hashpartitioning(CustomerID#29577, 200), ENSURE_REQUIREMENTS, [plan_id=48802]
+                        :     +- Filter substring(Date#29578, 1, 4) IN (2012,2013)
+                        :        +- Scan JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1] [CustomerID#29577,Date#29578,Consumption#29579] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Date:string,Consumption:double>
+                        +- Sort [CustomerID#29557 ASC NULLS FIRST], false, 0
+                          +- Exchange hashpartitioning(CustomerID#29557, 200), ENSURE_REQUIREMENTS, [plan_id=48803]
+                              +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29557,Segment#29558] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Segment:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Sort [Percentage_Increase#29650 DESC NULLS LAST], true, 0
+  +- Exchange rangepartitioning(Percentage_Increase#29650 DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [plan_id=48865]
+  +- Project [Segment#29558, _aggregateexpression#29655 AS Consumption_2012#29647, _aggregateexpression#29656 AS Consumption_2013#29648, (_aggregateexpression#29656 - _aggregateexpression#29655) AS Increase_Decrease#29649, (((_aggregateexpression#29656 - _aggregateexpression#29655) / if ((_aggregateexpression#29655 = 0.0)) null else _aggregateexpression#29655) * 100.0) AS Percentage_Increase#29650]
+  +- HashAggregate(keys=[Segment#29558], functions=[sum(CASE WHEN (substring(Date#29578, 1, 4) = 2012) THEN Consumption#29579 ELSE 0.0 END), sum(CASE WHEN (substring(Date#29578, 1, 4) = 2013) THEN Consumption#29579 ELSE 0.0 END)])
+  +- Exchange hashpartitioning(Segment#29558, 200), ENSURE_REQUIREMENTS, [plan_id=48861]
+  +- HashAggregate(keys=[Segment#29558], functions=[partial_sum(CASE WHEN (substring(Date#29578, 1, 4) = 2012) THEN Consumption#29579 ELSE 0.0 END), partial_sum(CASE WHEN (substring(Date#29578, 1, 4) = 2013) THEN Consumption#29579 ELSE 0.0 END)])
+  +- Project [Date#29578, Consumption#29579, Segment#29558]
+  +- SortMergeJoin [CustomerID#29577], [CustomerID#29557], Inner
+  :- Sort [CustomerID#29577 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(CustomerID#29577, 200), ENSURE_REQUIREMENTS, [plan_id=48853]
+  :     +- Filter substring(Date#29578, 1, 4) IN (2012,2013)
+  :        +- Scan JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1] [CustomerID#29577,Date#29578,Consumption#29579] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Date:string,Consumption:double>
+  +- Sort [CustomerID#29557 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(CustomerID#29557, 200), ENSURE_REQUIREMENTS, [plan_id=48854]
+  +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29557,Segment#29558] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Segment:string>
+================================================================================

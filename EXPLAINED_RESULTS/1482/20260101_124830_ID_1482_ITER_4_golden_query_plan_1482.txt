@@ -1,0 +1,59 @@
+
+Execution Plan for: Golden Query ID 1482...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias(((cast(('SUM('IF((('T1.Segment = SME) AND 'T2.Date LIKE 2013%), 'T2.Consumption, 0)) - 'SUM('IF((('T1.Segment = SME) AND 'T2.Date LIKE 2012%), 'T2.Consumption, 0))) as float) * 100) / 'SUM('IF((('T1.Segment = SME) AND 'T2.Date LIKE 2012%), 'T2.Consumption, 0)))), unresolvedalias(((cast(('SUM('IF((('T1.Segment = LAM) AND 'T2.Date LIKE 2013%), 'T2.Consumption, 0)) - 'SUM('IF((('T1.Segment = LAM) AND 'T2.Date LIKE 2012%), 'T2.Consumption, 0))) as float) * 100) / 'SUM('IF((('T1.Segment = LAM) AND 'T2.Date LIKE 2012%), 'T2.Consumption, 0)))), unresolvedalias(((cast(('SUM('IF((('T1.Segment = KAM) AND 'T2.Date LIKE 2013%), 'T2.Consumption, 0)) - 'SUM('IF((('T1.Segment = KAM) AND 'T2.Date LIKE 2012%), 'T2.Consumption, 0))) as float) * 100) / 'SUM('IF((('T1.Segment = KAM) AND 'T2.Date LIKE 2012%), 'T2.Consumption, 0))))]
++- 'Join Inner, ('T1.CustomerID = 'T2.CustomerID)
+   :- 'SubqueryAlias T1
+   :  +- 'UnresolvedRelation [customers], [], false
+   +- 'SubqueryAlias T2
+      +- 'UnresolvedRelation [yearmonth], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [((cast(cast((sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0) - sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)) as float) as double) * 100.0) / sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)) AS ((CAST((sum((IF(((Segment = SME) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0))))#29775, ((cast(cast((sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0) - sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)) as float) as double) * 100.0) / sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)) AS ((CAST((sum((IF(((Segment = LAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0))))#29776, ((cast(cast((sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0) - sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)) as float) as double) * 100.0) / sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)) AS ((CAST((sum((IF(((Segment = KAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0))))#29777]
++- Project [Segment#29744, Date#29764, Consumption#29765]
+   +- Join Inner, (CustomerID#29743 = CustomerID#29763)
+      :- Project [CustomerID#29743, Segment#29744]
+      :  +- Filter isnotnull(CustomerID#29743)
+      :     +- Relation [CustomerID#29743,Segment#29744,Currency#29745] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]
+      +- Filter isnotnull(CustomerID#29763)
+         +- Relation [CustomerID#29763,Date#29764,Consumption#29765] JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)], output=[((CAST((sum((IF(((Segment = SME) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = SME) AND Date LIKE 2012%), Consumption, 0))))#29775, ((CAST((sum((IF(((Segment = LAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = LAM) AND Date LIKE 2012%), Consumption, 0))))#29776, ((CAST((sum((IF(((Segment = KAM) AND Date LIKE 2013%), Consumption, 0))) - sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0)))) AS FLOAT) * 100) / sum((IF(((Segment = KAM) AND Date LIKE 2012%), Consumption, 0))))#29777])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=49012]
+      +- HashAggregate(keys=[], functions=[partial_sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)], output=[sum#29784, sum#29785, sum#29786, sum#29787, sum#29788, sum#29789])
+        +- Project [Segment#29744, Date#29764, Consumption#29765]
+            +- SortMergeJoin [CustomerID#29743], [CustomerID#29763], Inner
+              :- Sort [CustomerID#29743 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(CustomerID#29743, 200), ENSURE_REQUIREMENTS, [plan_id=49004]
+              :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29743,Segment#29744] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Segment:string>
+              +- Sort [CustomerID#29763 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(CustomerID#29763, 200), ENSURE_REQUIREMENTS, [plan_id=49005]
+                    +- Scan JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1] [CustomerID#29763,Date#29764,Consumption#29765] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Date:string,Consumption:double>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=49049]
+  +- HashAggregate(keys=[], functions=[partial_sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = SME) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = LAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2013))) Consumption#29765 else 0.0), partial_sum(if (((Segment#29744 = KAM) AND StartsWith(Date#29764, 2012))) Consumption#29765 else 0.0)])
+  +- Project [Segment#29744, Date#29764, Consumption#29765]
+  +- SortMergeJoin [CustomerID#29743], [CustomerID#29763], Inner
+  :- Sort [CustomerID#29743 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(CustomerID#29743, 200), ENSURE_REQUIREMENTS, [plan_id=49041]
+  :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29743,Segment#29744] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Segment:string>
+  +- Sort [CustomerID#29763 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(CustomerID#29763, 200), ENSURE_REQUIREMENTS, [plan_id=49042]
+  +- Scan JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1] [CustomerID#29763,Date#29764,Consumption#29765] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Date:string,Consumption:double>
+================================================================================

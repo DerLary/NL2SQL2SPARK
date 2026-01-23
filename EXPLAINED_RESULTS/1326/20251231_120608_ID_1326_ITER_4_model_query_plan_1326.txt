@@ -1,0 +1,15 @@
+
+Execution Plan for: Model Query ID 1326...
+================================================================================
+Could not create DataFrame for the query: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;
+'Project [unresolvedalias('COUNT('T1.member_id))]
++- 'Filter ('T2.major_name = Environmental Engineering)
+   +- 'Join Inner, ('T1.major_id = major_id#11057)
+      :- SubqueryAlias T1
+      :  +- SubqueryAlias member
+      :     +- View (`member`, [member_id#11089, first_name#11090, last_name#11091, email#11092, position#11093, t_shirt_size#11094, phone#11095, zip#11096, link_to_major#11097])
+      :        +- Relation [member_id#11089,first_name#11090,last_name#11091,email#11092,position#11093,t_shirt_size#11094,phone#11095,zip#11096,link_to_major#11097] JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1]
+      +- SubqueryAlias T2
+         +- SubqueryAlias major
+            +- View (`major`, [major_id#11057, major_name#11058, department#11059, college#11060])
+               +- Relation [major_id#11057,major_name#11058,department#11059,college#11060] JDBCRelation((SELECT "major_id", "major_name", "department", "college" FROM "major") AS "major") [numPartitions=1]

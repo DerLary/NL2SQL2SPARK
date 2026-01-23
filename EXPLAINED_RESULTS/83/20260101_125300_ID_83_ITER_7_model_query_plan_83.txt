@@ -1,0 +1,43 @@
+
+Execution Plan for: Model Query ID 83...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 10
++- 'LocalLimit 10
+   +- 'Distinct
+      +- 'Project ['GSserved]
+         +- 'UnresolvedRelation [schools], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 10
++- LocalLimit 10
+   +- Aggregate [GSserved#36382], [GSserved#36382]
+      +- Project [GSserved#36382]
+         +- Relation [CDSCode#36348,NCESDist#36349,NCESSchool#36350,StatusType#36351,County#36352,District#36353,School#36354,Street#36355,StreetAbr#36356,City#36357,Zip#36358,State#36359,MailStreet#36360,MailStrAbr#36361,MailCity#36362,MailZip#36363,MailState#36364,Phone#36365,Ext#36366,Website#36367,OpenDate#36368,ClosedDate#36369,Charter#36370,CharterNum#36371,FundingType#36372,... 24 more fields] JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- CollectLimit 10
+  +- HashAggregate(keys=[GSserved#36382], functions=[], output=[GSserved#36382])
+      +- Exchange hashpartitioning(GSserved#36382, 200), ENSURE_REQUIREMENTS, [plan_id=59849]
+        +- HashAggregate(keys=[GSserved#36382], functions=[], output=[GSserved#36382])
+            +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [GSserved#36382] PushedFilters: [], ReadSchema: struct<GSserved:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- CollectLimit 10
+  +- HashAggregate(keys=[GSserved#36382], functions=[])
+  +- Exchange hashpartitioning(GSserved#36382, 200), ENSURE_REQUIREMENTS, [plan_id=59869]
+  +- HashAggregate(keys=[GSserved#36382], functions=[])
+  +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [GSserved#36382] PushedFilters: [], ReadSchema: struct<GSserved:string>
+================================================================================

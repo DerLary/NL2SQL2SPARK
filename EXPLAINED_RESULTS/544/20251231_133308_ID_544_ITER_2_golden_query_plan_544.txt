@@ -1,0 +1,54 @@
+
+Execution Plan for: Golden Query ID 544...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['T2.DisplayName]
++- 'Filter ('T1.Title = Examples for teaching: Correlation does not mean causation)
+   +- 'Join Inner, ('T1.LastEditorUserId = 'T2.Id)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [posts], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [users], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [DisplayName#7993]
++- Join Inner, (LastEditorUserId#7978 = Id#7990)
+   :- Project [LastEditorUserId#7978]
+   :  +- Filter ((isnotnull(Title#7973) AND (Title#7973 = Examples for teaching: Correlation does not mean causation)) AND isnotnull(LastEditorUserId#7978))
+   :     +- Relation [Id#7964,PostTypeId#7965,AcceptedAnswerId#7966,CreaionDate#7967,Score#7968,ViewCount#7969,Body#7970,OwnerUserId#7971,LasActivityDate#7972,Title#7973,Tags#7974,AnswerCount#7975,CommentCount#7976,FavoriteCount#7977,LastEditorUserId#7978,LastEditDate#7979,CommunityOwnedDate#7980,ParentId#7981,ClosedDate#7982,OwnerDisplayName#7983,LastEditorDisplayName#7984] JDBCRelation((SELECT "Id", "PostTypeId", "AcceptedAnswerId", CAST("CreaionDate" AS TEXT) AS "CreaionDate", "Score", "ViewCount", "Body", "OwnerUserId", CAST("LasActivityDate" AS TEXT) AS "LasActivityDate", "Title", "Tags", "AnswerCount", "CommentCount", "FavoriteCount", "LastEditorUserId", CAST("LastEditDate" AS TEXT) AS "LastEditDate", CAST("CommunityOwnedDate" AS TEXT) AS "CommunityOwnedDate", "ParentId", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "OwnerDisplayName", "LastEditorDisplayName" FROM "posts") AS "posts") [numPartitions=1]
+   +- Project [Id#7990, DisplayName#7993]
+      +- Filter isnotnull(Id#7990)
+         +- Relation [Id#7990,Reputation#7991,CreationDate#7992,DisplayName#7993,LastAccessDate#7994,WebsiteUrl#7995,Location#7996,AboutMe#7997,Views#7998,UpVotes#7999,DownVotes#8000,AccountId#8001,Age#8002,ProfileImageUrl#8003] JDBCRelation((SELECT "Id", "Reputation", CAST("CreationDate" AS TEXT) AS "CreationDate", "DisplayName", CAST("LastAccessDate" AS TEXT) AS "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users") AS "users") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [DisplayName#7993]
+  +- SortMergeJoin [LastEditorUserId#7978], [Id#7990], Inner
+      :- Sort [LastEditorUserId#7978 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(LastEditorUserId#7978, 200), ENSURE_REQUIREMENTS, [plan_id=18707]
+      :     +- Scan JDBCRelation((SELECT "Id", "PostTypeId", "AcceptedAnswerId", CAST("CreaionDate" AS TEXT) AS "CreaionDate", "Score", "ViewCount", "Body", "OwnerUserId", CAST("LasActivityDate" AS TEXT) AS "LasActivityDate", "Title", "Tags", "AnswerCount", "CommentCount", "FavoriteCount", "LastEditorUserId", CAST("LastEditDate" AS TEXT) AS "LastEditDate", CAST("CommunityOwnedDate" AS TEXT) AS "CommunityOwnedDate", "ParentId", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "OwnerDisplayName", "LastEditorDisplayName" FROM "posts") AS "posts") [numPartitions=1] [LastEditorUserId#7978] PushedFilters: [*IsNotNull(Title), *EqualTo(Title,Examples for teaching: Correlation does not mean causation), *..., ReadSchema: struct<LastEditorUserId:int>
+      +- Sort [Id#7990 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(Id#7990, 200), ENSURE_REQUIREMENTS, [plan_id=18708]
+            +- Scan JDBCRelation((SELECT "Id", "Reputation", CAST("CreationDate" AS TEXT) AS "CreationDate", "DisplayName", CAST("LastAccessDate" AS TEXT) AS "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users") AS "users") [numPartitions=1] [Id#7990,DisplayName#7993] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,DisplayName:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [DisplayName#7993]
+  +- SortMergeJoin [LastEditorUserId#7978], [Id#7990], Inner
+  :- Sort [LastEditorUserId#7978 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(LastEditorUserId#7978, 200), ENSURE_REQUIREMENTS, [plan_id=18737]
+  :     +- Scan JDBCRelation((SELECT "Id", "PostTypeId", "AcceptedAnswerId", CAST("CreaionDate" AS TEXT) AS "CreaionDate", "Score", "ViewCount", "Body", "OwnerUserId", CAST("LasActivityDate" AS TEXT) AS "LasActivityDate", "Title", "Tags", "AnswerCount", "CommentCount", "FavoriteCount", "LastEditorUserId", CAST("LastEditDate" AS TEXT) AS "LastEditDate", CAST("CommunityOwnedDate" AS TEXT) AS "CommunityOwnedDate", "ParentId", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "OwnerDisplayName", "LastEditorDisplayName" FROM "posts") AS "posts") [numPartitions=1] [LastEditorUserId#7978] PushedFilters: [*IsNotNull(Title), *EqualTo(Title,Examples for teaching: Correlation does not mean causation), *..., ReadSchema: struct<LastEditorUserId:int>
+  +- Sort [Id#7990 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(Id#7990, 200), ENSURE_REQUIREMENTS, [plan_id=18738]
+  +- Scan JDBCRelation((SELECT "Id", "Reputation", CAST("CreationDate" AS TEXT) AS "CreationDate", "DisplayName", CAST("LastAccessDate" AS TEXT) AS "LastAccessDate", "WebsiteUrl", "Location", "AboutMe", "Views", "UpVotes", "DownVotes", "AccountId", "Age", "ProfileImageUrl" FROM "users") AS "users") [numPartitions=1] [Id#7990,DisplayName#7993] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,DisplayName:string>
+================================================================================

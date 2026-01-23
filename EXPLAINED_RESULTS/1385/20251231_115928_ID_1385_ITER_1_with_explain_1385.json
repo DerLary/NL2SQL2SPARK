@@ -1,0 +1,378 @@
+{
+    "query_id": 1385,
+    "difficulty": "simple",
+    "is_initial": true,
+    "nl_query": "Which student was able to generate income more than $40? name of students means the full name; full name refers to first_name, last_name; generate income more than $50 refers to income.amount > 40",
+    "golden_query": "SELECT T1.first_name, T1.last_name FROM member AS T1 INNER JOIN income AS T2 ON T1.member_id = T2.link_to_member WHERE T2.amount > 40",
+    "sparksql_query": "SELECT `m`.`first_name`, `m`.`last_name` FROM `member` AS `m` JOIN `income` AS `i` ON `m`.`member_id` = `i`.`link_to_member` WHERE `i`.`amount` > 40",
+    "jaccard_index": 1.0,
+    "exact_match": 0,
+    "ground_truth": [
+        {
+            "first_name": "Angela",
+            "last_name": "Sanders"
+        },
+        {
+            "first_name": "Grant",
+            "last_name": "Gilmour"
+        },
+        {
+            "first_name": "Luisa",
+            "last_name": "Guidi"
+        },
+        {
+            "first_name": "Connor",
+            "last_name": "Hilton"
+        },
+        {
+            "first_name": "Connor",
+            "last_name": "Hilton"
+        },
+        {
+            "first_name": "Sacha",
+            "last_name": "Harrison"
+        },
+        {
+            "first_name": "Sacha",
+            "last_name": "Harrison"
+        },
+        {
+            "first_name": "Christof",
+            "last_name": "Nielson"
+        },
+        {
+            "first_name": "Carlo",
+            "last_name": "Jacobs"
+        },
+        {
+            "first_name": "Phillip",
+            "last_name": "Cullen"
+        },
+        {
+            "first_name": "Matthew",
+            "last_name": "Snay"
+        },
+        {
+            "first_name": "Adele",
+            "last_name": "Deleon"
+        },
+        {
+            "first_name": "Casey",
+            "last_name": "Mason"
+        },
+        {
+            "first_name": "Trent",
+            "last_name": "Smith"
+        },
+        {
+            "first_name": "Rafi",
+            "last_name": "Mckee"
+        },
+        {
+            "first_name": "Katy",
+            "last_name": "Balentine"
+        },
+        {
+            "first_name": "Dean",
+            "last_name": "O'Reilly"
+        },
+        {
+            "first_name": "Emily",
+            "last_name": "Jaquith"
+        },
+        {
+            "first_name": "Edwardo",
+            "last_name": "Ing"
+        },
+        {
+            "first_name": "Amy",
+            "last_name": "Firth"
+        },
+        {
+            "first_name": "Mccauley",
+            "last_name": "Nash"
+        },
+        {
+            "first_name": "Tyler",
+            "last_name": "Hewitt"
+        },
+        {
+            "first_name": "Maya",
+            "last_name": "Mclean"
+        },
+        {
+            "first_name": "Brent",
+            "last_name": "Thomason"
+        },
+        {
+            "first_name": "Vincent",
+            "last_name": "Ratcliffe"
+        },
+        {
+            "first_name": "Adela",
+            "last_name": "O'Gallagher"
+        },
+        {
+            "first_name": "Garrett",
+            "last_name": "Gerke"
+        },
+        {
+            "first_name": "Keaton",
+            "last_name": "Mccray"
+        },
+        {
+            "first_name": "Elijah",
+            "last_name": "Allen"
+        },
+        {
+            "first_name": "Madelyn",
+            "last_name": "Nicholson"
+        },
+        {
+            "first_name": "Annabella",
+            "last_name": "Warren"
+        },
+        {
+            "first_name": "Kevin",
+            "last_name": "Pierce"
+        },
+        {
+            "first_name": "Sherri",
+            "last_name": "Ramsey"
+        }
+    ],
+    "query_result": [
+        [
+            "Angela",
+            "Sanders"
+        ],
+        [
+            "Grant",
+            "Gilmour"
+        ],
+        [
+            "Luisa",
+            "Guidi"
+        ],
+        [
+            "Connor",
+            "Hilton"
+        ],
+        [
+            "Connor",
+            "Hilton"
+        ],
+        [
+            "Sacha",
+            "Harrison"
+        ],
+        [
+            "Sacha",
+            "Harrison"
+        ],
+        [
+            "Christof",
+            "Nielson"
+        ],
+        [
+            "Carlo",
+            "Jacobs"
+        ],
+        [
+            "Phillip",
+            "Cullen"
+        ],
+        [
+            "Matthew",
+            "Snay"
+        ],
+        [
+            "Adele",
+            "Deleon"
+        ],
+        [
+            "Casey",
+            "Mason"
+        ],
+        [
+            "Trent",
+            "Smith"
+        ],
+        [
+            "Rafi",
+            "Mckee"
+        ],
+        [
+            "Katy",
+            "Balentine"
+        ],
+        [
+            "Dean",
+            "O'Reilly"
+        ],
+        [
+            "Emily",
+            "Jaquith"
+        ],
+        [
+            "Edwardo",
+            "Ing"
+        ],
+        [
+            "Amy",
+            "Firth"
+        ],
+        [
+            "Mccauley",
+            "Nash"
+        ],
+        [
+            "Tyler",
+            "Hewitt"
+        ],
+        [
+            "Maya",
+            "Mclean"
+        ],
+        [
+            "Brent",
+            "Thomason"
+        ],
+        [
+            "Vincent",
+            "Ratcliffe"
+        ],
+        [
+            "Adela",
+            "O'Gallagher"
+        ],
+        [
+            "Garrett",
+            "Gerke"
+        ],
+        [
+            "Keaton",
+            "Mccray"
+        ],
+        [
+            "Elijah",
+            "Allen"
+        ],
+        [
+            "Madelyn",
+            "Nicholson"
+        ],
+        [
+            "Annabella",
+            "Warren"
+        ],
+        [
+            "Kevin",
+            "Pierce"
+        ],
+        [
+            "Sherri",
+            "Ramsey"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 1385...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['T1.first_name, 'T1.last_name]\n+- 'Filter ('T2.amount > 40)\n   +- 'Join Inner, ('T1.member_id = 'T2.link_to_member)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [member], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [income], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [first_name#12640, last_name#12641]\n+- Join Inner, (member_id#12639 = link_to_member#12638)\n   :- Project [member_id#12639, first_name#12640, last_name#12641]\n   :  +- Filter isnotnull(member_id#12639)\n   :     +- Relation [member_id#12639,first_name#12640,last_name#12641,email#12642,position#12643,t_shirt_size#12644,phone#12645,zip#12646,link_to_major#12647] JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1]\n   +- Project [link_to_member#12638]\n      +- Filter ((isnotnull(amount#12635) AND (amount#12635 > 40)) AND isnotnull(link_to_member#12638))\n         +- Relation [income_id#12633,date_received#12634,amount#12635,source#12636,notes#12637,link_to_member#12638] JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [first_name#12640, last_name#12641]\n  +- SortMergeJoin [member_id#12639], [link_to_member#12638], Inner\n      :- Sort [member_id#12639 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(member_id#12639, 200), ENSURE_REQUIREMENTS, [plan_id=29223]\n      :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>\n      +- Sort [link_to_member#12638 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(link_to_member#12638, 200), ENSURE_REQUIREMENTS, [plan_id=29224]\n            +- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [first_name#12640, last_name#12641]\n  +- SortMergeJoin [member_id#12639], [link_to_member#12638], Inner\n  :- Sort [member_id#12639 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(member_id#12639, 200), ENSURE_REQUIREMENTS, [plan_id=29253]\n  :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>\n  +- Sort [link_to_member#12638 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(link_to_member#12638, 200), ENSURE_REQUIREMENTS, [plan_id=29254]\n  +- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 1385...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['m.first_name, 'm.last_name]\n+- 'Filter ('i.amount > 40)\n   +- 'Join Inner, ('m.member_id = 'i.link_to_member)\n      :- 'SubqueryAlias m\n      :  +- 'UnresolvedRelation [member], [], false\n      +- 'SubqueryAlias i\n         +- 'UnresolvedRelation [income], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [first_name#12640, last_name#12641]\n+- Join Inner, (member_id#12639 = link_to_member#12638)\n   :- Project [member_id#12639, first_name#12640, last_name#12641]\n   :  +- Filter isnotnull(member_id#12639)\n   :     +- Relation [member_id#12639,first_name#12640,last_name#12641,email#12642,position#12643,t_shirt_size#12644,phone#12645,zip#12646,link_to_major#12647] JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1]\n   +- Project [link_to_member#12638]\n      +- Filter ((isnotnull(amount#12635) AND (amount#12635 > 40)) AND isnotnull(link_to_member#12638))\n         +- Relation [income_id#12633,date_received#12634,amount#12635,source#12636,notes#12637,link_to_member#12638] JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [first_name#12640, last_name#12641]\n  +- SortMergeJoin [member_id#12639], [link_to_member#12638], Inner\n      :- Sort [member_id#12639 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(member_id#12639, 200), ENSURE_REQUIREMENTS, [plan_id=29283]\n      :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>\n      +- Sort [link_to_member#12638 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(link_to_member#12638, 200), ENSURE_REQUIREMENTS, [plan_id=29284]\n            +- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [first_name#12640, last_name#12641]\n  +- SortMergeJoin [member_id#12639], [link_to_member#12638], Inner\n  :- Sort [member_id#12639 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(member_id#12639, 200), ENSURE_REQUIREMENTS, [plan_id=29313]\n  :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>\n  +- Sort [link_to_member#12638 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(link_to_member#12638, 200), ENSURE_REQUIREMENTS, [plan_id=29314]\n  +- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1385/20251231_115928_ID_1385_ITER_1_102a5151.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 2
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>",
+                    "filters": [
+                        "*IsNotNull(member_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(amount)",
+                        "*GreaterThan(amount",
+                        "40)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>",
+                    "filters": [
+                        "*IsNotNull(member_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(amount)",
+                        "*GreaterThan(amount",
+                        "40)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 2
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>",
+                    "filters": [
+                        "*IsNotNull(member_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(amount)",
+                        "*GreaterThan(amount",
+                        "40)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#12639,first_name#12640,last_name#12641] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>",
+                    "filters": [
+                        "*IsNotNull(member_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"income_id\", \"date_received\", \"amount\", \"source\", \"notes\", \"link_to_member\" FROM \"income\") AS \"income\") [numPartitions=1] [link_to_member#12638] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(amount)",
+                        "*GreaterThan(amount",
+                        "40)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": true
+        }
+    }
+}

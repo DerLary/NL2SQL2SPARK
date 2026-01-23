@@ -1,0 +1,125 @@
+
+Execution Plan for: Model Query ID 1482...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+CTE [YearlyConsumption]
+:  +- 'SubqueryAlias YearlyConsumption
+:     +- 'Aggregate ['c.Segment, 'SUBSTR('t.Date, 1, 4)], ['c.Segment, 'SUBSTR('t.Date, 1, 4) AS Year#29281, 'SUM('t.Price) AS TotalConsumption#29282]
+:        +- 'Filter (('c.Currency = EUR) AND 'SUBSTR('t.Date, 1, 4) IN (2012,2013))
+:           +- 'Join Inner, ('c.CustomerID = 't.CustomerID)
+:              :- 'SubqueryAlias c
+:              :  +- 'UnresolvedRelation [customers], [], false
+:              +- 'SubqueryAlias t
+:                 +- 'UnresolvedRelation [transactions_1k], [], false
++- 'Sort ['PercentageIncrease DESC NULLS LAST], true
+   +- 'Project ['yc2013.Segment, 'yc2013.TotalConsumption AS Consumption2013#29277, 'yc2012.TotalConsumption AS Consumption2012#29278, ('yc2013.TotalConsumption - 'yc2012.TotalConsumption) AS IncreaseDecrease#29279, ((cast(('yc2013.TotalConsumption - 'yc2012.TotalConsumption) as double) / 'yc2013.TotalConsumption) * 100) AS PercentageIncrease#29280]
+      +- 'Filter (('yc2013.Year = 2013) AND ('yc2012.Year = 2012))
+         +- 'Join Inner, ('yc2013.Segment = 'yc2012.Segment)
+            :- 'SubqueryAlias yc2013
+            :  +- 'UnresolvedRelation [YearlyConsumption], [], false
+            +- 'SubqueryAlias yc2012
+               +- 'UnresolvedRelation [YearlyConsumption], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Sort [PercentageIncrease#29280 DESC NULLS LAST], true
++- Project [Segment#29203, TotalConsumption#29282 AS Consumption2013#29277, TotalConsumption#29286 AS Consumption2012#29278, (TotalConsumption#29282 - TotalConsumption#29286) AS IncreaseDecrease#29279, (((TotalConsumption#29282 - TotalConsumption#29286) / TotalConsumption#29282) * 100.0) AS PercentageIncrease#29280]
+   +- Join Inner, (Segment#29203 = Segment#29303)
+      :- Aggregate [Segment#29203, _groupingexpression#29301], [Segment#29203, sum(Price#29219) AS TotalConsumption#29282]
+      :  +- Project [Segment#29203, Price#29219, substr(cast(Date#29212 as string), 1, 4) AS _groupingexpression#29301]
+      :     +- Join Inner, (CustomerID#29202 = CustomerID#29214)
+      :        :- Project [CustomerID#29202, Segment#29203]
+      :        :  +- Filter ((isnotnull(Currency#29204) AND (Currency#29204 = EUR)) AND (isnotnull(CustomerID#29202) AND isnotnull(Segment#29203)))
+      :        :     +- Relation [CustomerID#29202,Segment#29203,Currency#29204] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]
+      :        +- Project [Date#29212, CustomerID#29214, Price#29219]
+      :           +- Filter ((isnotnull(Date#29212) AND (substr(cast(Date#29212 as string), 1, 4) IN (2012,2013) AND (substr(cast(Date#29212 as string), 1, 4) = 2013))) AND isnotnull(CustomerID#29214))
+      :              +- Relation [TransactionID#29211,Date#29212,Time#29213,CustomerID#29214,CardID#29215,GasStationID#29216,ProductID#29217,Amount#29218,Price#29219] JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1]
+      +- Aggregate [Segment#29303, _groupingexpression#29314], [Segment#29303, sum(Price#29313) AS TotalConsumption#29286]
+         +- Project [Segment#29303, Price#29313, substr(cast(Date#29306 as string), 1, 4) AS _groupingexpression#29314]
+            +- Join Inner, (CustomerID#29302 = CustomerID#29308)
+               :- Project [CustomerID#29302, Segment#29303]
+               :  +- Filter ((isnotnull(Currency#29304) AND (Currency#29304 = EUR)) AND (isnotnull(CustomerID#29302) AND isnotnull(Segment#29303)))
+               :     +- Relation [CustomerID#29302,Segment#29303,Currency#29304] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]
+               +- Project [Date#29306, CustomerID#29308, Price#29313]
+                  +- Filter ((isnotnull(Date#29306) AND (substr(cast(Date#29306 as string), 1, 4) IN (2012,2013) AND (substr(cast(Date#29306 as string), 1, 4) = 2012))) AND isnotnull(CustomerID#29308))
+                     +- Relation [TransactionID#29305,Date#29306,Time#29307,CustomerID#29308,CardID#29309,GasStationID#29310,ProductID#29311,Amount#29312,Price#29313] JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [PercentageIncrease#29280 DESC NULLS LAST], true, 0
+  +- Exchange rangepartitioning(PercentageIncrease#29280 DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [plan_id=48272]
+      +- Project [Segment#29203, TotalConsumption#29282 AS Consumption2013#29277, TotalConsumption#29286 AS Consumption2012#29278, (TotalConsumption#29282 - TotalConsumption#29286) AS IncreaseDecrease#29279, (((TotalConsumption#29282 - TotalConsumption#29286) / TotalConsumption#29282) * 100.0) AS PercentageIncrease#29280]
+        +- SortMergeJoin [Segment#29203], [Segment#29303], Inner
+            :- Sort [Segment#29203 ASC NULLS FIRST], false, 0
+            :  +- Exchange hashpartitioning(Segment#29203, 200), ENSURE_REQUIREMENTS, [plan_id=48265]
+            :     +- HashAggregate(keys=[Segment#29203, _groupingexpression#29301], functions=[sum(Price#29219)], output=[Segment#29203, TotalConsumption#29282])
+            :        +- Exchange hashpartitioning(Segment#29203, _groupingexpression#29301, 200), ENSURE_REQUIREMENTS, [plan_id=48250]
+            :           +- HashAggregate(keys=[Segment#29203, _groupingexpression#29301], functions=[partial_sum(Price#29219)], output=[Segment#29203, _groupingexpression#29301, sum#29318])
+            :              +- Project [Segment#29203, Price#29219, substr(cast(Date#29212 as string), 1, 4) AS _groupingexpression#29301]
+            :                 +- SortMergeJoin [CustomerID#29202], [CustomerID#29214], Inner
+            :                    :- Sort [CustomerID#29202 ASC NULLS FIRST], false, 0
+            :                    :  +- Exchange hashpartitioning(CustomerID#29202, 200), ENSURE_REQUIREMENTS, [plan_id=48242]
+            :                    :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29202,Segment#29203] PushedFilters: [*IsNotNull(Currency), *EqualTo(Currency,EUR), *IsNotNull(CustomerID), *IsNotNull(Segment)], ReadSchema: struct<CustomerID:int,Segment:string>
+            :                    +- Sort [CustomerID#29214 ASC NULLS FIRST], false, 0
+            :                       +- Exchange hashpartitioning(CustomerID#29214, 200), ENSURE_REQUIREMENTS, [plan_id=48243]
+            :                          +- Filter (substr(cast(Date#29212 as string), 1, 4) IN (2012,2013) AND (substr(cast(Date#29212 as string), 1, 4) = 2013))
+            :                             +- Scan JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1] [Date#29212,CustomerID#29214,Price#29219] PushedFilters: [*IsNotNull(Date), *IsNotNull(CustomerID)], ReadSchema: struct<Date:decimal(38,18),CustomerID:int,Price:double>
+            +- Sort [Segment#29303 ASC NULLS FIRST], false, 0
+              +- Exchange hashpartitioning(Segment#29303, 200), ENSURE_REQUIREMENTS, [plan_id=48266]
+                  +- HashAggregate(keys=[Segment#29303, _groupingexpression#29314], functions=[sum(Price#29313)], output=[Segment#29303, TotalConsumption#29286])
+                    +- Exchange hashpartitioning(Segment#29303, _groupingexpression#29314, 200), ENSURE_REQUIREMENTS, [plan_id=48261]
+                        +- HashAggregate(keys=[Segment#29303, _groupingexpression#29314], functions=[partial_sum(Price#29313)], output=[Segment#29303, _groupingexpression#29314, sum#29320])
+                          +- Project [Segment#29303, Price#29313, substr(cast(Date#29306 as string), 1, 4) AS _groupingexpression#29314]
+                              +- SortMergeJoin [CustomerID#29302], [CustomerID#29308], Inner
+                                :- Sort [CustomerID#29302 ASC NULLS FIRST], false, 0
+                                :  +- Exchange hashpartitioning(CustomerID#29302, 200), ENSURE_REQUIREMENTS, [plan_id=48253]
+                                :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29302,Segment#29303] PushedFilters: [*IsNotNull(Currency), *EqualTo(Currency,EUR), *IsNotNull(CustomerID), *IsNotNull(Segment)], ReadSchema: struct<CustomerID:int,Segment:string>
+                                +- Sort [CustomerID#29308 ASC NULLS FIRST], false, 0
+                                    +- Exchange hashpartitioning(CustomerID#29308, 200), ENSURE_REQUIREMENTS, [plan_id=48254]
+                                      +- Filter (substr(cast(Date#29306 as string), 1, 4) IN (2012,2013) AND (substr(cast(Date#29306 as string), 1, 4) = 2012))
+                                          +- Scan JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1] [Date#29306,CustomerID#29308,Price#29313] PushedFilters: [*IsNotNull(Date), *IsNotNull(CustomerID)], ReadSchema: struct<Date:decimal(38,18),CustomerID:int,Price:double>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Sort [PercentageIncrease#29324 DESC NULLS LAST], true, 0
+  +- Exchange rangepartitioning(PercentageIncrease#29324 DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [plan_id=48385]
+  +- Project [Segment#29203, TotalConsumption#29326 AS Consumption2013#29321, TotalConsumption#29334 AS Consumption2012#29322, (TotalConsumption#29326 - TotalConsumption#29334) AS IncreaseDecrease#29323, (((TotalConsumption#29326 - TotalConsumption#29334) / TotalConsumption#29326) * 100.0) AS PercentageIncrease#29324]
+  +- SortMergeJoin [Segment#29203], [Segment#29351], Inner
+  :- Sort [Segment#29203 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(Segment#29203, 200), ENSURE_REQUIREMENTS, [plan_id=48378]
+  :     +- HashAggregate(keys=[Segment#29203, _groupingexpression#29349], functions=[sum(Price#29219)])
+  :        +- Exchange hashpartitioning(Segment#29203, _groupingexpression#29349, 200), ENSURE_REQUIREMENTS, [plan_id=48363]
+  :           +- HashAggregate(keys=[Segment#29203, _groupingexpression#29349], functions=[partial_sum(Price#29219)])
+  :              +- Project [Segment#29203, Price#29219, substr(cast(Date#29212 as string), 1, 4) AS _groupingexpression#29349]
+  :                 +- SortMergeJoin [CustomerID#29202], [CustomerID#29214], Inner
+  :                    :- Sort [CustomerID#29202 ASC NULLS FIRST], false, 0
+  :                    :  +- Exchange hashpartitioning(CustomerID#29202, 200), ENSURE_REQUIREMENTS, [plan_id=48355]
+  :                    :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29202,Segment#29203] PushedFilters: [*IsNotNull(Currency), *EqualTo(Currency,EUR), *IsNotNull(CustomerID), *IsNotNull(Segment)], ReadSchema: struct<CustomerID:int,Segment:string>
+  :                    +- Sort [CustomerID#29214 ASC NULLS FIRST], false, 0
+  :                       +- Exchange hashpartitioning(CustomerID#29214, 200), ENSURE_REQUIREMENTS, [plan_id=48356]
+  :                          +- Filter (substr(cast(Date#29212 as string), 1, 4) IN (2012,2013) AND (substr(cast(Date#29212 as string), 1, 4) = 2013))
+  :                             +- Scan JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1] [Date#29212,CustomerID#29214,Price#29219] PushedFilters: [*IsNotNull(Date), *IsNotNull(CustomerID)], ReadSchema: struct<Date:decimal(38,18),CustomerID:int,Price:double>
+  +- Sort [Segment#29351 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(Segment#29351, 200), ENSURE_REQUIREMENTS, [plan_id=48379]
+  +- HashAggregate(keys=[Segment#29351, _groupingexpression#29362], functions=[sum(Price#29361)])
+  +- Exchange hashpartitioning(Segment#29351, _groupingexpression#29362, 200), ENSURE_REQUIREMENTS, [plan_id=48374]
+  +- HashAggregate(keys=[Segment#29351, _groupingexpression#29362], functions=[partial_sum(Price#29361)])
+  +- Project [Segment#29351, Price#29361, substr(cast(Date#29354 as string), 1, 4) AS _groupingexpression#29362]
+  +- SortMergeJoin [CustomerID#29350], [CustomerID#29356], Inner
+  :- Sort [CustomerID#29350 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(CustomerID#29350, 200), ENSURE_REQUIREMENTS, [plan_id=48366]
+  :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29350,Segment#29351] PushedFilters: [*IsNotNull(Currency), *EqualTo(Currency,EUR), *IsNotNull(CustomerID), *IsNotNull(Segment)], ReadSchema: struct<CustomerID:int,Segment:string>
+  +- Sort [CustomerID#29356 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(CustomerID#29356, 200), ENSURE_REQUIREMENTS, [plan_id=48367]
+  +- Filter (substr(cast(Date#29354 as string), 1, 4) IN (2012,2013) AND (substr(cast(Date#29354 as string), 1, 4) = 2012))
+  +- Scan JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1] [Date#29354,CustomerID#29356,Price#29361] PushedFilters: [*IsNotNull(Date), *IsNotNull(CustomerID)], ReadSchema: struct<Date:decimal(38,18),CustomerID:int,Price:double>
+================================================================================

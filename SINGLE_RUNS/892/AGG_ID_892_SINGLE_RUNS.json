@@ -1,0 +1,63 @@
+{
+    "google_892": {
+        "llm": "google",
+        "query_id": 892,
+        "nl_query": null,
+        "golden_query": "SELECT T3.forename, T3.surname, T2.points FROM races AS T1 INNER JOIN driverStandings AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId ORDER BY T2.points DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT d.forename, d.surname, ds.points FROM races AS r INNER JOIN driverstandings AS ds ON r.raceId = ds.raceId INNER JOIN drivers AS d ON ds.driverId = d.driverId ORDER BY ds.points DESC LIMIT 1"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Sebastian",
+                    "Vettel",
+                    "397.0"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "forename": "Sebastian",
+                    "surname": "Vettel",
+                    "points": 397.0
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "State the driver with the most points scored. Find his full name with that points. the most points scored refers to max(points); Full name of the driver refers to drivers.forename and drivers.surname; First use an inner join to join races and driverStandings and then another inner join to join this table with drivers. Do not use backticks."
+        ],
+        "spark_error": [
+            null
+        ],
+        "total_time": [
+            14.231040716171265
+        ],
+        "spark_time": [
+            0.6748201847076416
+        ],
+        "translation_time": [
+            13.556220531463623
+        ],
+        "jaccard_index": [
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0
+        ],
+        "exact_match": [
+            1
+        ],
+        "total_time_avg": 14.231040716171265,
+        "spark_time_avg": 0.6748201847076416,
+        "translation_time_avg": 13.556220531463623,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

@@ -1,0 +1,398 @@
+{
+    "llm": "google",
+    "sparksql_query": "SELECT T2.A2 AS district, T2.A3 AS state, (CAST((T2.A13 - T2.A12) AS DOUBLE) / T2.A12) * 100 AS unemployment_rate_increment FROM loan AS T1 JOIN account AS T3 ON T1.account_id = T3.account_id JOIN district AS T2 ON T3.district_id = T2.district_id WHERE T1.status = 'D'",
+    "query_id": 125,
+    "iteration": 6,
+    "difficulty": "challenging",
+    "execution_status": "VALID",
+    "query_result": [
+        [
+            "Jesenik",
+            "north Moravia",
+            "None"
+        ],
+        [
+            "Mlada Boleslav",
+            "central Bohemia",
+            "20.0"
+        ],
+        [
+            "Opava",
+            "north Moravia",
+            "13.333333333333346"
+        ],
+        [
+            "Bruntal",
+            "north Moravia",
+            "14.91228070175438"
+        ],
+        [
+            "Novy Jicin",
+            "north Moravia",
+            "-5.593220338983052"
+        ],
+        [
+            "Karvina",
+            "north Moravia",
+            "17.42424242424243"
+        ],
+        [
+            "Chrudim",
+            "east Bohemia",
+            "39.259259259259245"
+        ],
+        [
+            "Opava",
+            "north Moravia",
+            "13.333333333333346"
+        ],
+        [
+            "Chrudim",
+            "east Bohemia",
+            "39.259259259259245"
+        ],
+        [
+            "Blansko",
+            "south Moravia",
+            "42.400000000000006"
+        ],
+        [
+            "Beroun",
+            "central Bohemia",
+            "16.315789473684212"
+        ],
+        [
+            "Hl.m. Praha",
+            "Prague",
+            "114.99999999999999"
+        ],
+        [
+            "Jesenik",
+            "north Moravia",
+            "None"
+        ],
+        [
+            "Plzen - mesto",
+            "west Bohemia",
+            "18.846153846153836"
+        ],
+        [
+            "Zlin",
+            "south Moravia",
+            "44.375"
+        ],
+        [
+            "Klatovy",
+            "west Bohemia",
+            "11.666666666666679"
+        ],
+        [
+            "Brno - mesto",
+            "south Moravia",
+            "22.499999999999993"
+        ],
+        [
+            "Hradec Kralove",
+            "east Bohemia",
+            "47.05882352941177"
+        ],
+        [
+            "Svitavy",
+            "east Bohemia",
+            "13.541666666666675"
+        ],
+        [
+            "Strakonice",
+            "south Bohemia",
+            "40.0"
+        ],
+        [
+            "Brno - mesto",
+            "south Moravia",
+            "22.499999999999993"
+        ],
+        [
+            "Kromeriz",
+            "south Moravia",
+            "8.4375"
+        ],
+        [
+            "Ceske Budejovice",
+            "south Bohemia",
+            "22.142857142857146"
+        ],
+        [
+            "Usti nad Orlici",
+            "east Bohemia",
+            "39.60000000000001"
+        ],
+        [
+            "Strakonice",
+            "south Bohemia",
+            "40.0"
+        ],
+        [
+            "Domazlice",
+            "west Bohemia",
+            "13.636363636363628"
+        ],
+        [
+            "Svitavy",
+            "east Bohemia",
+            "13.541666666666675"
+        ],
+        [
+            "Hl.m. Praha",
+            "Prague",
+            "114.99999999999999"
+        ],
+        [
+            "Prachatice",
+            "south Bohemia",
+            "28.387096774193544"
+        ],
+        [
+            "Brno - mesto",
+            "south Moravia",
+            "22.499999999999993"
+        ],
+        [
+            "Brno - venkov",
+            "south Moravia",
+            "35.0"
+        ],
+        [
+            "Olomouc",
+            "north Moravia",
+            "26.052631578947377"
+        ],
+        [
+            "Kladno",
+            "central Bohemia",
+            "9.78260869565218"
+        ],
+        [
+            "Ostrava - mesto",
+            "north Moravia",
+            "15.744680851063833"
+        ],
+        [
+            "Hl.m. Praha",
+            "Prague",
+            "114.99999999999999"
+        ],
+        [
+            "Rokycany",
+            "west Bohemia",
+            "28.57142857142858"
+        ],
+        [
+            "Bruntal",
+            "north Moravia",
+            "14.91228070175438"
+        ],
+        [
+            "Karvina",
+            "north Moravia",
+            "17.42424242424243"
+        ],
+        [
+            "Hl.m. Praha",
+            "Prague",
+            "114.99999999999999"
+        ],
+        [
+            "Havlickuv Brod",
+            "east Bohemia",
+            "22.500000000000004"
+        ],
+        [
+            "Rychnov nad Kneznou",
+            "east Bohemia",
+            "43.529411764705884"
+        ],
+        [
+            "Karvina",
+            "north Moravia",
+            "17.42424242424243"
+        ],
+        [
+            "Kutna Hora",
+            "central Bohemia",
+            "38.6206896551724"
+        ],
+        [
+            "Svitavy",
+            "east Bohemia",
+            "13.541666666666675"
+        ],
+        [
+            "Beroun",
+            "central Bohemia",
+            "16.315789473684212"
+        ]
+    ],
+    "spark_error": null,
+    "total_time": 18.289251565933228,
+    "spark_time": 0.057920217514038086,
+    "translation_time": 18.23133134841919,
+    "llm_requests": 6,
+    "chain_of_thought": [
+        "Action: list_tables_sql_db\nAction Input: {}",
+        "Observation: content='account, atom, bond, card, client, connected, customers, disp, district, examination, frpm, gasstations, laboratory, loan, molecule, order, patient, products, satscores, schools, sqlite_sequence, trans, transactions_1k, yearmonth' name='list_tables_sql_db' tool_call_id='d4b3793e-f8be-4a08-b86d-30a1deb94952'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'loan, client, district'}",
+        "Observation: content='CREATE TABLE loan (loan_id int, account_id int, date date, amount int, duration int, payments double, status string);\\n\\nCREATE TABLE client (client_id int, gender string, birth_date date, district_id int);\\n\\nCREATE TABLE district (district_id int, A2 string, A3 string, A4 string, A5 string, A6 string, A7 string, A8 int, A9 int, A10 double, A11 int, A12 double, A13 double, A14 int, A15 int, A16 int);' name='schema_sql_db' tool_call_id='2ffe4725-6884-453e-9ba3-f26296ee7340'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'account'}",
+        "Observation: content='CREATE TABLE account (account_id int, district_id int, frequency string, date date);' name='schema_sql_db' tool_call_id='38bc8285-98b4-4446-94e0-1131f6a4166d'",
+        "Action: query_checker_sql_db\nAction Input: {'query': \"SELECT T2.A2 AS district, T2.A3 AS state, ((T2.A13 - T2.A12) / T2.A12) * 100 AS unemployment_rate_increment FROM loan AS T1 JOIN account AS T3 ON T1.account_id = T3.account_id JOIN district AS T2 ON T3.district_id = T2.district_id WHERE T1.status = 'D'\"}",
+        "Observation: content=\"The provided Spark SQL query has a potential issue related to data type handling in the arithmetic expression for `unemployment_rate_increment`.\\n\\n**Mistake:**\\n\\n*   **Data type mismatch / Casting to the correct data type:** If `T2.A13` and `T2.A12` are integer types, the division `(T2.A13 - T2.A12) / T2.A12` will perform integer division, truncating any decimal part. This would lead to an inaccurate `unemployment_rate_increment`, which is typically expected to be a floating-point percentage. To ensure floating-point division and preserve precision, one of the operands in the division should be explicitly cast to a floating-point type (e.g., `DOUBLE`).\\n\\n**Rewritten Query:**\\n\\n```sql\\nSELECT\\n    T2.A2 AS district,\\n    T2.A3 AS state,\\n    (CAST((T2.A13 - T2.A12) AS DOUBLE) / T2.A12) * 100 AS unemployment_rate_increment\\nFROM\\n    loan AS T1\\nJOIN\\n    account AS T3 ON T1.account_id = T3.account_id\\nJOIN\\n    district AS T2 ON T3.district_id = T2.district_id\\nWHERE\\n    T1.status = 'D'\\n```\" name='query_checker_sql_db' tool_call_id='1575f1b2-263f-488d-97e8-09a279c0626f'",
+        "Action: query_sql_db\nAction Input: {'query': \"SELECT T2.A2 AS district, T2.A3 AS state, (CAST((T2.A13 - T2.A12) AS DOUBLE) / T2.A12) * 100 AS unemployment_rate_increment FROM loan AS T1 JOIN account AS T3 ON T1.account_id = T3.account_id JOIN district AS T2 ON T3.district_id = T2.district_id WHERE T1.status = 'D'\"}"
+    ],
+    "input_tokens": 4979,
+    "output_tokens": 3650,
+    "cloudflare_neurons": null,
+    "prompt": "System: You are an agent designed to interact with Spark SQL.\nGiven an input question, create a syntactically correct Spark SQL query to run, then look at the results of the query and return the answer.\nDon't limit the result size.\nYou can order the results by a relevant column to return the most interesting examples in the database.\nNever query for all the columns from a specific table, only ask for the relevant columns given the question.\nYou have access to tools for interacting with the database.\nOnly use the below tools. Only use the information returned by the below tools to construct your final answer.\nYou MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.\n\nDO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.\n\nIf the question does not seem related to the database, just return \"I don't know\" as the answer.\n\nHuman: For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996. Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'\n\n\nAI: [{'name': 'list_tables_sql_db', 'args': {}, 'id': 'd4b3793e-f8be-4a08-b86d-30a1deb94952', 'type': 'tool_call'}]\nTool: account, atom, bond, card, client, connected, customers, disp, district, examination, frpm, gasstations, laboratory, loan, molecule, order, patient, products, satscores, schools, sqlite_sequence, trans, transactions_1k, yearmonth\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'loan, client, district'}, 'id': '2ffe4725-6884-453e-9ba3-f26296ee7340', 'type': 'tool_call'}]\nTool: CREATE TABLE loan (loan_id int, account_id int, date date, amount int, duration int, payments double, status string);\n\nCREATE TABLE client (client_id int, gender string, birth_date date, district_id int);\n\nCREATE TABLE district (district_id int, A2 string, A3 string, A4 string, A5 string, A6 string, A7 string, A8 int, A9 int, A10 double, A11 int, A12 double, A13 double, A14 int, A15 int, A16 int);\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'account'}, 'id': '38bc8285-98b4-4446-94e0-1131f6a4166d', 'type': 'tool_call'}]\nTool: CREATE TABLE account (account_id int, district_id int, frequency string, date date);\nAI: [{'name': 'query_checker_sql_db', 'args': {'query': \"SELECT T2.A2 AS district, T2.A3 AS state, ((T2.A13 - T2.A12) / T2.A12) * 100 AS unemployment_rate_increment FROM loan AS T1 JOIN account AS T3 ON T1.account_id = T3.account_id JOIN district AS T2 ON T3.district_id = T2.district_id WHERE T1.status = 'D'\"}, 'id': '1575f1b2-263f-488d-97e8-09a279c0626f', 'type': 'tool_call'}]\nTool: The provided Spark SQL query has a potential issue related to data type handling in the arithmetic expression for `unemployment_rate_increment`.\n\n**Mistake:**\n\n*   **Data type mismatch / Casting to the correct data type:** If `T2.A13` and `T2.A12` are integer types, the division `(T2.A13 - T2.A12) / T2.A12` will perform integer division, truncating any decimal part. This would lead to an inaccurate `unemployment_rate_increment`, which is typically expected to be a floating-point percentage. To ensure floating-point division and preserve precision, one of the operands in the division should be explicitly cast to a floating-point type (e.g., `DOUBLE`).\n\n**Rewritten Query:**\n\n```sql\nSELECT\n    T2.A2 AS district,\n    T2.A3 AS state,\n    (CAST((T2.A13 - T2.A12) AS DOUBLE) / T2.A12) * 100 AS unemployment_rate_increment\nFROM\n    loan AS T1\nJOIN\n    account AS T3 ON T1.account_id = T3.account_id\nJOIN\n    district AS T2 ON T3.district_id = T2.district_id\nWHERE\n    T1.status = 'D'\n```",
+    "final_answer": "",
+    "golden_query": "SELECT CAST((T3.A13 - T3.A12) AS FLOAT) * 100 / T3.A12 FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+    "nl_query": "For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996. Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'",
+    "ground_truth": [
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": null
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 19.999999552965164
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.33333326108528
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 14.912281120032594
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": -5.593220561237658
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 17.424242063002154
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.259257139983
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.33333326108528
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.259257139983
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 42.39999771118164
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 16.315789599167672
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": null
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 18.84615421295166
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 44.37499865889549
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 11.666666716337204
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 47.058824230642884
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.541666169961294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.999998532808746
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 8.437500335276127
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.142857313156128
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.60000038146973
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.999998532808746
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.636364178224042
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.541666169961294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 28.38709662037511
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 34.99999973509047
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 26.052631829914294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 9.782608436501546
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 15.744681053973258
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 28.571428997176035
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 14.912281120032594
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 17.424242063002154
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 43.52941232569078
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 17.424242063002154
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 38.62068981959902
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.541666169961294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 16.315789599167672
+        }
+    ],
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "jaccard_index_new": 0.0
+}

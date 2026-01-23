@@ -1,0 +1,120 @@
+{
+    "query_id": 1326,
+    "difficulty": "simple",
+    "is_initial": true,
+    "nl_query": "How many members of the Student_Club have majored Environmental Engineering?\n 'Environmental Engineering' is the major name",
+    "golden_query": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+    "sparksql_query": "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+    "jaccard_index": 1.0,
+    "exact_match": 1,
+    "ground_truth": [
+        {
+            "count(member_id)": 2
+        }
+    ],
+    "query_result": [
+        [
+            "2"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 1326...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.link_to_major = 'T2.major_id)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [member], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [major], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [count(member_id#11017) AS count(member_id)#11027L]\n+- Project [member_id#11017]\n   +- Join Inner, (link_to_major#11025 = major_id#10985)\n      :- Project [member_id#11017, link_to_major#11025]\n      :  +- Filter isnotnull(link_to_major#11025)\n      :     +- Relation [member_id#11017,first_name#11018,last_name#11019,email#11020,position#11021,t_shirt_size#11022,phone#11023,zip#11024,link_to_major#11025] JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1]\n      +- Project [major_id#10985]\n         +- Filter ((isnotnull(major_name#10986) AND (major_name#10986 = Environmental Engineering)) AND isnotnull(major_id#10985))\n            +- Relation [major_id#10985,major_name#10986,department#10987,college#10988] JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[count(member_id#11017)], output=[count(member_id)#11027L])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=26318]\n      +- HashAggregate(keys=[], functions=[partial_count(member_id#11017)], output=[count#11029L])\n        +- Project [member_id#11017]\n            +- SortMergeJoin [link_to_major#11025], [major_id#10985], Inner\n              :- Sort [link_to_major#11025 ASC NULLS FIRST], false, 0\n              :  +- Exchange hashpartitioning(link_to_major#11025, 200), ENSURE_REQUIREMENTS, [plan_id=26310]\n              :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>\n              +- Sort [major_id#10985 ASC NULLS FIRST], false, 0\n                  +- Exchange hashpartitioning(major_id#10985, 200), ENSURE_REQUIREMENTS, [plan_id=26311]\n                    +- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[count(member_id#11017)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=26361]\n  +- HashAggregate(keys=[], functions=[partial_count(member_id#11017)])\n  +- Project [member_id#11017]\n  +- SortMergeJoin [link_to_major#11025], [major_id#10985], Inner\n  :- Sort [link_to_major#11025 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(link_to_major#11025, 200), ENSURE_REQUIREMENTS, [plan_id=26353]\n  :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>\n  +- Sort [major_id#10985 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(major_id#10985, 200), ENSURE_REQUIREMENTS, [plan_id=26354]\n  +- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 1326...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.link_to_major = 'T2.major_id)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [member], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [major], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [count(member_id#11017) AS count(member_id)#11039L]\n+- Project [member_id#11017]\n   +- Join Inner, (link_to_major#11025 = major_id#10985)\n      :- Project [member_id#11017, link_to_major#11025]\n      :  +- Filter isnotnull(link_to_major#11025)\n      :     +- Relation [member_id#11017,first_name#11018,last_name#11019,email#11020,position#11021,t_shirt_size#11022,phone#11023,zip#11024,link_to_major#11025] JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1]\n      +- Project [major_id#10985]\n         +- Filter ((isnotnull(major_name#10986) AND (major_name#10986 = Environmental Engineering)) AND isnotnull(major_id#10985))\n            +- Relation [major_id#10985,major_name#10986,department#10987,college#10988] JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[count(member_id#11017)], output=[count(member_id)#11039L])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=26404]\n      +- HashAggregate(keys=[], functions=[partial_count(member_id#11017)], output=[count#11041L])\n        +- Project [member_id#11017]\n            +- SortMergeJoin [link_to_major#11025], [major_id#10985], Inner\n              :- Sort [link_to_major#11025 ASC NULLS FIRST], false, 0\n              :  +- Exchange hashpartitioning(link_to_major#11025, 200), ENSURE_REQUIREMENTS, [plan_id=26396]\n              :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>\n              +- Sort [major_id#10985 ASC NULLS FIRST], false, 0\n                  +- Exchange hashpartitioning(major_id#10985, 200), ENSURE_REQUIREMENTS, [plan_id=26397]\n                    +- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[count(member_id#11017)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=26447]\n  +- HashAggregate(keys=[], functions=[partial_count(member_id#11017)])\n  +- Project [member_id#11017]\n  +- SortMergeJoin [link_to_major#11025], [major_id#10985], Inner\n  :- Sort [link_to_major#11025 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(link_to_major#11025, 200), ENSURE_REQUIREMENTS, [plan_id=26439]\n  :     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>\n  +- Sort [major_id#10985 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(major_id#10985, 200), ENSURE_REQUIREMENTS, [plan_id=26440]\n  +- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_d598f842/1326/20251231_120712_ID_1326_ITER_8_76088827.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 3
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_major)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>",
+                    "filters": [
+                        "*IsNotNull(major_name)",
+                        "*EqualTo(major_name",
+                        "Environmental Engineering)",
+                        "*IsNotNull(major_id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_major)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>",
+                    "filters": [
+                        "*IsNotNull(major_name)",
+                        "*EqualTo(major_name",
+                        "Environmental Engineering)",
+                        "*IsNotNull(major_id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 3
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_major)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>",
+                    "filters": [
+                        "*IsNotNull(major_name)",
+                        "*EqualTo(major_name",
+                        "Environmental Engineering)",
+                        "*IsNotNull(major_id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#11017,link_to_major#11025] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_major)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"major_id\", \"major_name\", \"department\", \"college\" FROM \"major\") AS \"major\") [numPartitions=1] [major_id#10985] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>",
+                    "filters": [
+                        "*IsNotNull(major_name)",
+                        "*EqualTo(major_name",
+                        "Environmental Engineering)",
+                        "*IsNotNull(major_id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": true
+        }
+    }
+}

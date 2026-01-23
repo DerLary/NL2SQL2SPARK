@@ -1,0 +1,227 @@
+{
+    "google_134": {
+        "llm": "google",
+        "query_id": 134,
+        "nl_query": "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996",
+        "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id GROUP BY T1.A16 ORDER BY T1.A16 DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(*) FROM `account` WHERE `district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1",
+            "SELECT COUNT(*) FROM `account` WHERE `district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(`account_id`) FROM `account` WHERE `district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1",
+            "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            12.623579740524292,
+            12.44122862815857,
+            13.399456024169922,
+            13.255891561508179,
+            7.846967697143555,
+            12.152913331985474,
+            13.052988052368164,
+            11.198909997940063,
+            10.360151052474976,
+            10.358307838439941
+        ],
+        "spark_time": [
+            0.060118913650512695,
+            0.10894083976745605,
+            0.04720902442932129,
+            0.04890894889831543,
+            0.03181576728820801,
+            0.4214658737182617,
+            0.059590816497802734,
+            0.05623364448547363,
+            0.02681589126586914,
+            0.022540807723999023
+        ],
+        "translation_time": [
+            12.56346082687378,
+            12.332287788391113,
+            13.3522469997406,
+            13.206982612609863,
+            7.815151929855347,
+            11.731447458267212,
+            12.993397235870361,
+            11.14267635345459,
+            10.333335161209106,
+            10.335767030715942
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 11.669039392471314,
+        "spark_time_avg": 0.08836405277252198,
+        "translation_time_avg": 11.580675339698791,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.7,
+        "exact_match_avg": 0.0
+    }
+}

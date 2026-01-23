@@ -1,0 +1,69 @@
+
+Execution Plan for: Golden Query ID 30...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 5
++- 'LocalLimit 5
+   +- 'Sort ['SUM('T1.Enrollment (K-12)) ASC NULLS FIRST], true
+      +- 'Aggregate ['T2.City], ['T2.City]
+         +- 'Join Inner, ('T1.CDSCode = 'T2.CDSCode)
+            :- 'SubqueryAlias T1
+            :  +- 'UnresolvedRelation [frpm], [], false
+            +- 'SubqueryAlias T2
+               +- 'UnresolvedRelation [schools], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 5
++- LocalLimit 5
+   +- Project [City#12094]
+      +- Sort [sum(Enrollment (K-12)#12063)#12135 ASC NULLS FIRST], true
+         +- Aggregate [City#12094], [City#12094, sum(Enrollment (K-12)#12063) AS sum(Enrollment (K-12)#12063)#12135]
+            +- Project [Enrollment (K-12)#12063, City#12094]
+               +- Join Inner, (CDSCode#12045 = CDSCode#12085)
+                  :- Project [CDSCode#12045, Enrollment (K-12)#12063]
+                  :  +- Filter isnotnull(CDSCode#12045)
+                  :     +- Relation [CDSCode#12045,Academic Year#12046,County Code#12047,District Code#12048,School Code#12049,County Name#12050,District Name#12051,School Name#12052,District Type#12053,School Type#12054,Educational Option Type#12055,NSLP Provision Status#12056,Charter School (Y/N)#12057,Charter School Number#12058,Charter Funding Type#12059,IRC#12060,Low Grade#12061,High Grade#12062,Enrollment (K-12)#12063,Free Meal Count (K-12)#12064,Percent (%) Eligible Free (K-12)#12065,FRPM Count (K-12)#12066,Percent (%) Eligible FRPM (K-12)#12067,Enrollment (Ages 5-17)#12068,Free Meal Count (Ages 5-17)#12069,... 4 more fields] JDBCRelation((SELECT "CDSCode", "Academic Year", "County Code", "District Code", "School Code", "County Name", "District Name", "School Name", "District Type", "School Type", "Educational Option Type", "NSLP Provision Status", "Charter School (Y/N)", "Charter School Number", "Charter Funding Type", "IRC", "Low Grade", "High Grade", "Enrollment (K-12)", "Free Meal Count (K-12)", "Percent (%) Eligible Free (K-12)", "FRPM Count (K-12)", "Percent (%) Eligible FRPM (K-12)", "Enrollment (Ages 5-17)", "Free Meal Count (Ages 5-17)", "Percent (%) Eligible Free (Ages 5-17)", "FRPM Count (Ages 5-17)", "Percent (%) Eligible FRPM (Ages 5-17)", "2013-14 CALPADS Fall 1 Certification Status" FROM "frpm") AS "frpm") [numPartitions=1]
+                  +- Project [CDSCode#12085, City#12094]
+                     +- Filter isnotnull(CDSCode#12085)
+                        +- Relation [CDSCode#12085,NCESDist#12086,NCESSchool#12087,StatusType#12088,County#12089,District#12090,School#12091,Street#12092,StreetAbr#12093,City#12094,Zip#12095,State#12096,MailStreet#12097,MailStrAbr#12098,MailCity#12099,MailZip#12100,MailState#12101,Phone#12102,Ext#12103,Website#12104,OpenDate#12105,ClosedDate#12106,Charter#12107,CharterNum#12108,FundingType#12109,... 24 more fields] JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- TakeOrderedAndProject(limit=5, orderBy=[sum(Enrollment (K-12)#12063)#12135 ASC NULLS FIRST], output=[City#12094])
+  +- HashAggregate(keys=[City#12094], functions=[sum(Enrollment (K-12)#12063)], output=[City#12094, sum(Enrollment (K-12)#12063)#12135])
+      +- Exchange hashpartitioning(City#12094, 200), ENSURE_REQUIREMENTS, [plan_id=28209]
+        +- HashAggregate(keys=[City#12094], functions=[partial_sum(Enrollment (K-12)#12063)], output=[City#12094, sum#12137])
+            +- Project [Enrollment (K-12)#12063, City#12094]
+              +- SortMergeJoin [CDSCode#12045], [CDSCode#12085], Inner
+                  :- Sort [CDSCode#12045 ASC NULLS FIRST], false, 0
+                  :  +- Exchange hashpartitioning(CDSCode#12045, 200), ENSURE_REQUIREMENTS, [plan_id=28201]
+                  :     +- Scan JDBCRelation((SELECT "CDSCode", "Academic Year", "County Code", "District Code", "School Code", "County Name", "District Name", "School Name", "District Type", "School Type", "Educational Option Type", "NSLP Provision Status", "Charter School (Y/N)", "Charter School Number", "Charter Funding Type", "IRC", "Low Grade", "High Grade", "Enrollment (K-12)", "Free Meal Count (K-12)", "Percent (%) Eligible Free (K-12)", "FRPM Count (K-12)", "Percent (%) Eligible FRPM (K-12)", "Enrollment (Ages 5-17)", "Free Meal Count (Ages 5-17)", "Percent (%) Eligible Free (Ages 5-17)", "FRPM Count (Ages 5-17)", "Percent (%) Eligible FRPM (Ages 5-17)", "2013-14 CALPADS Fall 1 Certification Status" FROM "frpm") AS "frpm") [numPartitions=1] [CDSCode#12045,Enrollment (K-12)#12063] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double>
+                  +- Sort [CDSCode#12085 ASC NULLS FIRST], false, 0
+                    +- Exchange hashpartitioning(CDSCode#12085, 200), ENSURE_REQUIREMENTS, [plan_id=28202]
+                        +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [CDSCode#12085,City#12094] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,City:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- TakeOrderedAndProject(limit=5, orderBy=[sum(Enrollment (K-12)#12063)#12143 ASC NULLS FIRST], output=[City#12094])
+  +- HashAggregate(keys=[City#12094], functions=[sum(Enrollment (K-12)#12063)])
+  +- Exchange hashpartitioning(City#12094, 200), ENSURE_REQUIREMENTS, [plan_id=28250]
+  +- HashAggregate(keys=[City#12094], functions=[partial_sum(Enrollment (K-12)#12063)])
+  +- Project [Enrollment (K-12)#12063, City#12094]
+  +- SortMergeJoin [CDSCode#12045], [CDSCode#12085], Inner
+  :- Sort [CDSCode#12045 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(CDSCode#12045, 200), ENSURE_REQUIREMENTS, [plan_id=28242]
+  :     +- Scan JDBCRelation((SELECT "CDSCode", "Academic Year", "County Code", "District Code", "School Code", "County Name", "District Name", "School Name", "District Type", "School Type", "Educational Option Type", "NSLP Provision Status", "Charter School (Y/N)", "Charter School Number", "Charter Funding Type", "IRC", "Low Grade", "High Grade", "Enrollment (K-12)", "Free Meal Count (K-12)", "Percent (%) Eligible Free (K-12)", "FRPM Count (K-12)", "Percent (%) Eligible FRPM (K-12)", "Enrollment (Ages 5-17)", "Free Meal Count (Ages 5-17)", "Percent (%) Eligible Free (Ages 5-17)", "FRPM Count (Ages 5-17)", "Percent (%) Eligible FRPM (Ages 5-17)", "2013-14 CALPADS Fall 1 Certification Status" FROM "frpm") AS "frpm") [numPartitions=1] [CDSCode#12045,Enrollment (K-12)#12063] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double>
+  +- Sort [CDSCode#12085 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(CDSCode#12085, 200), ENSURE_REQUIREMENTS, [plan_id=28243]
+  +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [CDSCode#12085,City#12094] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,City:string>
+================================================================================

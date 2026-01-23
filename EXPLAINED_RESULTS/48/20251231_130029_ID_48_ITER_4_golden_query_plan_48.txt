@@ -1,0 +1,38 @@
+
+Execution Plan for: Golden Query ID 48...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias((cast('SUM(CASE WHEN ('DOC = 54) THEN 1 ELSE 0 END) as float) / 'SUM(CASE WHEN ('DOC = 52) THEN 1 ELSE 0 END)))]
++- 'Filter (('StatusType = Merged) AND ('County = Orange))
+   +- 'UnresolvedRelation [schools], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [(cast(sum(CASE WHEN (cast(DOC#3847 as bigint) = 54) THEN 1 ELSE 0 END) as double) / cast(sum(CASE WHEN (cast(DOC#3847 as bigint) = 52) THEN 1 ELSE 0 END) as double)) AS (CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))#3873]
++- Project [DOC#3847]
+   +- Filter ((isnotnull(StatusType#3825) AND isnotnull(County#3826)) AND ((StatusType#3825 = Merged) AND (County#3826 = Orange)))
+      +- Relation [CDSCode#3822,NCESDist#3823,NCESSchool#3824,StatusType#3825,County#3826,District#3827,School#3828,Street#3829,StreetAbr#3830,City#3831,Zip#3832,State#3833,MailStreet#3834,MailStrAbr#3835,MailCity#3836,MailZip#3837,MailState#3838,Phone#3839,Ext#3840,Website#3841,OpenDate#3842,ClosedDate#3843,Charter#3844,CharterNum#3845,FundingType#3846,... 24 more fields] JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[sum(CASE WHEN (cast(DOC#3847 as bigint) = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (cast(DOC#3847 as bigint) = 52) THEN 1 ELSE 0 END)], output=[(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))#3873])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8190]
+      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (cast(DOC#3847 as bigint) = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (cast(DOC#3847 as bigint) = 52) THEN 1 ELSE 0 END)], output=[sum#3876L, sum#3877L])
+        +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [DOC#3847] PushedFilters: [*IsNotNull(StatusType), *IsNotNull(County), *EqualTo(StatusType,Merged), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (cast(DOC#3847 as bigint) = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (cast(DOC#3847 as bigint) = 52) THEN 1 ELSE 0 END)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8210]
+  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (cast(DOC#3847 as bigint) = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (cast(DOC#3847 as bigint) = 52) THEN 1 ELSE 0 END)])
+  +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [DOC#3847] PushedFilters: [*IsNotNull(StatusType), *IsNotNull(County), *EqualTo(StatusType,Merged), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>
+================================================================================

@@ -1,0 +1,103 @@
+{
+    "provider": "google",
+    "output_folder": "benchmark_results_20251231_google_0d954987",
+    "iterations": 10,
+    "query_ids": {
+        "168": {
+            "database_name": "financial",
+            "difficulty": "moderate",
+            "nl_query": "What percentage of clients who opened their accounts in the district with an average salary of over 10000 are women? Female refers to gender = 'F'; Woman and female are closed; Average salary can be found in A11",
+            "golden_query": "SELECT CAST(SUM(T2.gender = 'F') AS REAL) * 100 / COUNT(T2.client_id) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000"
+        },
+        "544": {
+            "database_name": "codebase_community",
+            "difficulty": "moderate",
+            "nl_query": "What is the display name of the user who last edited the post \"Examples for teaching: Correlation does not mean causation\"? \"Examples for teaching: Correlation does not mean causation\" is the Title of post; user who last edited refers to LastEditorUserId",
+            "golden_query": "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'"
+        },
+        "150": {
+            "database_name": "financial",
+            "difficulty": "moderate",
+            "nl_query": "How many accounts in North Bohemia has made a transaction with the partner's bank being AB? A3 contains the region names; North Bohemia is a region.",
+            "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T3.bank = 'AB' AND T1.A3 = 'north Bohemia'"
+        },
+        "892": {
+            "database_name": "formula_1",
+            "difficulty": "moderate",
+            "nl_query": "State the driver with the most points scored. Find his full name with that points. the most points scored refers to max(points); Full name of the driver refers to drivers.forename and drivers.surname;",
+            "golden_query": "SELECT T3.forename, T3.surname, T2.points FROM races AS T1 INNER JOIN driverStandings AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId ORDER BY T2.points DESC LIMIT 1"
+        },
+        "845": {
+            "database_name": "superhero",
+            "difficulty": "moderate",
+            "nl_query": "List the power of superheroes with height greater than 80% of the average height of all superheroes. power of superheroes refers to power_name; height greater than 80% of the average height of all superheroes = height_cm > MULTIPLY(AVG(height_cm), 0.8);",
+            "golden_query": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm * 100 > ( SELECT AVG(height_cm) FROM superhero ) * 80"
+        },
+        "1212": {
+            "database_name": "thrombosis_prediction",
+            "difficulty": "moderate",
+            "nl_query": "For patients with alkaliphophatase (ALP) within normal range, were they treated as inpatient or outpatient? alkaliphophatase (ALP) within normal range refers to ALP < 300; inpatient refers to admission = '+'; outpatient refers to admission = '-'",
+            "golden_query": "SELECT T1.Admission FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.ALP < 300"
+        },
+        "523": {
+            "database_name": "card_games",
+            "difficulty": "challenging",
+            "nl_query": "What is the annual average number of sets that were released between 1/1/2012 to 12/31/2015? Indicate the common langugage of the card. AVG(id); releaseDate BETWEEN 1/1/2012 AND 12/31/2015; the common language refers to MAX(COUNT(language))",
+            "golden_query": "SELECT (CAST(SUM(T1.id) AS REAL) / COUNT(T1.id)) / 4, T2.language FROM sets AS T1 INNER JOIN set_translations AS T2 ON T1.id = T2.id WHERE T1.releaseDate BETWEEN '2012-01-01' AND '2015-12-31' GROUP BY T1.releaseDate ORDER BY COUNT(T2.language) DESC LIMIT 1"
+        },
+        "944": {
+            "database_name": "formula_1",
+            "difficulty": "challenging",
+            "nl_query": "How much faster in percentage is the champion than the driver who finished the race last in the 2008 Australian Grand Prix? how much faster in percentage = divide(subtract(incremental time, champion time), last_driver time) * 100; last driver finished time = incremental time + champion time; only champion's finished time is represented by 'HH:MM:SS.mmm'; finished the game refers to time is not null",
+            "golden_query": "WITH time_in_seconds AS ( SELECT T1.positionOrder, CASE WHEN T1.positionOrder = 1 THEN (CAST(SUBSTR(T1.time, 1, 1) AS REAL) * 3600) + (CAST(SUBSTR(T1.time, 3, 2) AS REAL) * 60) + CAST(SUBSTR(T1.time, 6) AS REAL) ELSE CAST(SUBSTR(T1.time, 2) AS REAL) END AS time_seconds FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId WHERE T2.name = 'Australian Grand Prix' AND T1.time IS NOT NULL AND T2.year = 2008 ), champion_time AS ( SELECT time_seconds FROM time_in_seconds WHERE positionOrder = 1), last_driver_incremental AS ( SELECT time_seconds FROM time_in_seconds WHERE positionOrder = (SELECT MAX(positionOrder) FROM time_in_seconds) ) SELECT (CAST((SELECT time_seconds FROM last_driver_incremental) AS REAL) * 100) / (SELECT time_seconds + (SELECT time_seconds FROM last_driver_incremental) FROM champion_time)"
+        },
+        "1169": {
+            "database_name": "thrombosis_prediction",
+            "difficulty": "challenging",
+            "nl_query": "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F'))",
+            "golden_query": "SELECT CAST(SUM(CASE WHEN T2.UA <= 8.0 AND T1.SEX = 'M' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN T2.UA <= 6.5 AND T1.SEX = 'F' THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID"
+        },
+        "1482": {
+            "database_name": "debit_card_specializing",
+            "difficulty": "challenging",
+            "nl_query": "Which of the three segments\u2014SME, LAM and KAM\u2014has the biggest and lowest percentage increases in consumption paid in EUR between 2012 and 2013? Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2013) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year",
+            "golden_query": "SELECT CAST((SUM(IIF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IIF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IIF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST(SUM(IIF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IIF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IIF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) , CAST(SUM(IIF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IIF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IIF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID"
+        },
+        "83": {
+            "database_name": "california_schools",
+            "difficulty": "challenging",
+            "nl_query": "Of the schools that offers a magnet program serving a grade span of Kindergarten to 8th grade, how many offers Multiple Provision Types? List the number of cities that offers a Kindergarten to 8th grade span and indicate how many schools are there serving such grade span for each city. Kindergarten to 8th grade refers to K-8; 'Offers a magnet program' means Magnet = 1; Multiple Provision Types refers to `NSLP Provision Status` = 'Multiple Provision Types'",
+            "golden_query": "SELECT T2.City, COUNT(T2.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.Magnet = 1 AND T2.GSoffered = 'K-8' AND T1.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T2.City"
+        },
+        "1223": {
+            "database_name": "thrombosis_prediction",
+            "difficulty": "challenging",
+            "nl_query": "Are there more male patients with creatinine not within the normal range than female? True or False? creatinine (CRE) not within the normal range refers to CRE > = 1.5; male refers to Sex = 'M'; female refers to Sex = 'F'; calculation = (SUM(SEX = 'M') > SUM(SEX = 'F')) where CRE > = 1.5",
+            "golden_query": "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5"
+        },
+        "28": {
+            "database_name": "california_schools",
+            "difficulty": "challenging",
+            "nl_query": "Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that are locally funded, list the names and DOC type of schools which has a difference above this average. Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)` - `Enrollment (Ages 5-17)`",
+            "golden_query": "SELECT T2.School, T2.DOC FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.FundingType = 'Locally funded' AND (T1.`Enrollment (K-12)` - T1.`Enrollment (Ages 5-17)`) > (SELECT AVG(T3.`Enrollment (K-12)` - T3.`Enrollment (Ages 5-17)`) FROM frpm AS T3 INNER JOIN schools AS T4 ON T3.CDSCode = T4.CDSCode WHERE T4.FundingType = 'Locally funded')"
+        },
+        "219": {
+            "database_name": "toxicology",
+            "difficulty": "challenging",
+            "nl_query": "What is the percentage of carcinogenic molecules in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'",
+            "golden_query": "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T2.molecule_id ELSE NULL END) AS REAL) * 100 / COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#'"
+        },
+        "220": {
+            "database_name": "toxicology",
+            "difficulty": "challenging",
+            "nl_query": "Please list top three elements of the toxicology of the molecule TR000 in alphabetical order. TR000 is the molecule id;",
+            "golden_query": "SELECT DISTINCT T.element FROM atom AS T WHERE T.molecule_id = 'TR000' ORDER BY T.element LIMIT 3"
+        },
+        "125": {
+            "database_name": "financial",
+            "difficulty": "challenging",
+            "nl_query": "For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996. Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'",
+            "golden_query": "SELECT CAST((T3.A13 - T3.A12) AS REAL) * 100 / T3.A12 FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'"
+        }
+    }
+}

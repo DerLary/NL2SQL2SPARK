@@ -1,0 +1,227 @@
+{
+    "google_48": {
+        "llm": "google",
+        "query_id": 48,
+        "nl_query": "What is the ratio of merged Unified School District schools in Orange County to merged Elementary School District schools? Elementary School District refers to DOC = 52; Unified School District refers to DOC = 54.",
+        "golden_query": "SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools WHERE StatusType = 'Merged' AND County = 'Orange'",
+        "sparksql_query": [
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) AS ratio FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN `DOC` = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN `DOC` = '52' THEN 1 ELSE 0 END) AS `Ratio` FROM `schools` WHERE `County` = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN `DOC` = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN `DOC` = '52' THEN 1 ELSE 0 END) AS ratio FROM `schools` WHERE `County` = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) AS ratio FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            16.109306573867798,
+            31.746546268463135,
+            25.60905122756958,
+            14.929830312728882,
+            18.28763175010681,
+            22.016738414764404,
+            24.25731110572815,
+            35.125874280929565,
+            13.311410903930664,
+            16.120265245437622
+        ],
+        "spark_time": [
+            0.05831122398376465,
+            0.03443145751953125,
+            0.03770279884338379,
+            0.049900054931640625,
+            0.0588836669921875,
+            0.031070709228515625,
+            0.12302398681640625,
+            0.047377586364746094,
+            0.05795454978942871,
+            0.03922247886657715
+        ],
+        "translation_time": [
+            16.050995349884033,
+            31.712114810943604,
+            25.571348428726196,
+            14.879930257797241,
+            18.228748083114624,
+            21.98566770553589,
+            24.134287118911743,
+            35.07849669456482,
+            13.253456354141235,
+            16.081042766571045
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 21.75139660835266,
+        "spark_time_avg": 0.053787851333618165,
+        "translation_time_avg": 21.697608757019044,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

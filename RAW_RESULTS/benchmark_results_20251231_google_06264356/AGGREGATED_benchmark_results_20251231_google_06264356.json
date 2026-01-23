@@ -1,0 +1,1395 @@
+{
+    "google_778": {
+        "llm": "google",
+        "query_id": 778,
+        "nl_query": "Provide superheroes' names who have the adaptation power. adaptation power refers to power_name = 'Adaptation';",
+        "golden_query": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+        "sparksql_query": [
+            "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'",
+            "SELECT `s`.`superhero_name` FROM `superhero` AS `s` JOIN `hero_power` AS `hp` ON `s`.`id` = `hp`.`hero_id` JOIN `superpower` AS `sp` ON `hp`.`power_id` = `sp`.`id` WHERE `sp`.`power_name` = 'Adaptation'",
+            "SELECT T1.`superhero_name` FROM `superhero` AS T1 INNER JOIN `hero_power` AS T2 ON T1.`id` = T2.`hero_id` INNER JOIN `superpower` AS T3 ON T2.`power_id` = T3.`id` WHERE T3.`power_name` = 'Adaptation'",
+            "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+            "SELECT `s`.`superhero_name` FROM `superhero` AS `s` JOIN `hero_power` AS `hp` ON `s`.`id` = `hp`.`hero_id` JOIN `superpower` AS `sp` ON `hp`.`power_id` = `sp`.`id` WHERE `sp`.`power_name` = 'Adaptation'",
+            "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'",
+            "SELECT T1.`superhero_name` FROM `superhero` AS T1 INNER JOIN `hero_power` AS T2 ON T1.`id` = T2.`hero_id` INNER JOIN `superpower` AS T3 ON T2.`power_id` = T3.`id` WHERE T3.`power_name` = 'Adaptation'",
+            "SELECT `s`.`superhero_name` FROM `superhero` AS `s` JOIN `hero_power` AS `hp` ON `s`.`id` = `hp`.`hero_id` JOIN `superpower` AS `sp` ON `hp`.`power_id` = `sp`.`id` WHERE `sp`.`power_name` = 'Adaptation'",
+            "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+            "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            12.170267343521118,
+            13.017995595932007,
+            12.964590787887573,
+            11.42976188659668,
+            13.5381019115448,
+            11.895776510238647,
+            11.966572046279907,
+            13.18212342262268,
+            12.28180742263794,
+            11.40920901298523
+        ],
+        "spark_time": [
+            0.22259926795959473,
+            0.08971285820007324,
+            0.09464120864868164,
+            0.08270001411437988,
+            0.11281776428222656,
+            0.11065483093261719,
+            0.10338377952575684,
+            0.09447336196899414,
+            0.1068582534790039,
+            0.08659195899963379
+        ],
+        "translation_time": [
+            11.947668075561523,
+            12.928282737731934,
+            12.869949579238892,
+            11.3470618724823,
+            13.425284147262573,
+            11.78512167930603,
+            11.86318826675415,
+            13.087650060653687,
+            12.174949169158936,
+            11.322617053985596
+        ],
+        "jaccard_index": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1
+        ],
+        "total_time_avg": 12.385620594024658,
+        "spark_time_avg": 0.1104433298110962,
+        "translation_time_avg": 12.275177264213562,
+        "jaccard_index_avg": 1.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.7,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/778/AGG_ID_778_benchmark_results_20251231_google_06264356.json"
+        ]
+    },
+    "google_895": {
+        "llm": "google",
+        "query_id": 895,
+        "nl_query": "What is the average lap time for Lewis Hamilton in the 2009 Malaysian Grand Prix? average lap time = AVG(milliseconds); 'Lewis Hamilton' refers to the full name of the driver; Full name of the driver refers to drivers.forename and drivers.surname; 'Malaysian Grand Prix' refers to races.name = 'Malaysian Grand Prix'",
+        "golden_query": "SELECT AVG(T2.milliseconds) FROM races AS T1 INNER JOIN lapTimes AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T3.forename = 'Lewis' AND T3.surname = 'Hamilton' AND T1.year = 2009 AND T1.name = 'Malaysian Grand Prix'",
+        "sparksql_query": [
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(LT.milliseconds) FROM laptimes AS LT JOIN drivers AS D ON LT.driverId = D.driverId JOIN races AS R ON LT.raceId = R.raceId WHERE D.forename = 'Lewis' AND D.surname = 'Hamilton' AND R.name = 'Malaysian Grand Prix' AND R.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009;",
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            11.685348987579346,
+            15.388404369354248,
+            9.885918140411377,
+            9.933424234390259,
+            10.947020530700684,
+            9.988013505935669,
+            11.999223470687866,
+            11.706602811813354,
+            10.254921674728394,
+            11.67326021194458
+        ],
+        "spark_time": [
+            0.2184140682220459,
+            0.22132110595703125,
+            0.2010936737060547,
+            0.22387409210205078,
+            0.21541666984558105,
+            0.20566582679748535,
+            0.19521594047546387,
+            0.20071721076965332,
+            0.6229591369628906,
+            0.216264009475708
+        ],
+        "translation_time": [
+            11.4669349193573,
+            15.167083263397217,
+            9.684824466705322,
+            9.709550142288208,
+            10.731603860855103,
+            9.782347679138184,
+            11.804007530212402,
+            11.505885601043701,
+            9.631962537765503,
+            11.456996202468872
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 11.346213793754577,
+        "spark_time_avg": 0.2520941734313965,
+        "translation_time_avg": 11.09411962032318,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/895/AGG_ID_895_benchmark_results_20251231_google_06264356.json"
+        ]
+    },
+    "google_983": {
+        "llm": "google",
+        "query_id": 983,
+        "nl_query": "Which of the Italian constructor got the highest point to date? Give its introduction website? introduction website refers to url; Italian is a nationality",
+        "golden_query": "SELECT T1.url FROM constructors AS T1 INNER JOIN constructorStandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+            "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+            "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY SUM(T2.points) DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY SUM(T2.points) DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY SUM(T2.points) DESC LIMIT 1",
+            "SELECT T1.`name`, T1.`url` FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.`constructorId` = T2.`constructorId` WHERE T1.`nationality` = 'Italian' GROUP BY T1.`name`, T1.`url` ORDER BY SUM(T2.`points`) DESC LIMIT 1",
+            "SELECT T1.`name`, T1.`url` FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.`constructorId` = T2.`constructorId` WHERE T1.`nationality` = 'Italian' GROUP BY T1.`name`, T1.`url` ORDER BY SUM(T2.`points`) DESC LIMIT 1",
+            "SELECT T1.`name`, T1.`url` FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.`constructorId` = T2.`constructorId` WHERE T1.`nationality` = 'Italian' GROUP BY T1.`name`, T1.`url` ORDER BY SUM(T2.`points`) DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 INNER JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1;"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "63855.5"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "63855.5"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "63855.5"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            10.757232427597046,
+            17.018261671066284,
+            13.82803750038147,
+            8.106865882873535,
+            9.933151483535767,
+            6.907336473464966,
+            14.43509840965271,
+            15.73948860168457,
+            13.76475739479065,
+            12.218424320220947
+        ],
+        "spark_time": [
+            0.0823514461517334,
+            0.07886862754821777,
+            0.3034038543701172,
+            0.09139537811279297,
+            0.0813596248626709,
+            0.07977747917175293,
+            0.07513046264648438,
+            0.10528945922851562,
+            0.09632444381713867,
+            0.0983431339263916
+        ],
+        "translation_time": [
+            10.674880981445312,
+            16.939393043518066,
+            13.524633646011353,
+            8.015470504760742,
+            9.851791858673096,
+            6.827558994293213,
+            14.359967947006226,
+            15.634199142456055,
+            13.66843295097351,
+            12.120081186294556
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 12.270865416526794,
+        "spark_time_avg": 0.10922439098358154,
+        "translation_time_avg": 12.161641025543213,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/983/AGG_ID_983_benchmark_results_20251231_google_06264356.json"
+        ]
+    },
+    "google_48": {
+        "llm": "google",
+        "query_id": 48,
+        "nl_query": "What is the ratio of merged Unified School District schools in Orange County to merged Elementary School District schools? Elementary School District refers to DOC = 52; Unified School District refers to DOC = 54.",
+        "golden_query": "SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools WHERE StatusType = 'Merged' AND County = 'Orange'",
+        "sparksql_query": [
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) AS ratio FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN `DOC` = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN `DOC` = '52' THEN 1 ELSE 0 END) AS `Ratio` FROM `schools` WHERE `County` = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN `DOC` = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN `DOC` = '52' THEN 1 ELSE 0 END) AS ratio FROM `schools` WHERE `County` = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS DOUBLE) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) AS ratio FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange'",
+            "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [
+                [
+                    "2.3946188340807173"
+                ]
+            ],
+            [
+                [
+                    "None"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            16.109306573867798,
+            31.746546268463135,
+            25.60905122756958,
+            14.929830312728882,
+            18.28763175010681,
+            22.016738414764404,
+            24.25731110572815,
+            35.125874280929565,
+            13.311410903930664,
+            16.120265245437622
+        ],
+        "spark_time": [
+            0.05831122398376465,
+            0.03443145751953125,
+            0.03770279884338379,
+            0.049900054931640625,
+            0.0588836669921875,
+            0.031070709228515625,
+            0.12302398681640625,
+            0.047377586364746094,
+            0.05795454978942871,
+            0.03922247886657715
+        ],
+        "translation_time": [
+            16.050995349884033,
+            31.712114810943604,
+            25.571348428726196,
+            14.879930257797241,
+            18.228748083114624,
+            21.98566770553589,
+            24.134287118911743,
+            35.07849669456482,
+            13.253456354141235,
+            16.081042766571045
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 21.75139660835266,
+        "spark_time_avg": 0.053787851333618165,
+        "translation_time_avg": 21.697608757019044,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/48/AGG_ID_48_benchmark_results_20251231_google_06264356.json"
+        ]
+    },
+    "google_134": {
+        "llm": "google",
+        "query_id": 134,
+        "nl_query": "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996",
+        "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id GROUP BY T1.A16 ORDER BY T1.A16 DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(*) FROM `account` WHERE `district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1",
+            "SELECT COUNT(*) FROM `account` WHERE `district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(`account_id`) FROM `account` WHERE `district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1",
+            "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            12.623579740524292,
+            12.44122862815857,
+            13.399456024169922,
+            13.255891561508179,
+            7.846967697143555,
+            12.152913331985474,
+            13.052988052368164,
+            11.198909997940063,
+            10.360151052474976,
+            10.358307838439941
+        ],
+        "spark_time": [
+            0.060118913650512695,
+            0.10894083976745605,
+            0.04720902442932129,
+            0.04890894889831543,
+            0.03181576728820801,
+            0.4214658737182617,
+            0.059590816497802734,
+            0.05623364448547363,
+            0.02681589126586914,
+            0.022540807723999023
+        ],
+        "translation_time": [
+            12.56346082687378,
+            12.332287788391113,
+            13.3522469997406,
+            13.206982612609863,
+            7.815151929855347,
+            11.731447458267212,
+            12.993397235870361,
+            11.14267635345459,
+            10.333335161209106,
+            10.335767030715942
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 11.669039392471314,
+        "spark_time_avg": 0.08836405277252198,
+        "translation_time_avg": 11.580675339698791,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.7,
+        "exact_match_avg": 0.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/134/AGG_ID_134_benchmark_results_20251231_google_06264356.json"
+        ]
+    }
+}

@@ -1,0 +1,54 @@
+
+Execution Plan for: Golden Query ID 1212...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['T1.Admission]
++- 'Filter ('T2.ALP < 300)
+   +- 'Join Inner, ('T1.ID = 'T2.ID)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [Patient], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [Laboratory], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [Admission#26236]
++- Join Inner, (ID#26231 = ID#26238)
+   :- Project [ID#26231, Admission#26236]
+   :  +- Filter isnotnull(ID#26231)
+   :     +- Relation [ID#26231,SEX#26232,Birthday#26233,Description#26234,First Date#26235,Admission#26236,Diagnosis#26237] JDBCRelation((SELECT "ID", "SEX", CAST("Birthday" AS TEXT) AS "Birthday", CAST("Description" AS TEXT) AS "Description", CAST("First Date" AS TEXT) AS "First Date", "Admission", "Diagnosis" FROM "Patient") AS "Patient") [numPartitions=1]
+   +- Project [ID#26238]
+      +- Filter ((isnotnull(ALP#26243) AND (ALP#26243 < 300)) AND isnotnull(ID#26238))
+         +- Relation [ID#26238,Date#26239,GOT#26240,GPT#26241,LDH#26242,ALP#26243,TP#26244,ALB#26245,UA#26246,UN#26247,CRE#26248,T-BIL#26249,T-CHO#26250,TG#26251,CPK#26252,GLU#26253,WBC#26254,RBC#26255,HGB#26256,HCT#26257,PLT#26258,PT#26259,APTT#26260,FG#26261,PIC#26262,... 19 more fields] JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [Admission#26236]
+  +- SortMergeJoin [ID#26231], [ID#26238], Inner
+      :- Sort [ID#26231 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(ID#26231, 200), ENSURE_REQUIREMENTS, [plan_id=43721]
+      :     +- Scan JDBCRelation((SELECT "ID", "SEX", CAST("Birthday" AS TEXT) AS "Birthday", CAST("Description" AS TEXT) AS "Description", CAST("First Date" AS TEXT) AS "First Date", "Admission", "Diagnosis" FROM "Patient") AS "Patient") [numPartitions=1] [ID#26231,Admission#26236] PushedFilters: [*IsNotNull(ID)], ReadSchema: struct<ID:int,Admission:string>
+      +- Sort [ID#26238 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(ID#26238, 200), ENSURE_REQUIREMENTS, [plan_id=43722]
+            +- Scan JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1] [ID#26238] PushedFilters: [*IsNotNull(ALP), *LessThan(ALP,300), *IsNotNull(ID)], ReadSchema: struct<ID:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [Admission#26236]
+  +- SortMergeJoin [ID#26231], [ID#26238], Inner
+  :- Sort [ID#26231 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(ID#26231, 200), ENSURE_REQUIREMENTS, [plan_id=43751]
+  :     +- Scan JDBCRelation((SELECT "ID", "SEX", CAST("Birthday" AS TEXT) AS "Birthday", CAST("Description" AS TEXT) AS "Description", CAST("First Date" AS TEXT) AS "First Date", "Admission", "Diagnosis" FROM "Patient") AS "Patient") [numPartitions=1] [ID#26231,Admission#26236] PushedFilters: [*IsNotNull(ID)], ReadSchema: struct<ID:int,Admission:string>
+  +- Sort [ID#26238 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(ID#26238, 200), ENSURE_REQUIREMENTS, [plan_id=43752]
+  +- Scan JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1] [ID#26238] PushedFilters: [*IsNotNull(ALP), *LessThan(ALP,300), *IsNotNull(ID)], ReadSchema: struct<ID:int>
+================================================================================

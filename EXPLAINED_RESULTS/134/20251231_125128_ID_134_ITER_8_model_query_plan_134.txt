@@ -1,0 +1,61 @@
+
+Execution Plan for: Model Query ID 134...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias('COUNT(1))]
++- 'Filter ('district_id = scalar-subquery#4342 [])
+   :  +- 'GlobalLimit 1
+   :     +- 'LocalLimit 1
+   :        +- 'Sort ['A16 DESC NULLS LAST], true
+   :           +- 'Project ['district_id]
+   :              +- 'UnresolvedRelation [district], [], false
+   +- 'UnresolvedRelation [account], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [count(1) AS count(1)#4344L]
++- Project
+   +- Filter (isnotnull(district_id#4276) AND (district_id#4276 = scalar-subquery#4342 []))
+      :  +- GlobalLimit 1
+      :     +- LocalLimit 1
+      :        +- Project [district_id#4291]
+      :           +- Sort [A16#4306 DESC NULLS LAST], true
+      :              +- Project [district_id#4291, A16#4306]
+      :                 +- Relation [district_id#4291,A2#4292,A3#4293,A4#4294,A5#4295,A6#4296,A7#4297,A8#4298,A9#4299,A10#4300,A11#4301,A12#4302,A13#4303,A14#4304,A15#4305,A16#4306] JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1]
+      +- Relation [account_id#4275,district_id#4276,frequency#4277,date#4278] JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[count(1)], output=[count(1)#4344L])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8973]
+      +- HashAggregate(keys=[], functions=[partial_count(1)], output=[count#4346L])
+        +- Project
+            +- Filter (district_id#4276 = Subquery subquery#4342, [id=#8967])
+              :  +- Subquery subquery#4342, [id=#8967]
+              :     +- AdaptiveSparkPlan isFinalPlan=false
+              :        +- TakeOrderedAndProject(limit=1, orderBy=[A16#4306 DESC NULLS LAST], output=[district_id#4291])
+              :           +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#4291,A16#4306] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>
+              +- Scan JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1] [district_id#4276] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[count(1)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=9003]
+  +- HashAggregate(keys=[], functions=[partial_count(1)])
+  +- Project
+  +- Filter (district_id#4276 = Subquery subquery#4347, [id=#8997])
+  :  +- Subquery subquery#4347, [id=#8997]
+  :     +- AdaptiveSparkPlan isFinalPlan=false
+  :        +- TakeOrderedAndProject(limit=1, orderBy=[A16#4306 DESC NULLS LAST], output=[district_id#4291])
+  :           +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#4291,A16#4306] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>
+  +- Scan JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1] [district_id#4276] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int>
+================================================================================

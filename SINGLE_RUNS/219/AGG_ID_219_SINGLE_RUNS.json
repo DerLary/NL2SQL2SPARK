@@ -1,0 +1,99 @@
+{
+    "google_219": {
+        "llm": "google",
+        "query_id": 219,
+        "nl_query": null,
+        "golden_query": "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T2.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#'",
+        "sparksql_query": [
+            "SELECT CAST(COUNT(DISTINCT CASE WHEN m.label = '+' THEN m.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT m.molecule_id) FROM atom a INNER JOIN molecule m ON a.molecule_id = m.molecule_id INNER JOIN bond b ON m.molecule_id = b.molecule_id WHERE b.bond_type = '#'",
+            "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T2.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT T2.molecule_id) AS percent FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#';",
+            "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T1.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT T1.molecule_id) FROM bond AS T1 JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.bond_type = '#'"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "66.66666666666667"
+                ]
+            ],
+            [
+                [
+                    "66.66666666666667"
+                ]
+            ],
+            [
+                [
+                    "66.66666666666667"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "What is the percentage of distinct molecules that are carcinogenic among all distinct molecules that participate in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'. Cast the count as float before dividing it by the distinct count of molecule ids. Use two inner joins to first join atom and molecule and then bond.",
+            "What is the percentage of distinct molecules that are carcinogenic among all distinct molecules that participate in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'. Cast the count as float before dividing it by the distinct count of molecule ids. Use two inner joins to first join atom and molecule and then bond. Avoid unncessary parantheses. Use the aliases exactly (and no other) atom AS T1, molecule AS T2, bond AS T3 and reference columns with those aliases",
+            "What is the percentage of distinct molecules that are carcinogenic among all distinct molecules that participate in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'. Cast the count as float before dividing it by the distinct count of molecule ids."
+        ],
+        "spark_error": [
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            32.14934182167053,
+            29.16391158103943,
+            32.18121576309204
+        ],
+        "spark_time": [
+            0.9374160766601562,
+            0.8926594257354736,
+            1.10858154296875
+        ],
+        "translation_time": [
+            31.211925745010376,
+            28.271252155303955,
+            31.07263422012329
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            1,
+            0
+        ],
+        "total_time_avg": 31.164823055267334,
+        "spark_time_avg": 0.9795523484547933,
+        "translation_time_avg": 30.185270706812542,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.3333333333333333
+    }
+}

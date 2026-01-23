@@ -1,0 +1,54 @@
+
+Execution Plan for: Model Query ID 1385...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['CONCAT('m.first_name,  , 'm.last_name) AS full_name#12424]
++- 'Filter ('i.amount > 40)
+   +- 'Join Inner, ('m.member_id = 'i.link_to_member)
+      :- 'SubqueryAlias m
+      :  +- 'UnresolvedRelation [member], [], false
+      +- 'SubqueryAlias i
+         +- 'UnresolvedRelation [income], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [concat(first_name#12412,  , last_name#12413) AS full_name#12424]
++- Join Inner, (member_id#12411 = link_to_member#12410)
+   :- Project [member_id#12411, first_name#12412, last_name#12413]
+   :  +- Filter isnotnull(member_id#12411)
+   :     +- Relation [member_id#12411,first_name#12412,last_name#12413,email#12414,position#12415,t_shirt_size#12416,phone#12417,zip#12418,link_to_major#12419] JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1]
+   +- Project [link_to_member#12410]
+      +- Filter ((isnotnull(amount#12407) AND (amount#12407 > 40)) AND isnotnull(link_to_member#12410))
+         +- Relation [income_id#12405,date_received#12406,amount#12407,source#12408,notes#12409,link_to_member#12410] JDBCRelation((SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income") AS "income") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [concat(first_name#12412,  , last_name#12413) AS full_name#12424]
+  +- SortMergeJoin [member_id#12411], [link_to_member#12410], Inner
+      :- Sort [member_id#12411 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(member_id#12411, 200), ENSURE_REQUIREMENTS, [plan_id=28707]
+      :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#12411,first_name#12412,last_name#12413] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>
+      +- Sort [link_to_member#12410 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(link_to_member#12410, 200), ENSURE_REQUIREMENTS, [plan_id=28708]
+            +- Scan JDBCRelation((SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income") AS "income") [numPartitions=1] [link_to_member#12410] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [concat(first_name#12412,  , last_name#12413) AS full_name#12425]
+  +- SortMergeJoin [member_id#12411], [link_to_member#12410], Inner
+  :- Sort [member_id#12411 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(member_id#12411, 200), ENSURE_REQUIREMENTS, [plan_id=28737]
+  :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#12411,first_name#12412,last_name#12413] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>
+  +- Sort [link_to_member#12410 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(link_to_member#12410, 200), ENSURE_REQUIREMENTS, [plan_id=28738]
+  +- Scan JDBCRelation((SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income") AS "income") [numPartitions=1] [link_to_member#12410] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>
+================================================================================

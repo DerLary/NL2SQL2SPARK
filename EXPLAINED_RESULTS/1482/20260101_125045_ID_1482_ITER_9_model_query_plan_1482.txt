@@ -1,0 +1,68 @@
+
+Execution Plan for: Model Query ID 1482...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Sort ['c.Segment ASC NULLS FIRST, 'Year ASC NULLS FIRST], true
++- 'Aggregate ['c.Segment, 'SUBSTRING('y.Date, 1, 4)], ['c.Segment, 'SUBSTRING('y.Date, 1, 4) AS Year#29186, 'SUM('y.Consumption) AS TotalConsumption#29187]
+   +- 'Filter (('c.Currency = EUR) AND 'SUBSTRING('y.Date, 1, 4) IN (2012,2013))
+      +- 'Join Inner, ('c.CustomerID = 'y.CustomerID)
+         :- 'SubqueryAlias c
+         :  +- 'UnresolvedRelation [customers], [], false
+         +- 'SubqueryAlias y
+            +- 'UnresolvedRelation [yearmonth], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Sort [Segment#29112 ASC NULLS FIRST, Year#29186 ASC NULLS FIRST], true
++- Aggregate [Segment#29112, _groupingexpression#29189], [Segment#29112, _groupingexpression#29189 AS Year#29186, sum(Consumption#29133) AS TotalConsumption#29187]
+   +- Project [Segment#29112, Consumption#29133, substring(Date#29132, 1, 4) AS _groupingexpression#29189]
+      +- Join Inner, (CustomerID#29111 = CustomerID#29131)
+         :- Project [CustomerID#29111, Segment#29112]
+         :  +- Filter ((isnotnull(Currency#29113) AND (Currency#29113 = EUR)) AND isnotnull(CustomerID#29111))
+         :     +- Relation [CustomerID#29111,Segment#29112,Currency#29113] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]
+         +- Filter (substring(Date#29132, 1, 4) IN (2012,2013) AND isnotnull(CustomerID#29131))
+            +- Relation [CustomerID#29131,Date#29132,Consumption#29133] JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [Segment#29112 ASC NULLS FIRST, Year#29186 ASC NULLS FIRST], true, 0
+  +- Exchange rangepartitioning(Segment#29112 ASC NULLS FIRST, Year#29186 ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [plan_id=48014]
+      +- HashAggregate(keys=[Segment#29112, _groupingexpression#29189], functions=[sum(Consumption#29133)], output=[Segment#29112, Year#29186, TotalConsumption#29187])
+        +- Exchange hashpartitioning(Segment#29112, _groupingexpression#29189, 200), ENSURE_REQUIREMENTS, [plan_id=48011]
+            +- HashAggregate(keys=[Segment#29112, _groupingexpression#29189], functions=[partial_sum(Consumption#29133)], output=[Segment#29112, _groupingexpression#29189, sum#29191])
+              +- Project [Segment#29112, Consumption#29133, substring(Date#29132, 1, 4) AS _groupingexpression#29189]
+                  +- SortMergeJoin [CustomerID#29111], [CustomerID#29131], Inner
+                    :- Sort [CustomerID#29111 ASC NULLS FIRST], false, 0
+                    :  +- Exchange hashpartitioning(CustomerID#29111, 200), ENSURE_REQUIREMENTS, [plan_id=48003]
+                    :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29111,Segment#29112] PushedFilters: [*IsNotNull(Currency), *EqualTo(Currency,EUR), *IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Segment:string>
+                    +- Sort [CustomerID#29131 ASC NULLS FIRST], false, 0
+                        +- Exchange hashpartitioning(CustomerID#29131, 200), ENSURE_REQUIREMENTS, [plan_id=48004]
+                          +- Filter substring(Date#29132, 1, 4) IN (2012,2013)
+                              +- Scan JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1] [CustomerID#29131,Date#29132,Consumption#29133] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Date:string,Consumption:double>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Sort [Segment#29112 ASC NULLS FIRST, Year#29192 ASC NULLS FIRST], true, 0
+  +- Exchange rangepartitioning(Segment#29112 ASC NULLS FIRST, Year#29192 ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [plan_id=48067]
+  +- HashAggregate(keys=[Segment#29112, _groupingexpression#29199], functions=[sum(Consumption#29133)])
+  +- Exchange hashpartitioning(Segment#29112, _groupingexpression#29199, 200), ENSURE_REQUIREMENTS, [plan_id=48064]
+  +- HashAggregate(keys=[Segment#29112, _groupingexpression#29199], functions=[partial_sum(Consumption#29133)])
+  +- Project [Segment#29112, Consumption#29133, substring(Date#29132, 1, 4) AS _groupingexpression#29199]
+  +- SortMergeJoin [CustomerID#29111], [CustomerID#29131], Inner
+  :- Sort [CustomerID#29111 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(CustomerID#29111, 200), ENSURE_REQUIREMENTS, [plan_id=48056]
+  :     +- Scan JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1] [CustomerID#29111,Segment#29112] PushedFilters: [*IsNotNull(Currency), *EqualTo(Currency,EUR), *IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Segment:string>
+  +- Sort [CustomerID#29131 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(CustomerID#29131, 200), ENSURE_REQUIREMENTS, [plan_id=48057]
+  +- Filter substring(Date#29132, 1, 4) IN (2012,2013)
+  +- Scan JDBCRelation((SELECT "CustomerID", "Date", "Consumption" FROM "yearmonth") AS "yearmonth") [numPartitions=1] [CustomerID#29131,Date#29132,Consumption#29133] PushedFilters: [*IsNotNull(CustomerID)], ReadSchema: struct<CustomerID:int,Date:string,Consumption:double>
+================================================================================

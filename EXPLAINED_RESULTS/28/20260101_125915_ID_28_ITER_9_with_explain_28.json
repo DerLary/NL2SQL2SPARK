@@ -1,0 +1,409 @@
+{
+    "query_id": 28,
+    "difficulty": "challenging",
+    "is_initial": true,
+    "nl_query": "Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that are locally funded, list the names and DOC type of schools which has a difference above this average. Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)` - `Enrollment (Ages 5-17)`",
+    "golden_query": "SELECT T2.School, T2.DOC FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.FundingType = 'Locally funded' AND (T1.`Enrollment (K-12)` - T1.`Enrollment (Ages 5-17)`) > (SELECT AVG(T3.`Enrollment (K-12)` - T3.`Enrollment (Ages 5-17)`) FROM frpm AS T3 INNER JOIN schools AS T4 ON T3.CDSCode = T4.CDSCode WHERE T4.FundingType = 'Locally funded')",
+    "sparksql_query": "SELECT s.School, s.DOCType FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.FundingType = 'Local' AND (f.`Enrollment (K-12)` - f.`Enrollment (Ages 5-17)`) > ( SELECT AVG(f2.`Enrollment (K-12)` - f2.`Enrollment (Ages 5-17)`) FROM schools AS s2 JOIN frpm AS f2 ON s2.CDSCode = f2.CDSCode WHERE s2.FundingType = 'Local' ) ORDER BY s.School;",
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "ground_truth": [
+        {
+            "School": "Forest Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "YES Academy",
+            "DOC": "54"
+        },
+        {
+            "School": "The Education Corps",
+            "DOC": "00"
+        },
+        {
+            "School": "Denair Charter Academy",
+            "DOC": "54"
+        },
+        {
+            "School": "Yuba County Career Preparatory Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Pomelo Community Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Elk Grove Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Taft Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Delta Charter Online",
+            "DOC": "52"
+        },
+        {
+            "School": "San Juan Choices Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Madera County Independent Academy",
+            "DOC": "00"
+        },
+        {
+            "School": "Monterey County Home Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Stanislaus Alternative Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Rosemary Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Pioneer Technical Center",
+            "DOC": "00"
+        },
+        {
+            "School": "Butterfield Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Sylmar Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Stockton High",
+            "DOC": "54"
+        },
+        {
+            "School": "Grover Cleveland Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Delta Home Charter",
+            "DOC": "52"
+        },
+        {
+            "School": "Westwood Charter Elementary",
+            "DOC": "54"
+        },
+        {
+            "School": "Calahan Community Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Delta Charter",
+            "DOC": "52"
+        },
+        {
+            "School": "Arundel Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Carpenter Community Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Lynhaven Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Clovis Online Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Visalia Charter Independent Study",
+            "DOC": "54"
+        },
+        {
+            "School": "Chatsworth Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Pacific Coast Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Mountain Oaks",
+            "DOC": "00"
+        },
+        {
+            "School": "Gateway to College Academy",
+            "DOC": "56"
+        },
+        {
+            "School": "Wilbur Charter For Enriched Academics",
+            "DOC": "54"
+        },
+        {
+            "School": "Grizzly ChalleNGe Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Kings River-Hardwick Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Riverside Preparatory",
+            "DOC": "52"
+        },
+        {
+            "School": "Summit Charter Academy",
+            "DOC": "52"
+        },
+        {
+            "School": "George Washington Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Visions In Education",
+            "DOC": "54"
+        },
+        {
+            "School": "Castlemont Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Castle Rock",
+            "DOC": "00"
+        },
+        {
+            "School": "Natomas Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Washington Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "YouthBuild Charter School of California",
+            "DOC": "00"
+        },
+        {
+            "School": "Soledad Enrichment Action Charter High",
+            "DOC": "00"
+        },
+        {
+            "School": "Mattole Valley Charter (#159)",
+            "DOC": "54"
+        },
+        {
+            "School": "Kern Workforce 2000 Academy",
+            "DOC": "56"
+        },
+        {
+            "School": "Fammatre Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "West Park Charter Academy",
+            "DOC": "52"
+        },
+        {
+            "School": "Serrania Avenue Charter For Enriched Studies",
+            "DOC": "54"
+        },
+        {
+            "School": "School of Extended Educational Options",
+            "DOC": "54"
+        },
+        {
+            "School": "Come Back Kids",
+            "DOC": "00"
+        },
+        {
+            "School": "Marlton",
+            "DOC": "54"
+        },
+        {
+            "School": "Union Hill Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Fairmont Charter Elementary",
+            "DOC": "54"
+        },
+        {
+            "School": "College Bridge Academy",
+            "DOC": "00"
+        },
+        {
+            "School": "Charter Community School Home Study Academy",
+            "DOC": "00"
+        }
+    ],
+    "query_result": [],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 28...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['T2.School, 'T2.DOC]\n+- 'Filter (('T2.FundingType = Locally funded) AND (('T1.Enrollment (K-12) - 'T1.Enrollment (Ages 5-17)) > scalar-subquery#33686 []))\n   :  +- 'Project [unresolvedalias('AVG(('T3.Enrollment (K-12) - 'T3.Enrollment (Ages 5-17))))]\n   :     +- 'Filter ('T4.FundingType = Locally funded)\n   :        +- 'Join Inner, ('T3.CDSCode = 'T4.CDSCode)\n   :           :- 'SubqueryAlias T3\n   :           :  +- 'UnresolvedRelation [frpm], [], false\n   :           +- 'SubqueryAlias T4\n   :              +- 'UnresolvedRelation [schools], [], false\n   +- 'Join Inner, ('T1.CDSCode = 'T2.CDSCode)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [frpm], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [schools], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [School#33643, DOC#33662]\n+- Join Inner, (CDSCode#33597 = CDSCode#33637)\n   :- Project [CDSCode#33597]\n   :  +- Filter (((isnotnull(Enrollment (K-12)#33615) AND isnotnull(Enrollment (Ages 5-17)#33620)) AND ((Enrollment (K-12)#33615 - Enrollment (Ages 5-17)#33620) > scalar-subquery#33686 [])) AND isnotnull(CDSCode#33597))\n   :     :  +- Aggregate [avg((Enrollment (K-12)#33707 - Enrollment (Ages 5-17)#33712)) AS avg((Enrollment (K-12) - Enrollment (Ages 5-17)))#33688]\n   :     :     +- Project [Enrollment (K-12)#33707, Enrollment (Ages 5-17)#33712]\n   :     :        +- Join Inner, (CDSCode#33689 = CDSCode#33718)\n   :     :           :- Project [CDSCode#33689, Enrollment (K-12)#33707, Enrollment (Ages 5-17)#33712]\n   :     :           :  +- Filter isnotnull(CDSCode#33689)\n   :     :           :     +- Relation [CDSCode#33689,Academic Year#33690,County Code#33691,District Code#33692,School Code#33693,County Name#33694,District Name#33695,School Name#33696,District Type#33697,School Type#33698,Educational Option Type#33699,NSLP Provision Status#33700,Charter School (Y/N)#33701,Charter School Number#33702,Charter Funding Type#33703,IRC#33704,Low Grade#33705,High Grade#33706,Enrollment (K-12)#33707,Free Meal Count (K-12)#33708,Percent (%) Eligible Free (K-12)#33709,FRPM Count (K-12)#33710,Percent (%) Eligible FRPM (K-12)#33711,Enrollment (Ages 5-17)#33712,Free Meal Count (Ages 5-17)#33713,... 4 more fields] JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1]\n   :     :           +- Project [CDSCode#33718]\n   :     :              +- Filter ((isnotnull(FundingType#33742) AND (FundingType#33742 = Locally funded)) AND isnotnull(CDSCode#33718))\n   :     :                 +- Relation [CDSCode#33718,NCESDist#33719,NCESSchool#33720,StatusType#33721,County#33722,District#33723,School#33724,Street#33725,StreetAbr#33726,City#33727,Zip#33728,State#33729,MailStreet#33730,MailStrAbr#33731,MailCity#33732,MailZip#33733,MailState#33734,Phone#33735,Ext#33736,Website#33737,OpenDate#33738,ClosedDate#33739,Charter#33740,CharterNum#33741,FundingType#33742,... 24 more fields] JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1]\n   :     +- Relation [CDSCode#33597,Academic Year#33598,County Code#33599,District Code#33600,School Code#33601,County Name#33602,District Name#33603,School Name#33604,District Type#33605,School Type#33606,Educational Option Type#33607,NSLP Provision Status#33608,Charter School (Y/N)#33609,Charter School Number#33610,Charter Funding Type#33611,IRC#33612,Low Grade#33613,High Grade#33614,Enrollment (K-12)#33615,Free Meal Count (K-12)#33616,Percent (%) Eligible Free (K-12)#33617,FRPM Count (K-12)#33618,Percent (%) Eligible FRPM (K-12)#33619,Enrollment (Ages 5-17)#33620,Free Meal Count (Ages 5-17)#33621,... 4 more fields] JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1]\n   +- Project [CDSCode#33637, School#33643, DOC#33662]\n      +- Filter ((isnotnull(FundingType#33661) AND (FundingType#33661 = Locally funded)) AND isnotnull(CDSCode#33637))\n         +- Relation [CDSCode#33637,NCESDist#33638,NCESSchool#33639,StatusType#33640,County#33641,District#33642,School#33643,Street#33644,StreetAbr#33645,City#33646,Zip#33647,State#33648,MailStreet#33649,MailStrAbr#33650,MailCity#33651,MailZip#33652,MailState#33653,Phone#33654,Ext#33655,Website#33656,OpenDate#33657,ClosedDate#33658,Charter#33659,CharterNum#33660,FundingType#33661,... 24 more fields] JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [School#33643, DOC#33662]\n  +- SortMergeJoin [CDSCode#33597], [CDSCode#33637], Inner\n      :- Sort [CDSCode#33597 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(CDSCode#33597, 200), ENSURE_REQUIREMENTS, [plan_id=57053]\n      :     +- Project [CDSCode#33597]\n      :        +- Filter ((Enrollment (K-12)#33615 - Enrollment (Ages 5-17)#33620) > Subquery subquery#33686, [id=#57044])\n      :           :  +- Subquery subquery#33686, [id=#57044]\n      :           :     +- AdaptiveSparkPlan isFinalPlan=false\n      :           :        +- HashAggregate(keys=[], functions=[avg((Enrollment (K-12)#33707 - Enrollment (Ages 5-17)#33712))], output=[avg((Enrollment (K-12) - Enrollment (Ages 5-17)))#33688])\n      :           :           +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=57042]\n      :           :              +- HashAggregate(keys=[], functions=[partial_avg((Enrollment (K-12)#33707 - Enrollment (Ages 5-17)#33712))], output=[sum#33769, count#33770L])\n      :           :                 +- Project [Enrollment (K-12)#33707, Enrollment (Ages 5-17)#33712]\n      :           :                    +- SortMergeJoin [CDSCode#33689], [CDSCode#33718], Inner\n      :           :                       :- Sort [CDSCode#33689 ASC NULLS FIRST], false, 0\n      :           :                       :  +- Exchange hashpartitioning(CDSCode#33689, 200), ENSURE_REQUIREMENTS, [plan_id=57034]\n      :           :                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33689,Enrollment (K-12)#33707,Enrollment (Ages 5-17)#33712] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n      :           :                       +- Sort [CDSCode#33718 ASC NULLS FIRST], false, 0\n      :           :                          +- Exchange hashpartitioning(CDSCode#33718, 200), ENSURE_REQUIREMENTS, [plan_id=57035]\n      :           :                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33718] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>\n      :           +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n      +- Sort [CDSCode#33637 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(CDSCode#33637, 200), ENSURE_REQUIREMENTS, [plan_id=57054]\n            +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOC#33662] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOC:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [School#33643, DOC#33662]\n  +- SortMergeJoin [CDSCode#33597], [CDSCode#33637], Inner\n  :- Sort [CDSCode#33597 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(CDSCode#33597, 200), ENSURE_REQUIREMENTS, [plan_id=57125]\n  :     +- Project [CDSCode#33597]\n  :        +- Filter ((Enrollment (K-12)#33615 - Enrollment (Ages 5-17)#33620) > Subquery subquery#33771, [id=#57116])\n  :           :  +- Subquery subquery#33771, [id=#57116]\n  :           :     +- AdaptiveSparkPlan isFinalPlan=false\n  :           :        +- HashAggregate(keys=[], functions=[avg((Enrollment (K-12)#33796 - Enrollment (Ages 5-17)#33801))])\n  :           :           +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=57114]\n  :           :              +- HashAggregate(keys=[], functions=[partial_avg((Enrollment (K-12)#33796 - Enrollment (Ages 5-17)#33801))])\n  :           :                 +- Project [Enrollment (K-12)#33796, Enrollment (Ages 5-17)#33801]\n  :           :                    +- SortMergeJoin [CDSCode#33778], [CDSCode#33807], Inner\n  :           :                       :- Sort [CDSCode#33778 ASC NULLS FIRST], false, 0\n  :           :                       :  +- Exchange hashpartitioning(CDSCode#33778, 200), ENSURE_REQUIREMENTS, [plan_id=57106]\n  :           :                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33778,Enrollment (K-12)#33796,Enrollment (Ages 5-17)#33801] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n  :           :                       +- Sort [CDSCode#33807 ASC NULLS FIRST], false, 0\n  :           :                          +- Exchange hashpartitioning(CDSCode#33807, 200), ENSURE_REQUIREMENTS, [plan_id=57107]\n  :           :                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33807] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>\n  :           +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n  +- Sort [CDSCode#33637 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(CDSCode#33637, 200), ENSURE_REQUIREMENTS, [plan_id=57126]\n  +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOC#33662] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOC:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 28...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Sort ['s.School ASC NULLS FIRST], true\n+- 'Project ['s.School, 's.DOCType]\n   +- 'Filter (('s.FundingType = Local) AND (('f.Enrollment (K-12) - 'f.Enrollment (Ages 5-17)) > scalar-subquery#33860 []))\n      :  +- 'Project [unresolvedalias('AVG(('f2.Enrollment (K-12) - 'f2.Enrollment (Ages 5-17))))]\n      :     +- 'Filter ('s2.FundingType = Local)\n      :        +- 'Join Inner, ('s2.CDSCode = 'f2.CDSCode)\n      :           :- 'SubqueryAlias s2\n      :           :  +- 'UnresolvedRelation [schools], [], false\n      :           +- 'SubqueryAlias f2\n      :              +- 'UnresolvedRelation [frpm], [], false\n      +- 'Join Inner, ('s.CDSCode = 'f.CDSCode)\n         :- 'SubqueryAlias s\n         :  +- 'UnresolvedRelation [schools], [], false\n         +- 'SubqueryAlias f\n            +- 'UnresolvedRelation [frpm], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nSort [School#33643 ASC NULLS FIRST], true\n+- Project [School#33643, DOCType#33663]\n   +- Join Inner, (CDSCode#33637 = CDSCode#33597)\n      :- Project [CDSCode#33637, School#33643, DOCType#33663]\n      :  +- Filter ((isnotnull(FundingType#33661) AND (FundingType#33661 = Local)) AND isnotnull(CDSCode#33637))\n      :     +- Relation [CDSCode#33637,NCESDist#33638,NCESSchool#33639,StatusType#33640,County#33641,District#33642,School#33643,Street#33644,StreetAbr#33645,City#33646,Zip#33647,State#33648,MailStreet#33649,MailStrAbr#33650,MailCity#33651,MailZip#33652,MailState#33653,Phone#33654,Ext#33655,Website#33656,OpenDate#33657,ClosedDate#33658,Charter#33659,CharterNum#33660,FundingType#33661,... 24 more fields] JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1]\n      +- Project [CDSCode#33597]\n         +- Filter (((isnotnull(Enrollment (K-12)#33615) AND isnotnull(Enrollment (Ages 5-17)#33620)) AND ((Enrollment (K-12)#33615 - Enrollment (Ages 5-17)#33620) > scalar-subquery#33860 [])) AND isnotnull(CDSCode#33597))\n            :  +- Aggregate [avg((Enrollment (K-12)#33930 - Enrollment (Ages 5-17)#33935)) AS avg((Enrollment (K-12) - Enrollment (Ages 5-17)))#33862]\n            :     +- Project [Enrollment (K-12)#33930, Enrollment (Ages 5-17)#33935]\n            :        +- Join Inner, (CDSCode#33863 = CDSCode#33912)\n            :           :- Project [CDSCode#33863]\n            :           :  +- Filter ((isnotnull(FundingType#33887) AND (FundingType#33887 = Local)) AND isnotnull(CDSCode#33863))\n            :           :     +- Relation [CDSCode#33863,NCESDist#33864,NCESSchool#33865,StatusType#33866,County#33867,District#33868,School#33869,Street#33870,StreetAbr#33871,City#33872,Zip#33873,State#33874,MailStreet#33875,MailStrAbr#33876,MailCity#33877,MailZip#33878,MailState#33879,Phone#33880,Ext#33881,Website#33882,OpenDate#33883,ClosedDate#33884,Charter#33885,CharterNum#33886,FundingType#33887,... 24 more fields] JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1]\n            :           +- Project [CDSCode#33912, Enrollment (K-12)#33930, Enrollment (Ages 5-17)#33935]\n            :              +- Filter isnotnull(CDSCode#33912)\n            :                 +- Relation [CDSCode#33912,Academic Year#33913,County Code#33914,District Code#33915,School Code#33916,County Name#33917,District Name#33918,School Name#33919,District Type#33920,School Type#33921,Educational Option Type#33922,NSLP Provision Status#33923,Charter School (Y/N)#33924,Charter School Number#33925,Charter Funding Type#33926,IRC#33927,Low Grade#33928,High Grade#33929,Enrollment (K-12)#33930,Free Meal Count (K-12)#33931,Percent (%) Eligible Free (K-12)#33932,FRPM Count (K-12)#33933,Percent (%) Eligible FRPM (K-12)#33934,Enrollment (Ages 5-17)#33935,Free Meal Count (Ages 5-17)#33936,... 4 more fields] JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1]\n            +- Relation [CDSCode#33597,Academic Year#33598,County Code#33599,District Code#33600,School Code#33601,County Name#33602,District Name#33603,School Name#33604,District Type#33605,School Type#33606,Educational Option Type#33607,NSLP Provision Status#33608,Charter School (Y/N)#33609,Charter School Number#33610,Charter Funding Type#33611,IRC#33612,Low Grade#33613,High Grade#33614,Enrollment (K-12)#33615,Free Meal Count (K-12)#33616,Percent (%) Eligible Free (K-12)#33617,FRPM Count (K-12)#33618,Percent (%) Eligible FRPM (K-12)#33619,Enrollment (Ages 5-17)#33620,Free Meal Count (Ages 5-17)#33621,... 4 more fields] JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Sort [School#33643 ASC NULLS FIRST], true, 0\n  +- Exchange rangepartitioning(School#33643 ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [plan_id=57210]\n      +- Project [School#33643, DOCType#33663]\n        +- SortMergeJoin [CDSCode#33637], [CDSCode#33597], Inner\n            :- Sort [CDSCode#33637 ASC NULLS FIRST], false, 0\n            :  +- Exchange hashpartitioning(CDSCode#33637, 200), ENSURE_REQUIREMENTS, [plan_id=57203]\n            :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOCType#33663] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOCType:string>\n            +- Sort [CDSCode#33597 ASC NULLS FIRST], false, 0\n              +- Exchange hashpartitioning(CDSCode#33597, 200), ENSURE_REQUIREMENTS, [plan_id=57204]\n                  +- Project [CDSCode#33597]\n                    +- Filter ((Enrollment (K-12)#33615 - Enrollment (Ages 5-17)#33620) > Subquery subquery#33860, [id=#57192])\n                        :  +- Subquery subquery#33860, [id=#57192]\n                        :     +- AdaptiveSparkPlan isFinalPlan=false\n                        :        +- HashAggregate(keys=[], functions=[avg((Enrollment (K-12)#33930 - Enrollment (Ages 5-17)#33935))], output=[avg((Enrollment (K-12) - Enrollment (Ages 5-17)))#33862])\n                        :           +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=57190]\n                        :              +- HashAggregate(keys=[], functions=[partial_avg((Enrollment (K-12)#33930 - Enrollment (Ages 5-17)#33935))], output=[sum#33943, count#33944L])\n                        :                 +- Project [Enrollment (K-12)#33930, Enrollment (Ages 5-17)#33935]\n                        :                    +- SortMergeJoin [CDSCode#33863], [CDSCode#33912], Inner\n                        :                       :- Sort [CDSCode#33863 ASC NULLS FIRST], false, 0\n                        :                       :  +- Exchange hashpartitioning(CDSCode#33863, 200), ENSURE_REQUIREMENTS, [plan_id=57182]\n                        :                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33863] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>\n                        :                       +- Sort [CDSCode#33912 ASC NULLS FIRST], false, 0\n                        :                          +- Exchange hashpartitioning(CDSCode#33912, 200), ENSURE_REQUIREMENTS, [plan_id=57183]\n                        :                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33912,Enrollment (K-12)#33930,Enrollment (Ages 5-17)#33935] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n                        +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Sort [School#33643 ASC NULLS FIRST], true, 0\n  +- Exchange rangepartitioning(School#33643 ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [plan_id=57291]\n  +- Project [School#33643, DOCType#33663]\n  +- SortMergeJoin [CDSCode#33637], [CDSCode#33597], Inner\n  :- Sort [CDSCode#33637 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(CDSCode#33637, 200), ENSURE_REQUIREMENTS, [plan_id=57284]\n  :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOCType#33663] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOCType:string>\n  +- Sort [CDSCode#33597 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(CDSCode#33597, 200), ENSURE_REQUIREMENTS, [plan_id=57285]\n  +- Project [CDSCode#33597]\n  +- Filter ((Enrollment (K-12)#33615 - Enrollment (Ages 5-17)#33620) > Subquery subquery#33945, [id=#57273])\n  :  +- Subquery subquery#33945, [id=#57273]\n  :     +- AdaptiveSparkPlan isFinalPlan=false\n  :        +- HashAggregate(keys=[], functions=[avg((Enrollment (K-12)#34019 - Enrollment (Ages 5-17)#34024))])\n  :           +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=57271]\n  :              +- HashAggregate(keys=[], functions=[partial_avg((Enrollment (K-12)#34019 - Enrollment (Ages 5-17)#34024))])\n  :                 +- Project [Enrollment (K-12)#34019, Enrollment (Ages 5-17)#34024]\n  :                    +- SortMergeJoin [CDSCode#33952], [CDSCode#34001], Inner\n  :                       :- Sort [CDSCode#33952 ASC NULLS FIRST], false, 0\n  :                       :  +- Exchange hashpartitioning(CDSCode#33952, 200), ENSURE_REQUIREMENTS, [plan_id=57263]\n  :                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33952] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>\n  :                       +- Sort [CDSCode#34001 ASC NULLS FIRST], false, 0\n  :                          +- Exchange hashpartitioning(CDSCode#34001, 200), ENSURE_REQUIREMENTS, [plan_id=57264]\n  :                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#34001,Enrollment (K-12)#34019,Enrollment (Ages 5-17)#34024] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n  +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20260101_google_ce2b3070/28/20260101_125915_ID_28_ITER_9_35078e08.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 4,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 5
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":           :                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33689,Enrollment (K-12)#33707,Enrollment (Ages 5-17)#33712] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":           :                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33718] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Locally funded)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":           +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(Enrollment (K-12))",
+                        "*IsNotNull(Enrollment (Ages 5-17))",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOC#33662] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOC:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Locally funded)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":           :                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33778,Enrollment (K-12)#33796,Enrollment (Ages 5-17)#33801] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":           :                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33807] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Locally funded)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":           +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(Enrollment (K-12))",
+                        "*IsNotNull(Enrollment (Ages 5-17))",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOC#33662] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Locally funded), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOC:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Locally funded)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 4
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 4,
+                "Exchange\\s+rangepartitioning\\(": 1,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 6
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOCType#33663] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOCType:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Local)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33863] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Local)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33912,Enrollment (K-12)#33930,Enrollment (Ages 5-17)#33935] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(Enrollment (K-12))",
+                        "*IsNotNull(Enrollment (Ages 5-17))",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33637,School#33643,DOCType#33663] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,School:string,DOCType:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Local)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":                       :     +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [CDSCode#33952] PushedFilters: [*IsNotNull(FundingType), *EqualTo(FundingType,Local), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string>",
+                    "filters": [
+                        "*IsNotNull(FundingType)",
+                        "*EqualTo(FundingType",
+                        "Local)",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": ":                             +- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#34001,Enrollment (K-12)#34019,Enrollment (Ages 5-17)#34024] PushedFilters: [*IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(CDSCode)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"Academic Year\", \"County Code\", \"District Code\", \"School Code\", \"County Name\", \"District Name\", \"School Name\", \"District Type\", \"School Type\", \"Educational Option Type\", \"NSLP Provision Status\", \"Charter School (Y/N)\", \"Charter School Number\", \"Charter Funding Type\", \"IRC\", \"Low Grade\", \"High Grade\", \"Enrollment (K-12)\", \"Free Meal Count (K-12)\", \"Percent (%) Eligible Free (K-12)\", \"FRPM Count (K-12)\", \"Percent (%) Eligible FRPM (K-12)\", \"Enrollment (Ages 5-17)\", \"Free Meal Count (Ages 5-17)\", \"Percent (%) Eligible Free (Ages 5-17)\", \"FRPM Count (Ages 5-17)\", \"Percent (%) Eligible FRPM (Ages 5-17)\", \"2013-14 CALPADS Fall 1 Certification Status\" FROM \"frpm\") AS \"frpm\") [numPartitions=1] [CDSCode#33597,Enrollment (K-12)#33615,Enrollment (Ages 5-17)#33620] PushedFilters: [*IsNotNull(Enrollment (K-12)), *IsNotNull(Enrollment (Ages 5-17)), *IsNotNull(CDSCode)], ReadSchema: struct<CDSCode:string,Enrollment (K-12):double,Enrollment (Ages 5-17):double>",
+                    "filters": [
+                        "*IsNotNull(Enrollment (K-12))",
+                        "*IsNotNull(Enrollment (Ages 5-17))",
+                        "*IsNotNull(CDSCode)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 4
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": false
+        }
+    }
+}

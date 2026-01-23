@@ -1,0 +1,226 @@
+{
+    "google_593": {
+        "llm": "google",
+        "query_id": 593,
+        "nl_query": "How many users from New York have a teacher and supporter badge? \"Supporter\" and \"Teachers\" are both Name of badge; 'New York' is the Location; user refers to UserId",
+        "golden_query": "SELECT COUNT(DISTINCT T1.Id) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name IN ('Supporter', 'Teacher') AND T2.Location = 'New York'",
+        "sparksql_query": [
+            "SELECT COUNT(DISTINCT `u`.`Id`) FROM `users` AS `u` JOIN `badges` AS `b_supporter` ON `u`.`Id` = `b_supporter`.`UserId` JOIN `badges` AS `b_teacher` ON `u`.`Id` = `b_teacher`.`UserId` WHERE `u`.`Location` = 'New York' AND `b_supporter`.`Name` = 'Supporter' AND `b_teacher`.`Name` = 'Teachers';",
+            "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId INNER JOIN badges AS T3 ON T1.Id = T3.UserId WHERE T1.Location = 'New York' AND T2.Name = 'Supporter' AND T3.Name = 'Teachers'",
+            "SELECT COUNT(*) FROM ( SELECT u.Id FROM users AS u JOIN badges AS b ON u.Id = b.UserId WHERE u.Location = 'New York' AND b.Name IN ('Supporter', 'Teachers') GROUP BY u.Id HAVING COUNT(DISTINCT b.Name) = 2 ) AS NewYorkTeachersSupporters;",
+            "SELECT COUNT(*) FROM ( SELECT u.Id FROM users AS u JOIN badges AS b ON u.Id = b.UserId WHERE u.Location = 'New York' AND b.Name IN ('Supporter', 'Teachers') GROUP BY u.Id HAVING COUNT(DISTINCT b.Name) = 2 ) AS subquery;",
+            "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId INNER JOIN badges AS T3 ON T1.Id = T3.UserId WHERE T1.Location = 'New York' AND T2.Name = 'Supporter' AND T3.Name = 'Teachers'",
+            "SELECT COUNT(*) FROM (SELECT T1.Id FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId WHERE T1.Location = 'New York' AND T2.Name IN ('Supporter', 'Teachers') GROUP BY T1.Id HAVING COUNT(DISTINCT T2.Name) = 2) AS SubQuery",
+            "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId INNER JOIN badges AS T3 ON T1.Id = T3.UserId WHERE T1.Location = 'New York' AND T2.Name = 'Supporter' AND T3.Name = 'Teachers'",
+            "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId WHERE T1.Location = 'New York' AND T2.Name IN ('Supporter', 'Teachers') GROUP BY T1.Id HAVING COUNT(DISTINCT T2.Name) = 2",
+            "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId INNER JOIN badges AS T3 ON T1.Id = T3.UserId WHERE T1.Location = 'New York' AND T2.Name = 'Supporter' AND T3.Name = 'Teachers'",
+            "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId INNER JOIN badges AS T3 ON T1.Id = T3.UserId WHERE T1.Location = 'New York' AND T2.Name = 'Supporter' AND T3.Name = 'Teachers'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [],
+            [
+                [
+                    "0"
+                ]
+            ],
+            [
+                [
+                    "0"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            26.960002422332764,
+            11.93754768371582,
+            34.018839836120605,
+            30.16618847846985,
+            13.517558336257935,
+            25.98664689064026,
+            14.41710114479065,
+            17.488698482513428,
+            13.734180688858032,
+            18.606000423431396
+        ],
+        "spark_time": [
+            0.0870809555053711,
+            0.7979304790496826,
+            0.5515468120574951,
+            0.13982462882995605,
+            0.08152198791503906,
+            0.18110871315002441,
+            0.08763933181762695,
+            0.40732812881469727,
+            0.11350202560424805,
+            0.0665888786315918
+        ],
+        "translation_time": [
+            26.872921466827393,
+            11.139617204666138,
+            33.46729302406311,
+            30.026363849639893,
+            13.436036348342896,
+            25.805538177490234,
+            14.329461812973022,
+            17.08137035369873,
+            13.620678663253784,
+            18.539411544799805
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 20.683276438713072,
+        "spark_time_avg": 0.25140719413757323,
+        "translation_time_avg": 20.431869244575502,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20260101_google_34d5d5fd/593/AGG_ID_593_benchmark_results_20260101_google_34d5d5fd.json"
+        ]
+    }
+}

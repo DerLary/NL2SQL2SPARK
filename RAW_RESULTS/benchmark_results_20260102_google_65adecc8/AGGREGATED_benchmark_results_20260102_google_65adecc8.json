@@ -1,0 +1,246 @@
+{
+    "google_1241": {
+        "llm": "google",
+        "query_id": 1241,
+        "nl_query": "For patients with abnormal platelet level, state the number of patients with lower than normal range. How is it compare to the number of patients with higher than normal range? abnormal platelet level refers to PLT <= 100 or PLT >= 400; platelet level lower than normal range refers to PLT < 100; calculation = SUBTRACT(SUM(PLT < 100), SUM(PLT > 400)); platelet level higher than normal range refers to PLT > 400;",
+        "golden_query": "SELECT SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID",
+        "sparksql_query": [
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory WHERE PLT < 100 OR PLT > 400",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal FROM laboratory",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory WHERE PLT <= 100 OR PLT >= 400",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory WHERE PLT <= 100 OR PLT >= 400",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal FROM laboratory",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal FROM laboratory",
+            "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal FROM laboratory"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "320",
+                    "875",
+                    "-555"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875",
+                    "-555"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875",
+                    "-555"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875",
+                    "-555"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875",
+                    "-555"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875",
+                    "-555"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875"
+                ]
+            ],
+            [
+                [
+                    "320",
+                    "875"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            22.043320655822754,
+            14.21567678451538,
+            21.980026960372925,
+            10.444590091705322,
+            23.29619526863098,
+            11.76726245880127,
+            13.6930091381073,
+            8.830250978469849,
+            14.154685497283936,
+            12.896726608276367
+        ],
+        "spark_time": [
+            0.04572916030883789,
+            0.046947479248046875,
+            0.036934614181518555,
+            0.41390037536621094,
+            0.06354165077209473,
+            0.06001567840576172,
+            0.031632184982299805,
+            0.03612637519836426,
+            0.11187553405761719,
+            0.04109334945678711
+        ],
+        "translation_time": [
+            21.997591495513916,
+            14.168729305267334,
+            21.943092346191406,
+            10.030689716339111,
+            23.232653617858887,
+            11.707246780395508,
+            13.661376953125,
+            8.794124603271484,
+            14.042809963226318,
+            12.85563325881958
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 15.332174444198609,
+        "spark_time_avg": 0.0887796401977539,
+        "translation_time_avg": 15.243394804000854,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0,
+        "source_file": [
+            "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20260102_google_65adecc8/1241/AGG_ID_1241_benchmark_results_20260102_google_65adecc8.json"
+        ]
+    }
+}

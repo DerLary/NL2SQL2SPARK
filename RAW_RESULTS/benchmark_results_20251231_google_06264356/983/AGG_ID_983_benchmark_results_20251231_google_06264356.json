@@ -1,0 +1,240 @@
+{
+    "google_983": {
+        "llm": "google",
+        "query_id": 983,
+        "nl_query": "Which of the Italian constructor got the highest point to date? Give its introduction website? introduction website refers to url; Italian is a nationality",
+        "golden_query": "SELECT T1.url FROM constructors AS T1 INNER JOIN constructorStandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+            "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+            "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY SUM(T2.points) DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY SUM(T2.points) DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY SUM(T2.points) DESC LIMIT 1",
+            "SELECT T1.`name`, T1.`url` FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.`constructorId` = T2.`constructorId` WHERE T1.`nationality` = 'Italian' GROUP BY T1.`name`, T1.`url` ORDER BY SUM(T2.`points`) DESC LIMIT 1",
+            "SELECT T1.`name`, T1.`url` FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.`constructorId` = T2.`constructorId` WHERE T1.`nationality` = 'Italian' GROUP BY T1.`name`, T1.`url` ORDER BY SUM(T2.`points`) DESC LIMIT 1",
+            "SELECT T1.`name`, T1.`url` FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.`constructorId` = T2.`constructorId` WHERE T1.`nationality` = 'Italian' GROUP BY T1.`name`, T1.`url` ORDER BY SUM(T2.`points`) DESC LIMIT 1",
+            "SELECT T1.name, T1.url FROM constructors AS T1 INNER JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1;"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "63855.5"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "63855.5"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                    "63855.5"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ],
+            [
+                [
+                    "Ferrari",
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ],
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            10.757232427597046,
+            17.018261671066284,
+            13.82803750038147,
+            8.106865882873535,
+            9.933151483535767,
+            6.907336473464966,
+            14.43509840965271,
+            15.73948860168457,
+            13.76475739479065,
+            12.218424320220947
+        ],
+        "spark_time": [
+            0.0823514461517334,
+            0.07886862754821777,
+            0.3034038543701172,
+            0.09139537811279297,
+            0.0813596248626709,
+            0.07977747917175293,
+            0.07513046264648438,
+            0.10528945922851562,
+            0.09632444381713867,
+            0.0983431339263916
+        ],
+        "translation_time": [
+            10.674880981445312,
+            16.939393043518066,
+            13.524633646011353,
+            8.015470504760742,
+            9.851791858673096,
+            6.827558994293213,
+            14.359967947006226,
+            15.634199142456055,
+            13.66843295097351,
+            12.120081186294556
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 12.270865416526794,
+        "spark_time_avg": 0.10922439098358154,
+        "translation_time_avg": 12.161641025543213,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

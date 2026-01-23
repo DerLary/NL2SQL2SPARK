@@ -1,0 +1,61 @@
+
+Execution Plan for: Model Query ID 1326...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias('COUNT('T1.member_id))]
++- 'Filter ('T2.major_name = Environmental Engineering)
+   +- 'Join Inner, ('T1.link_to_major = 'T2.major_id)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [member], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [major], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [count(member_id#10609) AS count(member_id)#10631L]
++- Project [member_id#10609]
+   +- Join Inner, (link_to_major#10617 = major_id#10577)
+      :- Project [member_id#10609, link_to_major#10617]
+      :  +- Filter isnotnull(link_to_major#10617)
+      :     +- Relation [member_id#10609,first_name#10610,last_name#10611,email#10612,position#10613,t_shirt_size#10614,phone#10615,zip#10616,link_to_major#10617] JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1]
+      +- Project [major_id#10577]
+         +- Filter ((isnotnull(major_name#10578) AND (major_name#10578 = Environmental Engineering)) AND isnotnull(major_id#10577))
+            +- Relation [major_id#10577,major_name#10578,department#10579,college#10580] JDBCRelation((SELECT "major_id", "major_name", "department", "college" FROM "major") AS "major") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[count(member_id#10609)], output=[count(member_id)#10631L])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=25400]
+      +- HashAggregate(keys=[], functions=[partial_count(member_id#10609)], output=[count#10633L])
+        +- Project [member_id#10609]
+            +- SortMergeJoin [link_to_major#10617], [major_id#10577], Inner
+              :- Sort [link_to_major#10617 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(link_to_major#10617, 200), ENSURE_REQUIREMENTS, [plan_id=25392]
+              :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#10609,link_to_major#10617] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>
+              +- Sort [major_id#10577 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(major_id#10577, 200), ENSURE_REQUIREMENTS, [plan_id=25393]
+                    +- Scan JDBCRelation((SELECT "major_id", "major_name", "department", "college" FROM "major") AS "major") [numPartitions=1] [major_id#10577] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[count(member_id#10609)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=25443]
+  +- HashAggregate(keys=[], functions=[partial_count(member_id#10609)])
+  +- Project [member_id#10609]
+  +- SortMergeJoin [link_to_major#10617], [major_id#10577], Inner
+  :- Sort [link_to_major#10617 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(link_to_major#10617, 200), ENSURE_REQUIREMENTS, [plan_id=25435]
+  :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#10609,link_to_major#10617] PushedFilters: [*IsNotNull(link_to_major)], ReadSchema: struct<member_id:string,link_to_major:string>
+  +- Sort [major_id#10577 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(major_id#10577, 200), ENSURE_REQUIREMENTS, [plan_id=25436]
+  +- Scan JDBCRelation((SELECT "major_id", "major_name", "department", "college" FROM "major") AS "major") [numPartitions=1] [major_id#10577] PushedFilters: [*IsNotNull(major_name), *EqualTo(major_name,Environmental Engineering), *IsNotNull(major_id)], ReadSchema: struct<major_id:string>
+================================================================================

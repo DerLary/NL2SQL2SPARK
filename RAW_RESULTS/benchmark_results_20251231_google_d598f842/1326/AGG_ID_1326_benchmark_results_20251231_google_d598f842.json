@@ -1,0 +1,194 @@
+{
+    "google_1326": {
+        "llm": "google",
+        "query_id": 1326,
+        "nl_query": "How many members of the Student_Club have majored Environmental Engineering?\n 'Environmental Engineering' is the major name",
+        "golden_query": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+        "sparksql_query": [
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.major_id = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.major_id = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.major_id = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+            "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "2"
+                ]
+            ],
+            null,
+            [
+                [
+                    "2"
+                ]
+            ],
+            [
+                [
+                    "2"
+                ]
+            ],
+            [
+                [
+                    "2"
+                ]
+            ],
+            null,
+            [
+                [
+                    "2"
+                ]
+            ],
+            null,
+            [
+                [
+                    "2"
+                ]
+            ],
+            [
+                [
+                    "2"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ],
+            [
+                {
+                    "count(member_id)": 2
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            "[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.major_id = major_id#10086)\n      :- SubqueryAlias T1\n      :  +- SubqueryAlias member\n      :     +- View (`member`, [member_id#10118, first_name#10119, last_name#10120, email#10121, position#10122, t_shirt_size#10123, phone#10124, zip#10125, link_to_major#10126])\n      :        +- Relation [member_id#10118,first_name#10119,last_name#10120,email#10121,position#10122,t_shirt_size#10123,phone#10124,zip#10125,link_to_major#10126] JDBCRelation(member) [numPartitions=1]\n      +- SubqueryAlias T2\n         +- SubqueryAlias major\n            +- View (`major`, [major_id#10086, major_name#10087, department#10088, college#10089])\n               +- Relation [major_id#10086,major_name#10087,department#10088,college#10089] JDBCRelation(major) [numPartitions=1]\n",
+            null,
+            null,
+            null,
+            "[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.major_id = major_id#10564)\n      :- SubqueryAlias T1\n      :  +- SubqueryAlias member\n      :     +- View (`member`, [member_id#10596, first_name#10597, last_name#10598, email#10599, position#10600, t_shirt_size#10601, phone#10602, zip#10603, link_to_major#10604])\n      :        +- Relation [member_id#10596,first_name#10597,last_name#10598,email#10599,position#10600,t_shirt_size#10601,phone#10602,zip#10603,link_to_major#10604] JDBCRelation(member) [numPartitions=1]\n      +- SubqueryAlias T2\n         +- SubqueryAlias major\n            +- View (`major`, [major_id#10564, major_name#10565, department#10566, college#10567])\n               +- Relation [major_id#10564,major_name#10565,department#10566,college#10567] JDBCRelation(major) [numPartitions=1]\n",
+            null,
+            "[UNRESOLVED_COLUMN.WITH_SUGGESTION] A column, variable, or function parameter with name `T1`.`major_id` cannot be resolved. Did you mean one of the following? [`T2`.`major_id`, `T1`.`member_id`, `T2`.`major_name`, `T1`.`phone`, `T1`.`email`]. SQLSTATE: 42703; line 1 pos 71;\n'Project [unresolvedalias('COUNT('T1.member_id))]\n+- 'Filter ('T2.major_name = Environmental Engineering)\n   +- 'Join Inner, ('T1.major_id = major_id#10147)\n      :- SubqueryAlias T1\n      :  +- SubqueryAlias member\n      :     +- View (`member`, [member_id#10179, first_name#10180, last_name#10181, email#10182, position#10183, t_shirt_size#10184, phone#10185, zip#10186, link_to_major#10187])\n      :        +- Relation [member_id#10179,first_name#10180,last_name#10181,email#10182,position#10183,t_shirt_size#10184,phone#10185,zip#10186,link_to_major#10187] JDBCRelation(member) [numPartitions=1]\n      +- SubqueryAlias T2\n         +- SubqueryAlias major\n            +- View (`major`, [major_id#10147, major_name#10148, department#10149, college#10150])\n               +- Relation [major_id#10147,major_name#10148,department#10149,college#10150] JDBCRelation(major) [numPartitions=1]\n",
+            null,
+            null
+        ],
+        "total_time": [
+            14.953884840011597,
+            13.749391794204712,
+            13.525371074676514,
+            13.340104818344116,
+            14.032371044158936,
+            19.539926052093506,
+            16.771220922470093,
+            17.43777894973755,
+            10.275093078613281,
+            11.180593252182007
+        ],
+        "spark_time": [
+            0.07577896118164062,
+            0.1439986228942871,
+            0.07243919372558594,
+            0.05283164978027344,
+            0.07486677169799805,
+            0.10285520553588867,
+            0.09729146957397461,
+            0.10544252395629883,
+            0.07774972915649414,
+            0.07596421241760254
+        ],
+        "translation_time": [
+            14.878105878829956,
+            13.605393171310425,
+            13.452931880950928,
+            13.287273168563843,
+            13.957504272460938,
+            19.437070846557617,
+            16.673929452896118,
+            17.33233642578125,
+            10.197343349456787,
+            11.104629039764404
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 14.480573582649232,
+        "spark_time_avg": 0.0879218339920044,
+        "translation_time_avg": 14.392651748657226,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

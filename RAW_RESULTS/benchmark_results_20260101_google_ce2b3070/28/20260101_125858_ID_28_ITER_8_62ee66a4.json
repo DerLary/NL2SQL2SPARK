@@ -1,0 +1,265 @@
+{
+    "llm": "google",
+    "sparksql_query": "SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;",
+    "query_id": 28,
+    "iteration": 8,
+    "difficulty": "challenging",
+    "execution_status": "VALID",
+    "query_result": [],
+    "spark_error": null,
+    "total_time": 14.811610460281372,
+    "spark_time": 0.047239065170288086,
+    "translation_time": 14.764371395111084,
+    "llm_requests": 6,
+    "chain_of_thought": [
+        "Action: list_tables_sql_db\nAction Input: {}",
+        "Observation: content='customers, examination, frpm, gasstations, laboratory, patient, products, satscores, schools, sqlite_sequence, transactions_1k, yearmonth' name='list_tables_sql_db' tool_call_id='9efffed6-511f-4163-981d-0b9e63effa1d'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'schools'}",
+        "Observation: content='CREATE TABLE schools (CDSCode string, NCESDist string, NCESSchool string, StatusType string, County string, District string, School string, Street string, StreetAbr string, City string, Zip string, State string, MailStreet string, MailStrAbr string, MailCity string, MailZip string, MailState string, Phone string, Ext string, Website string, OpenDate date, ClosedDate date, Charter int, CharterNum string, FundingType string, DOC string, DOCType string, SOC string, SOCType string, EdOpsCode string, EdOpsName string, EILCode string, EILName string, GSoffered string, GSserved string, Virtual string, Magnet int, Latitude double, Longitude double, AdmFName1 string, AdmLName1 string, AdmEmail1 string, AdmFName2 string, AdmLName2 string, AdmEmail2 string, AdmFName3 string, AdmLName3 string, AdmEmail3 string, LastUpdate date);' name='schema_sql_db' tool_call_id='5e5f8231-49fd-485a-b93f-eac8aab8b711'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'frpm'}",
+        "Observation: content='CREATE TABLE frpm (CDSCode string, Academic Year string, County Code string, District Code int, School Code string, County Name string, District Name string, School Name string, District Type string, School Type string, Educational Option Type string, NSLP Provision Status string, Charter School (Y/N) int, Charter School Number string, Charter Funding Type string, IRC int, Low Grade string, High Grade string, Enrollment (K-12) double, Free Meal Count (K-12) double, Percent (%) Eligible Free (K-12) double, FRPM Count (K-12) double, Percent (%) Eligible FRPM (K-12) double, Enrollment (Ages 5-17) double, Free Meal Count (Ages 5-17) double, Percent (%) Eligible Free (Ages 5-17) double, FRPM Count (Ages 5-17) double, Percent (%) Eligible FRPM (Ages 5-17) double, 2013-14 CALPADS Fall 1 Certification Status int);' name='schema_sql_db' tool_call_id='77e2e4dd-a986-4704-b33d-7e14b4c616b3'",
+        "Action: query_checker_sql_db\nAction Input: {'query': \"SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;\"}",
+        "Observation: content=\"The provided Spark SQL query appears to be well-formed and does not contain any of the common mistakes listed.\\n\\n*   **NOT IN with NULL values**: Not used.\\n*   **UNION when UNION ALL should have been used**: Not used.\\n*   **BETWEEN for exclusive ranges**: Not used.\\n*   **Data type mismatch in predicates**: The data types for `CDSCode` are assumed to be compatible for the join. `Charter Funding Type` is compared to a string literal. Enrollment numbers are typically numeric, and their subtraction and comparison with an average are appropriate.\\n*   **Properly quoting identifiers**: Identifiers with spaces (e.g., ``Charter Funding Type``, ``Enrollment (K-12)``) are correctly quoted using backticks (` `).\\n*   **Use ` for the in-query strings**: String literals like `'Local'` correctly use single quotes. Backticks are correctly used for identifiers.\\n*   **Using the correct number of arguments for functions**: `AVG()` is used with a single expression, which is correct.\\n*   **Casting to the correct data type**: No explicit casting is used, and implicit casting for numeric operations seems appropriate.\\n*   **Using the proper columns for joins**: `T1.CDSCode = T2.CDSCode` is a common and logical join condition between a `schools` table and a `frpm` (Free and Reduced Price Meal) table, which would typically contain school-level data identified by `CDSCode`.\\n\\nThe query is correct as written.\\n\\n```sql\\nSELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;\\n```\" name='query_checker_sql_db' tool_call_id='9dc3f179-c613-4d6b-b4db-219badde4762'",
+        "Action: query_sql_db\nAction Input: {'query': \"SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;\"}"
+    ],
+    "input_tokens": 5492,
+    "output_tokens": 2496,
+    "cloudflare_neurons": null,
+    "prompt": "System: You are an agent designed to interact with Spark SQL.\nGiven an input question, create a syntactically correct Spark SQL query to run, then look at the results of the query and return the answer.\nDon't limit the result size.\nYou can order the results by a relevant column to return the most interesting examples in the database.\nNever query for all the columns from a specific table, only ask for the relevant columns given the question.\nYou have access to tools for interacting with the database.\nOnly use the below tools. Only use the information returned by the below tools to construct your final answer.\nYou MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.\n\nDO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.\n\nIf the question does not seem related to the database, just return \"I don't know\" as the answer.\n\nHuman: Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that are locally funded, list the names and DOC type of schools which has a difference above this average. Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)` - `Enrollment (Ages 5-17)`\n\n\nAI: [{'name': 'list_tables_sql_db', 'args': {}, 'id': '9efffed6-511f-4163-981d-0b9e63effa1d', 'type': 'tool_call'}]\nTool: customers, examination, frpm, gasstations, laboratory, patient, products, satscores, schools, sqlite_sequence, transactions_1k, yearmonth\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'schools'}, 'id': '5e5f8231-49fd-485a-b93f-eac8aab8b711', 'type': 'tool_call'}]\nTool: CREATE TABLE schools (CDSCode string, NCESDist string, NCESSchool string, StatusType string, County string, District string, School string, Street string, StreetAbr string, City string, Zip string, State string, MailStreet string, MailStrAbr string, MailCity string, MailZip string, MailState string, Phone string, Ext string, Website string, OpenDate date, ClosedDate date, Charter int, CharterNum string, FundingType string, DOC string, DOCType string, SOC string, SOCType string, EdOpsCode string, EdOpsName string, EILCode string, EILName string, GSoffered string, GSserved string, Virtual string, Magnet int, Latitude double, Longitude double, AdmFName1 string, AdmLName1 string, AdmEmail1 string, AdmFName2 string, AdmLName2 string, AdmEmail2 string, AdmFName3 string, AdmLName3 string, AdmEmail3 string, LastUpdate date);\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'frpm'}, 'id': '77e2e4dd-a986-4704-b33d-7e14b4c616b3', 'type': 'tool_call'}]\nTool: CREATE TABLE frpm (CDSCode string, Academic Year string, County Code string, District Code int, School Code string, County Name string, District Name string, School Name string, District Type string, School Type string, Educational Option Type string, NSLP Provision Status string, Charter School (Y/N) int, Charter School Number string, Charter Funding Type string, IRC int, Low Grade string, High Grade string, Enrollment (K-12) double, Free Meal Count (K-12) double, Percent (%) Eligible Free (K-12) double, FRPM Count (K-12) double, Percent (%) Eligible FRPM (K-12) double, Enrollment (Ages 5-17) double, Free Meal Count (Ages 5-17) double, Percent (%) Eligible Free (Ages 5-17) double, FRPM Count (Ages 5-17) double, Percent (%) Eligible FRPM (Ages 5-17) double, 2013-14 CALPADS Fall 1 Certification Status int);\nAI: [{'name': 'query_checker_sql_db', 'args': {'query': \"SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;\"}, 'id': '9dc3f179-c613-4d6b-b4db-219badde4762', 'type': 'tool_call'}]\nTool: The provided Spark SQL query appears to be well-formed and does not contain any of the common mistakes listed.\n\n*   **NOT IN with NULL values**: Not used.\n*   **UNION when UNION ALL should have been used**: Not used.\n*   **BETWEEN for exclusive ranges**: Not used.\n*   **Data type mismatch in predicates**: The data types for `CDSCode` are assumed to be compatible for the join. `Charter Funding Type` is compared to a string literal. Enrollment numbers are typically numeric, and their subtraction and comparison with an average are appropriate.\n*   **Properly quoting identifiers**: Identifiers with spaces (e.g., ``Charter Funding Type``, ``Enrollment (K-12)``) are correctly quoted using backticks (` `).\n*   **Use ` for the in-query strings**: String literals like `'Local'` correctly use single quotes. Backticks are correctly used for identifiers.\n*   **Using the correct number of arguments for functions**: `AVG()` is used with a single expression, which is correct.\n*   **Casting to the correct data type**: No explicit casting is used, and implicit casting for numeric operations seems appropriate.\n*   **Using the proper columns for joins**: `T1.CDSCode = T2.CDSCode` is a common and logical join condition between a `schools` table and a `frpm` (Free and Reduced Price Meal) table, which would typically contain school-level data identified by `CDSCode`.\n\nThe query is correct as written.\n\n```sql\nSELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;\n```",
+    "final_answer": "",
+    "golden_query": "SELECT T2.School, T2.DOC FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.FundingType = 'Locally funded' AND (T1.`Enrollment (K-12)` - T1.`Enrollment (Ages 5-17)`) > (SELECT AVG(T3.`Enrollment (K-12)` - T3.`Enrollment (Ages 5-17)`) FROM frpm AS T3 INNER JOIN schools AS T4 ON T3.CDSCode = T4.CDSCode WHERE T4.FundingType = 'Locally funded')",
+    "nl_query": "Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that are locally funded, list the names and DOC type of schools which has a difference above this average. Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)` - `Enrollment (Ages 5-17)`",
+    "ground_truth": [
+        {
+            "School": "Forest Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "YES Academy",
+            "DOC": "54"
+        },
+        {
+            "School": "The Education Corps",
+            "DOC": "00"
+        },
+        {
+            "School": "Denair Charter Academy",
+            "DOC": "54"
+        },
+        {
+            "School": "Yuba County Career Preparatory Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Pomelo Community Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Elk Grove Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Taft Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Delta Charter Online",
+            "DOC": "52"
+        },
+        {
+            "School": "San Juan Choices Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Madera County Independent Academy",
+            "DOC": "00"
+        },
+        {
+            "School": "Monterey County Home Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Stanislaus Alternative Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Rosemary Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Pioneer Technical Center",
+            "DOC": "00"
+        },
+        {
+            "School": "Butterfield Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Sylmar Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Stockton High",
+            "DOC": "54"
+        },
+        {
+            "School": "Grover Cleveland Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Delta Home Charter",
+            "DOC": "52"
+        },
+        {
+            "School": "Westwood Charter Elementary",
+            "DOC": "54"
+        },
+        {
+            "School": "Calahan Community Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Delta Charter",
+            "DOC": "52"
+        },
+        {
+            "School": "Arundel Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Carpenter Community Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Lynhaven Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Clovis Online Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Visalia Charter Independent Study",
+            "DOC": "54"
+        },
+        {
+            "School": "Chatsworth Charter High",
+            "DOC": "54"
+        },
+        {
+            "School": "Pacific Coast Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Mountain Oaks",
+            "DOC": "00"
+        },
+        {
+            "School": "Gateway to College Academy",
+            "DOC": "56"
+        },
+        {
+            "School": "Wilbur Charter For Enriched Academics",
+            "DOC": "54"
+        },
+        {
+            "School": "Grizzly ChalleNGe Charter",
+            "DOC": "00"
+        },
+        {
+            "School": "Kings River-Hardwick Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Riverside Preparatory",
+            "DOC": "52"
+        },
+        {
+            "School": "Summit Charter Academy",
+            "DOC": "52"
+        },
+        {
+            "School": "George Washington Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Visions In Education",
+            "DOC": "54"
+        },
+        {
+            "School": "Castlemont Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Castle Rock",
+            "DOC": "00"
+        },
+        {
+            "School": "Natomas Charter",
+            "DOC": "54"
+        },
+        {
+            "School": "Washington Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "YouthBuild Charter School of California",
+            "DOC": "00"
+        },
+        {
+            "School": "Soledad Enrichment Action Charter High",
+            "DOC": "00"
+        },
+        {
+            "School": "Mattole Valley Charter (#159)",
+            "DOC": "54"
+        },
+        {
+            "School": "Kern Workforce 2000 Academy",
+            "DOC": "56"
+        },
+        {
+            "School": "Fammatre Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "West Park Charter Academy",
+            "DOC": "52"
+        },
+        {
+            "School": "Serrania Avenue Charter For Enriched Studies",
+            "DOC": "54"
+        },
+        {
+            "School": "School of Extended Educational Options",
+            "DOC": "54"
+        },
+        {
+            "School": "Come Back Kids",
+            "DOC": "00"
+        },
+        {
+            "School": "Marlton",
+            "DOC": "54"
+        },
+        {
+            "School": "Union Hill Elementary",
+            "DOC": "52"
+        },
+        {
+            "School": "Fairmont Charter Elementary",
+            "DOC": "54"
+        },
+        {
+            "School": "College Bridge Academy",
+            "DOC": "00"
+        },
+        {
+            "School": "Charter Community School Home Study Academy",
+            "DOC": "00"
+        }
+    ],
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "jaccard_index_new": 0.0
+}

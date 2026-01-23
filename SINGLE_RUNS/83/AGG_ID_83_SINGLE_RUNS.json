@@ -1,0 +1,105 @@
+{
+    "google_83": {
+        "llm": "google",
+        "query_id": 83,
+        "nl_query": null,
+        "golden_query": "SELECT T2.City, COUNT(T2.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.Magnet = 1 AND T2.GSoffered = 'K-8' AND T1.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T2.City",
+        "sparksql_query": [
+            "SELECT T1.City, COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.GSoffered = 'K-8' AND T1.Magnet = 1 AND T2.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T1.City",
+            "SELECT T2.City, COUNT(T2.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.Magnet = 1 AND T2.GSoffered LIKE '%K-8%' AND T1.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T2.City",
+            "SELECT T2.City, COUNT(T1.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.GSoffered = 'K-8' AND T2.Magnet = 1 AND T1.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T2.City"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Adelanto",
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "Adelanto",
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "Adelanto",
+                    "1"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "Output the name of the city and the count for the following description: Of the schools that offers a magnet program serving a grade span of Kindergarten to 8th grade, how many offers Multiple Provision Types? List the number of cities that offers a Kindergarten to 8th grade span and indicate how many schools are there serving such grade span for each city. Kindergarten to 8th grade refers to K-8; 'Offers a magnet program' means Magnet = 1; Multiple Provision Types refers to NSLP Provision Status = Multiple Provision Types. The grade span is indicated by GSoffered. Return one row per city: output the city name and COUNT(CDSCode); group by City. Please ensure to output exactly the name and the count. First select the values from the frpm table and then apply the neccessary inner joins.  You do not need oder by. Use GSoffered = 'K-8'. Extract the city name and count both from the same joined table",
+            "Output the name of the city and the count for the following description: Of the schools that offers a magnet program serving a grade span of Kindergarten to 8th grade, how many offers Multiple Provision Types? List the number of cities that offers a Kindergarten to 8th grade span and indicate how many schools are there serving such grade span for each city. Kindergarten to 8th grade refers to K-8; 'Offers a magnet program' means Magnet = 1; Multiple Provision Types refers to NSLP Provision Status = Multiple Provision Types. The grade span is indicated by GSoffered. Return one row per city: output the city name and COUNT(CDSCode); group by City. Please ensure to output exactly the name and the count. First select the values from the frpm table and then apply the neccessary inner joins. You do not need oder by",
+            "Output the name of the city and the count for the following description: Of the schools that offers a magnet program serving a grade span of Kindergarten to 8th grade, how many offers Multiple Provision Types? List the number of cities that offers a Kindergarten to 8th grade span and indicate how many schools are there serving such grade span for each city. Kindergarten to 8th grade refers to K-8; 'Offers a magnet program' means Magnet = 1; Multiple Provision Types refers to NSLP Provision Status = Multiple Provision Types. The grade span is indicated by GSoffered. Return one row per city: output the city name and COUNT(CDSCode); group by City. Please ensure to output exactly the name and the count. First select the values from the frpm table and then apply the neccessary inner joins. You do not need oder by. Use GSoffered = 'K-8'."
+        ],
+        "spark_error": [
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            11.921007871627808,
+            16.629679679870605,
+            12.80675458908081
+        ],
+        "spark_time": [
+            0.9451007843017578,
+            1.0097541809082031,
+            0.9646852016448975
+        ],
+        "translation_time": [
+            10.97590708732605,
+            15.619925498962402,
+            11.842069387435913
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            0,
+            0
+        ],
+        "total_time_avg": 13.785814046859741,
+        "spark_time_avg": 0.9731800556182861,
+        "translation_time_avg": 12.812633991241455,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.3333333333333333
+    }
+}

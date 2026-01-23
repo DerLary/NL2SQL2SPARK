@@ -1,0 +1,227 @@
+{
+    "google_1429": {
+        "llm": "google",
+        "query_id": 1429,
+        "nl_query": "What is the name of the social event that was attended by the vice president of the Student_Club located at 900 E. Washington St.? name of social event refers to event_name where type = 'Social'; 'Vice President' is position; located at refers to location",
+        "golden_query": "SELECT T2.event_name FROM attendance AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event INNER JOIN member AS T3 ON T1.link_to_member = T3.member_id WHERE T3.position = 'Vice President' AND T2.location = '900 E. Washington St.' AND T2.type = 'Social'",
+        "sparksql_query": [
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT T1.`event_name` FROM `event` AS T1 JOIN `attendance` AS T2 ON T1.`event_id` = T2.`link_to_event` JOIN `member` AS T3 ON T2.`link_to_member` = T3.`member_id` WHERE T1.`type` = 'Social' AND T1.`location` = '900 E. Washington St.' AND T3.`position` = 'Vice President'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT `T1`.`event_name` FROM `event` AS `T1` INNER JOIN `attendance` AS `T2` ON `T1`.`event_id` = `T2`.`link_to_event` INNER JOIN `member` AS `T3` ON `T2`.`link_to_member` = `T3`.`member_id` WHERE `T1`.`type` = 'Social' AND `T1`.`location` = '900 E. Washington St.' AND `T3`.`position` = 'Vice President'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+            "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ],
+            [
+                [
+                    "Laugh Out Loud"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ],
+            [
+                {
+                    "event_name": "Laugh Out Loud"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            14.541998386383057,
+            13.02199912071228,
+            16.584393739700317,
+            19.332371473312378,
+            11.609118700027466,
+            16.02979278564453,
+            17.426312923431396,
+            13.793191909790039,
+            14.650789976119995,
+            16.67354702949524
+        ],
+        "spark_time": [
+            0.0622556209564209,
+            0.049494028091430664,
+            0.04485464096069336,
+            0.06411862373352051,
+            0.25016212463378906,
+            0.04483604431152344,
+            0.05229377746582031,
+            0.05992746353149414,
+            0.049338340759277344,
+            0.05818939208984375
+        ],
+        "translation_time": [
+            14.479742765426636,
+            12.97250509262085,
+            16.539539098739624,
+            19.268252849578857,
+            11.358956575393677,
+            15.984956741333008,
+            17.374019145965576,
+            13.733264446258545,
+            14.601451635360718,
+            16.615357637405396
+        ],
+        "jaccard_index": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 15.36635160446167,
+        "spark_time_avg": 0.07354700565338135,
+        "translation_time_avg": 15.292804598808289,
+        "jaccard_index_avg": 1.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.9
+    }
+}

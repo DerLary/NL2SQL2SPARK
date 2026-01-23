@@ -1,0 +1,139 @@
+{
+    "google_134": {
+        "llm": "google",
+        "query_id": 134,
+        "nl_query": null,
+        "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id GROUP BY T1.A16 ORDER BY T1.A16 DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT COUNT(T1.`account_id`) FROM `account` AS T1 INNER JOIN `district` AS T2 ON T1.`district_id` = T2.`district_id` WHERE T2.`district_id` = (SELECT `district_id` FROM `district` ORDER BY `A16` DESC LIMIT 1)",
+            "SELECT COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A16 = (SELECT MAX(A16) FROM district);",
+            "SELECT COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.district_id = (SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1);",
+            "SELECT COUNT(T1.account_id) FROM account AS T1 INNER JOIN district AS T2 ON T1.district_id = T2.district_id WHERE T2.A16 = (SELECT MAX(A16) FROM district);",
+            "SELECT COUNT(T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id GROUP BY T2.A16 ORDER BY T2.A16 DESC LIMIT 1"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ],
+            [
+                [
+                    "554"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 554
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "In the branch with the highest number of crimes in 1996 (A16), how many accounts were opened? Join district with account on district_id. Consider districts grouped by their A16 value, rank these groups from highest A16 to lowest, take the top group, and output how many accounts it contains. Return exactly one number.",
+            "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996. Return only the count of the  account ids for the district.",
+            "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996. Return only the count of the  account ids for the district. Join district with account by district_id.",
+            "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996. Return only the count of the  account ids for the district. First determine which A16 value is the highest across districts, then report the number of accounts for that top-A16 district group. Join district with account by district_id.",
+            "Join district and account on district_id. For each distinct 1996-crime level (A16), count how many accounts are linked to districts with that A16. Then pick the crime level with the largest A16 and return its account count as a single row."
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            45.02433753013611,
+            14.28320860862732,
+            24.930481910705566,
+            12.263033151626587,
+            12.514177322387695
+        ],
+        "spark_time": [
+            1.0018222332000732,
+            0.8999862670898438,
+            1.0308170318603516,
+            0.8235194683074951,
+            0.9715170860290527
+        ],
+        "translation_time": [
+            44.022515296936035,
+            13.383222341537476,
+            23.899664878845215,
+            11.439513683319092,
+            11.542660236358643
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            1
+        ],
+        "total_time_avg": 21.803047704696656,
+        "spark_time_avg": 0.9455324172973633,
+        "translation_time_avg": 20.85751528739929,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.2
+    }
+}

@@ -1,0 +1,38 @@
+
+Execution Plan for: Model Query ID 48...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [(cast('SUM(CASE WHEN ('DOC = 54) THEN 1 ELSE 0 END) as double) / 'SUM(CASE WHEN ('DOC = 52) THEN 1 ELSE 0 END)) AS ratio#3639]
++- 'Filter ('County = Orange)
+   +- 'UnresolvedRelation [schools], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [(cast(sum(CASE WHEN (DOC#3597 = 54) THEN 1 ELSE 0 END) as double) / cast(sum(CASE WHEN (DOC#3597 = 52) THEN 1 ELSE 0 END) as double)) AS ratio#3639]
++- Project [DOC#3597]
+   +- Filter (isnotnull(County#3576) AND (County#3576 = Orange))
+      +- Relation [CDSCode#3572,NCESDist#3573,NCESSchool#3574,StatusType#3575,County#3576,District#3577,School#3578,Street#3579,StreetAbr#3580,City#3581,Zip#3582,State#3583,MailStreet#3584,MailStrAbr#3585,MailCity#3586,MailZip#3587,MailState#3588,Phone#3589,Ext#3590,Website#3591,OpenDate#3592,ClosedDate#3593,Charter#3594,CharterNum#3595,FundingType#3596,... 24 more fields] JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[sum(CASE WHEN (DOC#3597 = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (DOC#3597 = 52) THEN 1 ELSE 0 END)], output=[ratio#3639])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8052]
+      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (DOC#3597 = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (DOC#3597 = 52) THEN 1 ELSE 0 END)], output=[sum#3644L, sum#3645L])
+        +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [DOC#3597] PushedFilters: [*IsNotNull(County), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (DOC#3597 = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (DOC#3597 = 52) THEN 1 ELSE 0 END)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8072]
+  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (DOC#3597 = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (DOC#3597 = 52) THEN 1 ELSE 0 END)])
+  +- Scan JDBCRelation((SELECT "CDSCode", "NCESDist", "NCESSchool", "StatusType", "County", "District", "School", "Street", "StreetAbr", "City", "Zip", "State", "MailStreet", "MailStrAbr", "MailCity", "MailZip", "MailState", "Phone", "Ext", "Website", CAST("OpenDate" AS TEXT) AS "OpenDate", CAST("ClosedDate" AS TEXT) AS "ClosedDate", "Charter", "CharterNum", "FundingType", "DOC", "DOCType", "SOC", "SOCType", "EdOpsCode", "EdOpsName", "EILCode", "EILName", "GSoffered", "GSserved", "Virtual", "Magnet", "Latitude", "Longitude", "AdmFName1", "AdmLName1", "AdmEmail1", "AdmFName2", "AdmLName2", "AdmEmail2", "AdmFName3", "AdmLName3", "AdmEmail3", CAST("LastUpdate" AS TEXT) AS "LastUpdate" FROM "schools") AS "schools") [numPartitions=1] [DOC#3597] PushedFilters: [*IsNotNull(County), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>
+================================================================================

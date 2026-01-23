@@ -1,0 +1,467 @@
+{
+    "google_778": {
+        "llm": "google",
+        "query_id": 778,
+        "nl_query": "Provide superheroes' names who have the adaptation power. adaptation power refers to power_name = 'Adaptation';",
+        "golden_query": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+        "sparksql_query": [
+            "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'",
+            "SELECT `s`.`superhero_name` FROM `superhero` AS `s` JOIN `hero_power` AS `hp` ON `s`.`id` = `hp`.`hero_id` JOIN `superpower` AS `sp` ON `hp`.`power_id` = `sp`.`id` WHERE `sp`.`power_name` = 'Adaptation'",
+            "SELECT T1.`superhero_name` FROM `superhero` AS T1 INNER JOIN `hero_power` AS T2 ON T1.`id` = T2.`hero_id` INNER JOIN `superpower` AS T3 ON T2.`power_id` = T3.`id` WHERE T3.`power_name` = 'Adaptation'",
+            "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+            "SELECT `s`.`superhero_name` FROM `superhero` AS `s` JOIN `hero_power` AS `hp` ON `s`.`id` = `hp`.`hero_id` JOIN `superpower` AS `sp` ON `hp`.`power_id` = `sp`.`id` WHERE `sp`.`power_name` = 'Adaptation'",
+            "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'",
+            "SELECT T1.`superhero_name` FROM `superhero` AS T1 INNER JOIN `hero_power` AS T2 ON T1.`id` = T2.`hero_id` INNER JOIN `superpower` AS T3 ON T2.`power_id` = T3.`id` WHERE T3.`power_name` = 'Adaptation'",
+            "SELECT `s`.`superhero_name` FROM `superhero` AS `s` JOIN `hero_power` AS `hp` ON `s`.`id` = `hp`.`hero_id` JOIN `superpower` AS `sp` ON `hp`.`power_id` = `sp`.`id` WHERE `sp`.`power_name` = 'Adaptation'",
+            "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+            "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ],
+            [
+                [
+                    "Man of Miracles"
+                ],
+                [
+                    "Alex Mercer"
+                ],
+                [
+                    "Vegeta"
+                ],
+                [
+                    "Legion"
+                ],
+                [
+                    "Doomsday"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "Man of Miracles"
+                },
+                {
+                    "superhero_name": "Alex Mercer"
+                },
+                {
+                    "superhero_name": "Vegeta"
+                },
+                {
+                    "superhero_name": "Legion"
+                },
+                {
+                    "superhero_name": "Doomsday"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            12.170267343521118,
+            13.017995595932007,
+            12.964590787887573,
+            11.42976188659668,
+            13.5381019115448,
+            11.895776510238647,
+            11.966572046279907,
+            13.18212342262268,
+            12.28180742263794,
+            11.40920901298523
+        ],
+        "spark_time": [
+            0.22259926795959473,
+            0.08971285820007324,
+            0.09464120864868164,
+            0.08270001411437988,
+            0.11281776428222656,
+            0.11065483093261719,
+            0.10338377952575684,
+            0.09447336196899414,
+            0.1068582534790039,
+            0.08659195899963379
+        ],
+        "translation_time": [
+            11.947668075561523,
+            12.928282737731934,
+            12.869949579238892,
+            11.3470618724823,
+            13.425284147262573,
+            11.78512167930603,
+            11.86318826675415,
+            13.087650060653687,
+            12.174949169158936,
+            11.322617053985596
+        ],
+        "jaccard_index": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1
+        ],
+        "total_time_avg": 12.385620594024658,
+        "spark_time_avg": 0.1104433298110962,
+        "translation_time_avg": 12.275177264213562,
+        "jaccard_index_avg": 1.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.7
+    }
+}

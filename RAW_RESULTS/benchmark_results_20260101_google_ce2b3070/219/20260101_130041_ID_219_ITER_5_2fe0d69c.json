@@ -1,0 +1,42 @@
+{
+    "llm": "google",
+    "sparksql_query": "SELECT (SUM(CASE WHEN T2.`bond_type` = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.`bond_id`) AS percentage_triple_bonds FROM `molecule` AS T1 INNER JOIN `bond` AS T2 ON T1.`molecule_id` = T2.`molecule_id` WHERE T1.`label` = '+'",
+    "query_id": 219,
+    "iteration": 5,
+    "difficulty": "challenging",
+    "execution_status": "VALID",
+    "query_result": [
+        [
+            "0.08075370121131"
+        ]
+    ],
+    "spark_error": null,
+    "total_time": 15.733798503875732,
+    "spark_time": 0.09583687782287598,
+    "translation_time": 15.637961626052856,
+    "llm_requests": 5,
+    "chain_of_thought": [
+        "Action: list_tables_sql_db\nAction Input: {}",
+        "Observation: content='atom, bond, connected, customers, examination, frpm, gasstations, laboratory, molecule, patient, products, satscores, schools, sqlite_sequence, transactions_1k, yearmonth' name='list_tables_sql_db' tool_call_id='f39f38f0-f9c0-415f-871e-e2c0fbfd7d62'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'atom, bond, molecule'}",
+        "Observation: content='CREATE TABLE atom (atom_id string, molecule_id string, element string);\\n\\nCREATE TABLE bond (bond_id string, molecule_id string, bond_type string);\\n\\nCREATE TABLE molecule (molecule_id string, label string);' name='schema_sql_db' tool_call_id='9a011bc2-5772-4f77-9b26-bc0096bfd41c'",
+        "Action: query_checker_sql_db\nAction Input: {'query': \"SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percentage_triple_bonds FROM molecule AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'\"}",
+        "Observation: content='The query has one potential area for improvement based on the specific instructions:\\n\\n*   **Properly quoting identifiers**: The instructions state \"Use ` for the in-query strings\" and provide `T1.``label``` as an example, indicating that identifiers should be enclosed in backticks. While Spark SQL often allows unquoted identifiers for simple names, adhering to this specific instruction makes the query more robust and consistent.\\n\\nHere\\'s the rewritten query with identifiers properly quoted:\\n\\n```sql\\nSELECT (SUM(CASE WHEN T2.``bond_type`` = \\'#\\' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.``bond_id``) AS percentage_triple_bonds FROM ``molecule`` AS T1 INNER JOIN ``bond`` AS T2 ON T1.``molecule_id`` = T2.``molecule_id`` WHERE T1.``label`` = \\'+\\'\\n```' name='query_checker_sql_db' tool_call_id='91aba7a4-4945-4cbf-b269-08da7268d71d'",
+        "Action: query_sql_db\nAction Input: {'query': \"SELECT (SUM(CASE WHEN T2.`bond_type` = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.`bond_id`) AS percentage_triple_bonds FROM `molecule` AS T1 INNER JOIN `bond` AS T2 ON T1.`molecule_id` = T2.`molecule_id` WHERE T1.`label` = '+'\"}"
+    ],
+    "input_tokens": 3310,
+    "output_tokens": 2786,
+    "cloudflare_neurons": null,
+    "prompt": "System: You are an agent designed to interact with Spark SQL.\nGiven an input question, create a syntactically correct Spark SQL query to run, then look at the results of the query and return the answer.\nDon't limit the result size.\nYou can order the results by a relevant column to return the most interesting examples in the database.\nNever query for all the columns from a specific table, only ask for the relevant columns given the question.\nYou have access to tools for interacting with the database.\nOnly use the below tools. Only use the information returned by the below tools to construct your final answer.\nYou MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.\n\nDO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.\n\nIf the question does not seem related to the database, just return \"I don't know\" as the answer.\n\nHuman: What is the percentage of carcinogenic molecules in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'\n\n\nAI: [{'name': 'list_tables_sql_db', 'args': {}, 'id': 'f39f38f0-f9c0-415f-871e-e2c0fbfd7d62', 'type': 'tool_call'}]\nTool: atom, bond, connected, customers, examination, frpm, gasstations, laboratory, molecule, patient, products, satscores, schools, sqlite_sequence, transactions_1k, yearmonth\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'atom, bond, molecule'}, 'id': '9a011bc2-5772-4f77-9b26-bc0096bfd41c', 'type': 'tool_call'}]\nTool: CREATE TABLE atom (atom_id string, molecule_id string, element string);\n\nCREATE TABLE bond (bond_id string, molecule_id string, bond_type string);\n\nCREATE TABLE molecule (molecule_id string, label string);\nAI: [{'name': 'query_checker_sql_db', 'args': {'query': \"SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percentage_triple_bonds FROM molecule AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'\"}, 'id': '91aba7a4-4945-4cbf-b269-08da7268d71d', 'type': 'tool_call'}]\nTool: The query has one potential area for improvement based on the specific instructions:\n\n*   **Properly quoting identifiers**: The instructions state \"Use ` for the in-query strings\" and provide `T1.``label``` as an example, indicating that identifiers should be enclosed in backticks. While Spark SQL often allows unquoted identifiers for simple names, adhering to this specific instruction makes the query more robust and consistent.\n\nHere's the rewritten query with identifiers properly quoted:\n\n```sql\nSELECT (SUM(CASE WHEN T2.``bond_type`` = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.``bond_id``) AS percentage_triple_bonds FROM ``molecule`` AS T1 INNER JOIN ``bond`` AS T2 ON T1.``molecule_id`` = T2.``molecule_id`` WHERE T1.``label`` = '+'\n```",
+    "final_answer": "",
+    "golden_query": "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T2.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#'",
+    "nl_query": "What is the percentage of carcinogenic molecules in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'",
+    "ground_truth": [
+        {
+            "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+        }
+    ],
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "jaccard_index_new": 0.0
+}

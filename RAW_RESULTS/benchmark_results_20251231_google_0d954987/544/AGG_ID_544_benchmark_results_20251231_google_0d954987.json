@@ -1,0 +1,227 @@
+{
+    "google_544": {
+        "llm": "google",
+        "query_id": 544,
+        "nl_query": "What is the display name of the user who last edited the post \"Examples for teaching: Correlation does not mean causation\"? \"Examples for teaching: Correlation does not mean causation\" is the Title of post; user who last edited refers to LastEditorUserId",
+        "golden_query": "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+        "sparksql_query": [
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT `T2`.`DisplayName` FROM `posts` AS `T1` JOIN `users` AS `T2` ON `T1`.`LastEditorUserId` = `T2`.`Id` WHERE `T1`.`Title` = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+            "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ],
+            [
+                [
+                    "Abhilash"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ],
+            [
+                {
+                    "DisplayName": "Abhilash"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            16.581937551498413,
+            13.762630701065063,
+            15.858447313308716,
+            14.94187617301941,
+            17.12012791633606,
+            9.953888893127441,
+            13.213876247406006,
+            16.582650423049927,
+            17.39620304107666,
+            13.16349983215332
+        ],
+        "spark_time": [
+            0.18841767311096191,
+            0.09696102142333984,
+            0.11204075813293457,
+            0.15063977241516113,
+            0.09430313110351562,
+            0.0958099365234375,
+            0.15723633766174316,
+            0.11077404022216797,
+            0.10029315948486328,
+            0.09020209312438965
+        ],
+        "translation_time": [
+            16.39351987838745,
+            13.665669679641724,
+            15.746406555175781,
+            14.791236400604248,
+            17.025824785232544,
+            9.858078956604004,
+            13.056639909744263,
+            16.47187638282776,
+            17.295909881591797,
+            13.07329773902893
+        ],
+        "jaccard_index": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 14.857513809204102,
+        "spark_time_avg": 0.11966779232025146,
+        "translation_time_avg": 14.73784601688385,
+        "jaccard_index_avg": 1.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.9
+    }
+}

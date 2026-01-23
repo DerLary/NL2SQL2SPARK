@@ -1,0 +1,54 @@
+
+Execution Plan for: Model Query ID 1385...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['m.first_name, 'm.last_name]
++- 'Filter ('i.amount > 40)
+   +- 'Join Inner, ('m.member_id = 'i.link_to_member)
+      :- 'SubqueryAlias m
+      :  +- 'UnresolvedRelation [member], [], false
+      +- 'SubqueryAlias i
+         +- 'UnresolvedRelation [income], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [first_name#12584, last_name#12585]
++- Join Inner, (member_id#12583 = link_to_member#12582)
+   :- Project [member_id#12583, first_name#12584, last_name#12585]
+   :  +- Filter isnotnull(member_id#12583)
+   :     +- Relation [member_id#12583,first_name#12584,last_name#12585,email#12586,position#12587,t_shirt_size#12588,phone#12589,zip#12590,link_to_major#12591] JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1]
+   +- Project [link_to_member#12582]
+      +- Filter ((isnotnull(amount#12579) AND (amount#12579 > 40)) AND isnotnull(link_to_member#12582))
+         +- Relation [income_id#12577,date_received#12578,amount#12579,source#12580,notes#12581,link_to_member#12582] JDBCRelation((SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income") AS "income") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [first_name#12584, last_name#12585]
+  +- SortMergeJoin [member_id#12583], [link_to_member#12582], Inner
+      :- Sort [member_id#12583 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(member_id#12583, 200), ENSURE_REQUIREMENTS, [plan_id=29139]
+      :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#12583,first_name#12584,last_name#12585] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>
+      +- Sort [link_to_member#12582 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(link_to_member#12582, 200), ENSURE_REQUIREMENTS, [plan_id=29140]
+            +- Scan JDBCRelation((SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income") AS "income") [numPartitions=1] [link_to_member#12582] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [first_name#12584, last_name#12585]
+  +- SortMergeJoin [member_id#12583], [link_to_member#12582], Inner
+  :- Sort [member_id#12583 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(member_id#12583, 200), ENSURE_REQUIREMENTS, [plan_id=29169]
+  :     +- Scan JDBCRelation((SELECT "member_id", "first_name", "last_name", "email", "position", "t_shirt_size", "phone", "zip", "link_to_major" FROM "member") AS "member") [numPartitions=1] [member_id#12583,first_name#12584,last_name#12585] PushedFilters: [*IsNotNull(member_id)], ReadSchema: struct<member_id:string,first_name:string,last_name:string>
+  +- Sort [link_to_member#12582 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(link_to_member#12582, 200), ENSURE_REQUIREMENTS, [plan_id=29170]
+  +- Scan JDBCRelation((SELECT "income_id", "date_received", "amount", "source", "notes", "link_to_member" FROM "income") AS "income") [numPartitions=1] [link_to_member#12582] PushedFilters: [*IsNotNull(amount), *GreaterThan(amount,40), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_member:string>
+================================================================================

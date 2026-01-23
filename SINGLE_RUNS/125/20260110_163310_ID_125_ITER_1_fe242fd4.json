@@ -1,0 +1,306 @@
+{
+    "llm": "google",
+    "sparksql_query": "SELECT ((CAST(T3.A13 AS FLOAT) - CAST(T3.A12 AS FLOAT)) / CAST(T3.A12 AS FLOAT)) * 100 FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+    "query_id": 125,
+    "iteration": 1,
+    "difficulty": "challenging",
+    "execution_status": "VALID",
+    "query_result": [
+        [
+            "None"
+        ],
+        [
+            "20.0"
+        ],
+        [
+            "13.333335259948143"
+        ],
+        [
+            "14.912287893204535"
+        ],
+        [
+            "-5.593218955456702"
+        ],
+        [
+            "17.424244120977058"
+        ],
+        [
+            "39.25925644663958"
+        ],
+        [
+            "13.333335259948143"
+        ],
+        [
+            "39.25925644663958"
+        ],
+        [
+            "42.39999771118164"
+        ],
+        [
+            "16.31579294099046"
+        ],
+        [
+            "115.00000037252902"
+        ],
+        [
+            "None"
+        ],
+        [
+            "18.846154904224502"
+        ],
+        [
+            "44.37499427236625"
+        ],
+        [
+            "11.666665010982156"
+        ],
+        [
+            "22.500000558793538"
+        ],
+        [
+            "47.058819404522964"
+        ],
+        [
+            "13.541658181283548"
+        ],
+        [
+            "40.00000916994569"
+        ],
+        [
+            "22.500000558793538"
+        ],
+        [
+            "8.437499278225015"
+        ],
+        [
+            "22.142861947721446"
+        ],
+        [
+            "39.60000038146973"
+        ],
+        [
+            "40.00000916994569"
+        ],
+        [
+            "13.636361173361838"
+        ],
+        [
+            "13.541658181283548"
+        ],
+        [
+            "115.00000037252902"
+        ],
+        [
+            "28.38710133912798"
+        ],
+        [
+            "22.500000558793538"
+        ],
+        [
+            "35.00000728501233"
+        ],
+        [
+            "26.052632156831745"
+        ],
+        [
+            "9.782615118080951"
+        ],
+        [
+            "15.744686765658065"
+        ],
+        [
+            "115.00000037252902"
+        ],
+        [
+            "28.571427355007227"
+        ],
+        [
+            "14.912287893204535"
+        ],
+        [
+            "17.424244120977058"
+        ],
+        [
+            "115.00000037252902"
+        ],
+        [
+            "22.499997516473233"
+        ],
+        [
+            "43.52941110472368"
+        ],
+        [
+            "17.424244120977058"
+        ],
+        [
+            "38.62068443888025"
+        ],
+        [
+            "13.541658181283548"
+        ],
+        [
+            "16.31579294099046"
+        ]
+    ],
+    "spark_error": null,
+    "total_time": 12.975610733032227,
+    "spark_time": 0.7240102291107178,
+    "translation_time": 12.251600503921509,
+    "llm_requests": 5,
+    "chain_of_thought": [
+        "Action: list_tables_sql_db\nAction Input: {}",
+        "Observation: content='account, card, client, disp, district, loan, order, trans' name='list_tables_sql_db' tool_call_id='2f28e2fd-e41a-4601-8287-8c8132cd0086'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'loan, account, district'}",
+        "Observation: content='CREATE TABLE loan (loan_id int, account_id int, date decimal(38,18), amount int, duration int, payments double, status string);\\n\\nCREATE TABLE account (account_id int, district_id int, frequency string, date decimal(38,18));\\n\\nCREATE TABLE district (district_id int, A2 string, A3 string, A4 string, A5 string, A6 string, A7 string, A8 int, A9 int, A10 double, A11 int, A12 double, A13 double, A14 int, A15 int, A16 int);' name='schema_sql_db' tool_call_id='0108451d-751d-451e-b875-22faf40edd65'",
+        "Action: query_checker_sql_db\nAction Input: {'query': \"SELECT ((CAST(T3.A13 AS FLOAT) - CAST(T3.A12 AS FLOAT)) / CAST(T3.A12 AS FLOAT)) * 100 FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'\"}",
+        "Observation: content=\"The provided Spark SQL query does not contain any of the common mistakes listed.\\n\\n*   It does not use `NOT IN` with NULL values.\\n*   It does not use `UNION`.\\n*   It does not use `BETWEEN`.\\n*   There are no apparent data type mismatches in predicates.\\n*   Identifiers are properly used (unquoted for standard names, which is fine).\\n*   String literals are correctly quoted with single quotes.\\n*   Functions (`CAST`) are used with the correct number of arguments.\\n*   Casting to `FLOAT` is appropriate for the percentage calculation to ensure floating-point division.\\n*   The columns used for joins (`account_id`, `district_id`) appear to be correct and logical.\\n\\n```sql\\nSELECT ((CAST(T3.A13 AS FLOAT) - CAST(T3.A12 AS FLOAT)) / CAST(T3.A12 AS FLOAT)) * 100 FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'\\n```\" name='query_checker_sql_db' tool_call_id='e4c079cf-8c37-4d2c-9c06-2c899af5ac5b'",
+        "Action: query_sql_db\nAction Input: {'query': \"SELECT ((CAST(T3.A13 AS FLOAT) - CAST(T3.A12 AS FLOAT)) / CAST(T3.A12 AS FLOAT)) * 100 FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'\"}"
+    ],
+    "input_tokens": 3953,
+    "output_tokens": 2238,
+    "cloudflare_neurons": null,
+    "prompt": "System: You are an agent designed to interact with Spark SQL.\nGiven an input question, create a syntactically correct Spark SQL query to run, then look at the results of the query and return the answer.\nDon't limit the result size.\nYou can order the results by a relevant column to return the most interesting examples in the database.\nNever query for all the columns from a specific table, only ask for the relevant columns given the question.\nYou have access to tools for interacting with the database.\nOnly use the below tools. Only use the information returned by the below tools to construct your final answer.\nYou MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.\n\nDO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.\n\nIf the question does not seem related to the database, just return \"I don't know\" as the answer.\n\nHuman: For loans contracts which are still running where client are in debt, list the district of the and the state the the percentage unemployment rate increment from year 1995 to 1996. Return only the percentage value (one column), not the district or state. Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'. First cast the difference of A13 and A12 as float before multiplying it with 100. Do not use backticks in the naming\n\n\nAI: [{'name': 'list_tables_sql_db', 'args': {}, 'id': '2f28e2fd-e41a-4601-8287-8c8132cd0086', 'type': 'tool_call'}]\nTool: account, card, client, disp, district, loan, order, trans\nAI: [{'name': 'schema_sql_db', 'args': {'table_names': 'loan, account, district'}, 'id': '0108451d-751d-451e-b875-22faf40edd65', 'type': 'tool_call'}]\nTool: CREATE TABLE loan (loan_id int, account_id int, date decimal(38,18), amount int, duration int, payments double, status string);\n\nCREATE TABLE account (account_id int, district_id int, frequency string, date decimal(38,18));\n\nCREATE TABLE district (district_id int, A2 string, A3 string, A4 string, A5 string, A6 string, A7 string, A8 int, A9 int, A10 double, A11 int, A12 double, A13 double, A14 int, A15 int, A16 int);\nAI: [{'name': 'query_checker_sql_db', 'args': {'query': \"SELECT ((CAST(T3.A13 AS FLOAT) - CAST(T3.A12 AS FLOAT)) / CAST(T3.A12 AS FLOAT)) * 100 FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'\"}, 'id': 'e4c079cf-8c37-4d2c-9c06-2c899af5ac5b', 'type': 'tool_call'}]\nTool: The provided Spark SQL query does not contain any of the common mistakes listed.\n\n*   It does not use `NOT IN` with NULL values.\n*   It does not use `UNION`.\n*   It does not use `BETWEEN`.\n*   There are no apparent data type mismatches in predicates.\n*   Identifiers are properly used (unquoted for standard names, which is fine).\n*   String literals are correctly quoted with single quotes.\n*   Functions (`CAST`) are used with the correct number of arguments.\n*   Casting to `FLOAT` is appropriate for the percentage calculation to ensure floating-point division.\n*   The columns used for joins (`account_id`, `district_id`) appear to be correct and logical.\n\n```sql\nSELECT ((CAST(T3.A13 AS FLOAT) - CAST(T3.A12 AS FLOAT)) / CAST(T3.A12 AS FLOAT)) * 100 FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'\n```",
+    "final_answer": "",
+    "used_hil_query": "For loans contracts which are still running where client are in debt, list the district of the and the state the the percentage unemployment rate increment from year 1995 to 1996. Return only the percentage value (one column), not the district or state. Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'. First cast the difference of A13 and A12 as float before multiplying it with 100. Do not use backticks in the naming",
+    "golden_query": "SELECT CAST((T3.A13 - T3.A12) AS FLOAT) * 100 / T3.A12 FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+    "ground_truth": [
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": null
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 19.999999552965164
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.33333326108528
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 14.912281120032594
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": -5.593220561237658
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 17.424242063002154
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.259257139983
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.33333326108528
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.259257139983
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 42.39999771118164
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 16.315789599167672
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": null
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 18.84615421295166
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 44.37499865889549
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 11.666666716337204
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 47.058824230642884
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.541666169961294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.999998532808746
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 8.437500335276127
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.142857313156128
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.60000038146973
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 39.999998532808746
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.636364178224042
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.541666169961294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 28.38709662037511
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 34.99999973509047
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 26.052631829914294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 9.782608436501546
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 15.744681053973258
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 28.571428997176035
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 14.912281120032594
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 17.424242063002154
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 115.00000208616257
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 22.50000089406967
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 43.52941232569078
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 17.424242063002154
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 38.62068981959902
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 13.541666169961294
+        },
+        {
+            "((CAST((A13 - A12) AS FLOAT) * 100) / A12)": 16.315789599167672
+        }
+    ],
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "jaccard_index_new": 0.05357142857142857
+}

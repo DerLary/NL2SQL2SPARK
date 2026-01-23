@@ -1,0 +1,63 @@
+
+Execution Plan for: Golden Query ID 983...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 1
++- 'LocalLimit 1
+   +- 'Sort ['T2.points DESC NULLS LAST], true
+      +- 'Project ['T1.url]
+         +- 'Filter ('T1.nationality = Italian)
+            +- 'Join Inner, ('T1.constructorId = 'T2.constructorId)
+               :- 'SubqueryAlias T1
+               :  +- 'UnresolvedRelation [constructors], [], false
+               +- 'SubqueryAlias T2
+                  +- 'UnresolvedRelation [constructorStandings], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 1
++- LocalLimit 1
+   +- Project [url#1909]
+      +- Sort [points#1937 DESC NULLS LAST], true
+         +- Project [url#1909, points#1937]
+            +- Join Inner, (constructorId#1905 = constructorId#1936)
+               :- Project [constructorId#1905, url#1909]
+               :  +- Filter ((isnotnull(nationality#1908) AND (nationality#1908 = Italian)) AND isnotnull(constructorId#1905))
+               :     +- Relation [constructorId#1905,constructorRef#1906,name#1907,nationality#1908,url#1909] JDBCRelation((SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors") AS "constructors") [numPartitions=1]
+               +- Project [constructorId#1936, points#1937]
+                  +- Filter isnotnull(constructorId#1936)
+                     +- Relation [constructorStandingsId#1934,raceId#1935,constructorId#1936,points#1937,position#1938,positionText#1939,wins#1940] JDBCRelation((SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings") AS "constructorStandings") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- TakeOrderedAndProject(limit=1, orderBy=[points#1937 DESC NULLS LAST], output=[url#1909])
+  +- Project [url#1909, points#1937]
+      +- SortMergeJoin [constructorId#1905], [constructorId#1936], Inner
+        :- Sort [constructorId#1905 ASC NULLS FIRST], false, 0
+        :  +- Exchange hashpartitioning(constructorId#1905, 200), ENSURE_REQUIREMENTS, [plan_id=5883]
+        :     +- Scan JDBCRelation((SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors") AS "constructors") [numPartitions=1] [constructorId#1905,url#1909] PushedFilters: [*IsNotNull(nationality), *EqualTo(nationality,Italian), *IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,url:string>
+        +- Sort [constructorId#1936 ASC NULLS FIRST], false, 0
+            +- Exchange hashpartitioning(constructorId#1936, 200), ENSURE_REQUIREMENTS, [plan_id=5884]
+              +- Scan JDBCRelation((SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings") AS "constructorStandings") [numPartitions=1] [constructorId#1936,points#1937] PushedFilters: [*IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,points:double>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- TakeOrderedAndProject(limit=1, orderBy=[points#1937 DESC NULLS LAST], output=[url#1909])
+  +- Project [url#1909, points#1937]
+  +- SortMergeJoin [constructorId#1905], [constructorId#1936], Inner
+  :- Sort [constructorId#1905 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(constructorId#1905, 200), ENSURE_REQUIREMENTS, [plan_id=5918]
+  :     +- Scan JDBCRelation((SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors") AS "constructors") [numPartitions=1] [constructorId#1905,url#1909] PushedFilters: [*IsNotNull(nationality), *EqualTo(nationality,Italian), *IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,url:string>
+  +- Sort [constructorId#1936 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(constructorId#1936, 200), ENSURE_REQUIREMENTS, [plan_id=5919]
+  +- Scan JDBCRelation((SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings") AS "constructorStandings") [numPartitions=1] [constructorId#1936,points#1937] PushedFilters: [*IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,points:double>
+================================================================================

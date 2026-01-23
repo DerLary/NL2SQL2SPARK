@@ -1,0 +1,148 @@
+{
+    "query_id": 593,
+    "difficulty": "simple",
+    "is_initial": true,
+    "nl_query": "How many users from New York have a teacher and supporter badge? \"Supporter\" and \"Teachers\" are both Name of badge; 'New York' is the Location; user refers to UserId",
+    "golden_query": "SELECT COUNT(DISTINCT T1.Id) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name IN ('Supporter', 'Teacher') AND T2.Location = 'New York'",
+    "sparksql_query": "SELECT COUNT(DISTINCT T1.Id) FROM users AS T1 INNER JOIN badges AS T2 ON T1.Id = T2.UserId INNER JOIN badges AS T3 ON T1.Id = T3.UserId WHERE T1.Location = 'New York' AND T2.Name = 'Supporter' AND T3.Name = 'Teachers'",
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "ground_truth": [
+        {
+            "count(DISTINCT Id)": 9
+        }
+    ],
+    "query_result": [
+        [
+            "0"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 593...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias('COUNT(distinct 'T1.Id))]\n+- 'Filter ('T1.Name IN (Supporter,Teacher) AND ('T2.Location = New York))\n   +- 'Join Inner, ('T1.UserId = 'T2.Id)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [badges], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [users], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [count(distinct Id#37531) AS count(DISTINCT Id)#37603L]\n+- Project [Id#37531]\n   +- Join Inner, (UserId#37532 = Id#37582)\n      :- Project [Id#37531, UserId#37532]\n      :  +- Filter (Name#37533 IN (Supporter,Teacher) AND isnotnull(UserId#37532))\n      :     +- Relation [Id#37531,UserId#37532,Name#37533,Date#37534] JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1]\n      +- Project [Id#37582]\n         +- Filter ((isnotnull(Location#37588) AND (Location#37588 = New York)) AND isnotnull(Id#37582))\n            +- Relation [Id#37582,Reputation#37583,CreationDate#37584,DisplayName#37585,LastAccessDate#37586,WebsiteUrl#37587,Location#37588,AboutMe#37589,Views#37590,UpVotes#37591,DownVotes#37592,AccountId#37593,Age#37594,ProfileImageUrl#37595] JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[count(distinct Id#37531)], output=[count(DISTINCT Id)#37603L])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=62776]\n      +- HashAggregate(keys=[], functions=[partial_count(distinct Id#37531)], output=[count#37606L])\n        +- HashAggregate(keys=[Id#37531], functions=[], output=[Id#37531])\n            +- Exchange hashpartitioning(Id#37531, 200), ENSURE_REQUIREMENTS, [plan_id=62772]\n              +- HashAggregate(keys=[Id#37531], functions=[], output=[Id#37531])\n                  +- Project [Id#37531]\n                    +- SortMergeJoin [UserId#37532], [Id#37582], Inner\n                        :- Sort [UserId#37532 ASC NULLS FIRST], false, 0\n                        :  +- Exchange hashpartitioning(UserId#37532, 200), ENSURE_REQUIREMENTS, [plan_id=62764]\n                        :     +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [Id#37531,UserId#37532] PushedFilters: [*In(Name, [Supporter,Teacher]), *IsNotNull(UserId)], ReadSchema: struct<Id:int,UserId:int>\n                        +- Sort [Id#37582 ASC NULLS FIRST], false, 0\n                          +- Exchange hashpartitioning(Id#37582, 200), ENSURE_REQUIREMENTS, [plan_id=62765]\n                              +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[count(distinct Id#37531)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=62833]\n  +- HashAggregate(keys=[], functions=[partial_count(distinct Id#37531)])\n  +- HashAggregate(keys=[Id#37531], functions=[])\n  +- Exchange hashpartitioning(Id#37531, 200), ENSURE_REQUIREMENTS, [plan_id=62829]\n  +- HashAggregate(keys=[Id#37531], functions=[])\n  +- Project [Id#37531]\n  +- SortMergeJoin [UserId#37532], [Id#37582], Inner\n  :- Sort [UserId#37532 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(UserId#37532, 200), ENSURE_REQUIREMENTS, [plan_id=62821]\n  :     +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [Id#37531,UserId#37532] PushedFilters: [*In(Name, [Supporter,Teacher]), *IsNotNull(UserId)], ReadSchema: struct<Id:int,UserId:int>\n  +- Sort [Id#37582 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(Id#37582, 200), ENSURE_REQUIREMENTS, [plan_id=62822]\n  +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 593...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias('COUNT(distinct 'T1.Id))]\n+- 'Filter ((('T1.Location = New York) AND ('T2.Name = Supporter)) AND ('T3.Name = Teachers))\n   +- 'Join Inner, ('T1.Id = 'T3.UserId)\n      :- 'Join Inner, ('T1.Id = 'T2.UserId)\n      :  :- 'SubqueryAlias T1\n      :  :  +- 'UnresolvedRelation [users], [], false\n      :  +- 'SubqueryAlias T2\n      :     +- 'UnresolvedRelation [badges], [], false\n      +- 'SubqueryAlias T3\n         +- 'UnresolvedRelation [badges], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [count(distinct Id#37582) AS count(DISTINCT Id)#37623L]\n+- Project [Id#37582]\n   +- Join Inner, (Id#37582 = UserId#37619)\n      :- Project [Id#37582]\n      :  +- Join Inner, (Id#37582 = UserId#37532)\n      :     :- Project [Id#37582]\n      :     :  +- Filter ((isnotnull(Location#37588) AND (Location#37588 = New York)) AND isnotnull(Id#37582))\n      :     :     +- Relation [Id#37582,Reputation#37583,CreationDate#37584,DisplayName#37585,LastAccessDate#37586,WebsiteUrl#37587,Location#37588,AboutMe#37589,Views#37590,UpVotes#37591,DownVotes#37592,AccountId#37593,Age#37594,ProfileImageUrl#37595] JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1]\n      :     +- Project [UserId#37532]\n      :        +- Filter ((isnotnull(Name#37533) AND (Name#37533 = Supporter)) AND isnotnull(UserId#37532))\n      :           +- Relation [Id#37531,UserId#37532,Name#37533,Date#37534] JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1]\n      +- Project [UserId#37619]\n         +- Filter ((isnotnull(Name#37620) AND (Name#37620 = Teachers)) AND isnotnull(UserId#37619))\n            +- Relation [Id#37618,UserId#37619,Name#37620,Date#37621] JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[count(distinct Id#37582)], output=[count(DISTINCT Id)#37623L])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=62910]\n      +- HashAggregate(keys=[], functions=[partial_count(distinct Id#37582)], output=[count#37626L])\n        +- HashAggregate(keys=[Id#37582], functions=[], output=[Id#37582])\n            +- HashAggregate(keys=[Id#37582], functions=[], output=[Id#37582])\n              +- Project [Id#37582]\n                  +- SortMergeJoin [Id#37582], [UserId#37619], Inner\n                    :- Project [Id#37582]\n                    :  +- SortMergeJoin [Id#37582], [UserId#37532], Inner\n                    :     :- Sort [Id#37582 ASC NULLS FIRST], false, 0\n                    :     :  +- Exchange hashpartitioning(Id#37582, 200), ENSURE_REQUIREMENTS, [plan_id=62894]\n                    :     :     +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>\n                    :     +- Sort [UserId#37532 ASC NULLS FIRST], false, 0\n                    :        +- Exchange hashpartitioning(UserId#37532, 200), ENSURE_REQUIREMENTS, [plan_id=62895]\n                    :           +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37532] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Supporter), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>\n                    +- Sort [UserId#37619 ASC NULLS FIRST], false, 0\n                        +- Exchange hashpartitioning(UserId#37619, 200), ENSURE_REQUIREMENTS, [plan_id=62902]\n                          +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37619] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Teachers), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[count(distinct Id#37582)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=62987]\n  +- HashAggregate(keys=[], functions=[partial_count(distinct Id#37582)])\n  +- HashAggregate(keys=[Id#37582], functions=[])\n  +- HashAggregate(keys=[Id#37582], functions=[])\n  +- Project [Id#37582]\n  +- SortMergeJoin [Id#37582], [UserId#37633], Inner\n  :- Project [Id#37582]\n  :  +- SortMergeJoin [Id#37582], [UserId#37532], Inner\n  :     :- Sort [Id#37582 ASC NULLS FIRST], false, 0\n  :     :  +- Exchange hashpartitioning(Id#37582, 200), ENSURE_REQUIREMENTS, [plan_id=62971]\n  :     :     +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>\n  :     +- Sort [UserId#37532 ASC NULLS FIRST], false, 0\n  :        +- Exchange hashpartitioning(UserId#37532, 200), ENSURE_REQUIREMENTS, [plan_id=62972]\n  :           +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37532] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Supporter), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>\n  +- Sort [UserId#37633 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(UserId#37633, 200), ENSURE_REQUIREMENTS, [plan_id=62979]\n  +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37633] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Teachers), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20260101_google_34d5d5fd/593/20260101_144931_ID_593_ITER_6_143a51f2.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 3,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 4
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [Id#37531,UserId#37532] PushedFilters: [*In(Name, [Supporter,Teacher]), *IsNotNull(UserId)], ReadSchema: struct<Id:int,UserId:int>",
+                    "filters": [
+                        "*In(Name",
+                        "[Supporter",
+                        "Teacher"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>",
+                    "filters": [
+                        "*IsNotNull(Location)",
+                        "*EqualTo(Location",
+                        "New York)",
+                        "*IsNotNull(Id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [Id#37531,UserId#37532] PushedFilters: [*In(Name, [Supporter,Teacher]), *IsNotNull(UserId)], ReadSchema: struct<Id:int,UserId:int>",
+                    "filters": [
+                        "*In(Name",
+                        "[Supporter",
+                        "Teacher"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>",
+                    "filters": [
+                        "*IsNotNull(Location)",
+                        "*EqualTo(Location",
+                        "New York)",
+                        "*IsNotNull(Id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 3,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 4
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     :     +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>",
+                    "filters": [
+                        "*IsNotNull(Location)",
+                        "*EqualTo(Location",
+                        "New York)",
+                        "*IsNotNull(Id)"
+                    ]
+                },
+                {
+                    "scan_line": ":           +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37532] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Supporter), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>",
+                    "filters": [
+                        "*IsNotNull(Name)",
+                        "*EqualTo(Name",
+                        "Supporter)",
+                        "*IsNotNull(UserId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37619] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Teachers), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>",
+                    "filters": [
+                        "*IsNotNull(Name)",
+                        "*EqualTo(Name",
+                        "Teachers)",
+                        "*IsNotNull(UserId)"
+                    ]
+                },
+                {
+                    "scan_line": ":     :     +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#37582] PushedFilters: [*IsNotNull(Location), *EqualTo(Location,New York), *IsNotNull(Id)], ReadSchema: struct<Id:int>",
+                    "filters": [
+                        "*IsNotNull(Location)",
+                        "*EqualTo(Location",
+                        "New York)",
+                        "*IsNotNull(Id)"
+                    ]
+                },
+                {
+                    "scan_line": ":           +- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37532] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Supporter), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>",
+                    "filters": [
+                        "*IsNotNull(Name)",
+                        "*EqualTo(Name",
+                        "Supporter)",
+                        "*IsNotNull(UserId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"UserId\", \"Name\", CAST(\"Date\" AS TEXT) AS \"Date\" FROM \"badges\") AS \"badges\") [numPartitions=1] [UserId#37633] PushedFilters: [*IsNotNull(Name), *EqualTo(Name,Teachers), *IsNotNull(UserId)], ReadSchema: struct<UserId:int>",
+                    "filters": [
+                        "*IsNotNull(Name)",
+                        "*EqualTo(Name",
+                        "Teachers)",
+                        "*IsNotNull(UserId)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 3
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": false
+        }
+    }
+}

@@ -1,0 +1,227 @@
+{
+    "google_219": {
+        "llm": "google",
+        "query_id": 219,
+        "nl_query": "What is the percentage of carcinogenic molecules in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'",
+        "golden_query": "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T2.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#'",
+        "sparksql_query": [
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percentage_triple_bonds FROM molecule AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+            "SELECT (SUM(CASE WHEN T2.`bond_type` = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.`bond_id`) AS percentage_triple_bonds FROM `molecule` AS T1 INNER JOIN `bond` AS T2 ON T1.`molecule_id` = T2.`molecule_id` WHERE T1.`label` = '+'",
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percentage_triple_bonds FROM molecule AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percent_carcinogenic_triple_bonds FROM molecule AS T1 JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percent_carcinogenic_triple_bonds FROM molecule AS T1 JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percent_carcinogenic_triple_bonds FROM molecule AS T1 JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+            "SELECT (SUM(CASE WHEN T2.`bond_type` = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.`bond_id`) AS percentage_triple_bonds FROM `molecule` AS T1 INNER JOIN `bond` AS T2 ON T1.`molecule_id` = T2.`molecule_id` WHERE T1.`label` = '+'",
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percentage_triple_bonds FROM molecule AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+            "SELECT (SUM(CASE WHEN T2.`bond_type` = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.`bond_id`) AS percentage_triple_bonds FROM `molecule` AS T1 INNER JOIN `bond` AS T2 ON T1.`molecule_id` = T2.`molecule_id` WHERE T1.`label` = '+'",
+            "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percent_carcinogenic_triple_bonds FROM molecule AS T1 JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ],
+            [
+                [
+                    "0.08075370121131"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ],
+            [
+                {
+                    "((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))": 66.66666666666667
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            11.193871974945068,
+            16.320371627807617,
+            11.876180410385132,
+            15.901349306106567,
+            13.957781314849854,
+            17.35986328125,
+            15.193263053894043,
+            12.436747312545776,
+            15.733798503875732,
+            13.962393283843994
+        ],
+        "spark_time": [
+            0.13733601570129395,
+            0.07277941703796387,
+            0.44267725944519043,
+            0.08078742027282715,
+            0.13752198219299316,
+            0.06546163558959961,
+            0.0787210464477539,
+            0.06417679786682129,
+            0.09583687782287598,
+            0.07424664497375488
+        ],
+        "translation_time": [
+            11.056535959243774,
+            16.247592210769653,
+            11.433503150939941,
+            15.82056188583374,
+            13.82025933265686,
+            17.2944016456604,
+            15.114542007446289,
+            12.372570514678955,
+            15.637961626052856,
+            13.88814663887024
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 14.39356200695038,
+        "spark_time_avg": 0.12495450973510742,
+        "translation_time_avg": 14.268607497215271,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

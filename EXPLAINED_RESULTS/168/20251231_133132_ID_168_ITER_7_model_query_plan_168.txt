@@ -1,0 +1,61 @@
+
+Execution Plan for: Model Query ID 168...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias(((cast('SUM(CASE WHEN ('T2.gender = F) THEN 1 ELSE 0 END) as double) * 100) / 'COUNT('T2.client_id)))]
++- 'Filter ('T1.A11 > 10000)
+   +- 'Join Inner, ('T1.district_id = 'T2.district_id)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [district], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [client], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [((cast(sum(CASE WHEN (gender#6153 = F) THEN 1 ELSE 0 END) as double) * 100.0) / cast(count(client_id#6152) as double)) AS ((CAST(sum(CASE WHEN (gender = F) THEN 1 ELSE 0 END) AS DOUBLE) * 100) / count(client_id))#6219]
++- Project [client_id#6152, gender#6153]
+   +- Join Inner, (district_id#6160 = district_id#6155)
+      :- Project [district_id#6160]
+      :  +- Filter ((isnotnull(A11#6170) AND (A11#6170 > 10000)) AND isnotnull(district_id#6160))
+      :     +- Relation [district_id#6160,A2#6161,A3#6162,A4#6163,A5#6164,A6#6165,A7#6166,A8#6167,A9#6168,A10#6169,A11#6170,A12#6171,A13#6172,A14#6173,A15#6174,A16#6175] JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1]
+      +- Project [client_id#6152, gender#6153, district_id#6155]
+         +- Filter isnotnull(district_id#6155)
+            +- Relation [client_id#6152,gender#6153,birth_date#6154,district_id#6155] JDBCRelation((SELECT "client_id", "gender", CAST("birth_date" AS TEXT) AS "birth_date", "district_id" FROM "client") AS "client") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[sum(CASE WHEN (gender#6153 = F) THEN 1 ELSE 0 END), count(client_id#6152)], output=[((CAST(sum(CASE WHEN (gender = F) THEN 1 ELSE 0 END) AS DOUBLE) * 100) / count(client_id))#6219])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=13490]
+      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (gender#6153 = F) THEN 1 ELSE 0 END), partial_count(client_id#6152)], output=[sum#6222L, count#6223L])
+        +- Project [client_id#6152, gender#6153]
+            +- SortMergeJoin [district_id#6160], [district_id#6155], Inner
+              :- Sort [district_id#6160 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(district_id#6160, 200), ENSURE_REQUIREMENTS, [plan_id=13482]
+              :     +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#6160] PushedFilters: [*IsNotNull(A11), *GreaterThan(A11,10000), *IsNotNull(district_id)], ReadSchema: struct<district_id:int>
+              +- Sort [district_id#6155 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(district_id#6155, 200), ENSURE_REQUIREMENTS, [plan_id=13483]
+                    +- Scan JDBCRelation((SELECT "client_id", "gender", CAST("birth_date" AS TEXT) AS "birth_date", "district_id" FROM "client") AS "client") [numPartitions=1] [client_id#6152,gender#6153,district_id#6155] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<client_id:int,gender:string,district_id:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (gender#6153 = F) THEN 1 ELSE 0 END), count(client_id#6152)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=13533]
+  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (gender#6153 = F) THEN 1 ELSE 0 END), partial_count(client_id#6152)])
+  +- Project [client_id#6152, gender#6153]
+  +- SortMergeJoin [district_id#6160], [district_id#6155], Inner
+  :- Sort [district_id#6160 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(district_id#6160, 200), ENSURE_REQUIREMENTS, [plan_id=13525]
+  :     +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#6160] PushedFilters: [*IsNotNull(A11), *GreaterThan(A11,10000), *IsNotNull(district_id)], ReadSchema: struct<district_id:int>
+  +- Sort [district_id#6155 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(district_id#6155, 200), ENSURE_REQUIREMENTS, [plan_id=13526]
+  +- Scan JDBCRelation((SELECT "client_id", "gender", CAST("birth_date" AS TEXT) AS "birth_date", "district_id" FROM "client") AS "client") [numPartitions=1] [client_id#6152,gender#6153,district_id#6155] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<client_id:int,gender:string,district_id:int>
+================================================================================

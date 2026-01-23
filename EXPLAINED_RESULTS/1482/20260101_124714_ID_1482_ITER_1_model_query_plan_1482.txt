@@ -1,0 +1,16 @@
+
+Execution Plan for: Model Query ID 1482...
+================================================================================
+Could not create DataFrame for the query: [DATATYPE_MISMATCH.UNEXPECTED_INPUT_TYPE] Cannot resolve "year(Date)" due to data type mismatch: The first parameter requires the "DATE" type, however "Date" has the type "DECIMAL(38,18)". SQLSTATE: 42K09; line 1 pos 179;
+'Sort ['c.Segment ASC NULLS FIRST, 'Year ASC NULLS FIRST], true
++- 'Aggregate ['c.Segment, 'YEAR('t.Date)], ['c.Segment, 'YEAR('t.Date) AS Year#29109, 'SUM('t.Price) AS TotalConsumption#29110]
+   +- 'Filter ((Currency#29036 = EUR) AND year(Date#29044) IN (2012,2013))
+      +- Join Inner, (CustomerID#29046 = CustomerID#29034)
+         :- SubqueryAlias t
+         :  +- SubqueryAlias transactions_1k
+         :     +- View (`transactions_1k`, [TransactionID#29043, Date#29044, Time#29045, CustomerID#29046, CardID#29047, GasStationID#29048, ProductID#29049, Amount#29050, Price#29051])
+         :        +- Relation [TransactionID#29043,Date#29044,Time#29045,CustomerID#29046,CardID#29047,GasStationID#29048,ProductID#29049,Amount#29050,Price#29051] JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1]
+         +- SubqueryAlias c
+            +- SubqueryAlias customers
+               +- View (`customers`, [CustomerID#29034, Segment#29035, Currency#29036])
+                  +- Relation [CustomerID#29034,Segment#29035,Currency#29036] JDBCRelation((SELECT "CustomerID", "Segment", "Currency" FROM "customers") AS "customers") [numPartitions=1]

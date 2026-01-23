@@ -1,0 +1,227 @@
+{
+    "google_879": {
+        "llm": "google",
+        "query_id": 879,
+        "nl_query": "For the driver who set the fastest lap speed, what is his nationality? the fastest lap speed refers to (MAX) fastestLapSpeed;",
+        "golden_query": "SELECT T1.nationality FROM drivers AS T1 INNER JOIN results AS T2 ON T2.driverId = T1.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT T2.nationality FROM results AS T1 INNER JOIN drivers AS T2 ON T1.driverId = T2.driverId ORDER BY CAST(T1.fastestLapSpeed AS DOUBLE) DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+            "SELECT T2.nationality FROM results AS T1 INNER JOIN drivers AS T2 ON T1.driverId = T2.driverId ORDER BY CAST(T1.fastestLapSpeed AS DOUBLE) DESC LIMIT 1;"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "Brazilian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Italian"
+                ]
+            ],
+            [
+                [
+                    "Brazilian"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ],
+            [
+                {
+                    "nationality": "Italian"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            14.500433206558228,
+            11.904682397842407,
+            10.984259128570557,
+            11.365821361541748,
+            10.851166725158691,
+            11.517069578170776,
+            10.578248262405396,
+            13.693487167358398,
+            9.55766248703003,
+            11.81034779548645
+        ],
+        "spark_time": [
+            0.07309651374816895,
+            0.06677365303039551,
+            0.0686194896697998,
+            0.09601879119873047,
+            0.06667637825012207,
+            0.1117868423461914,
+            0.07886934280395508,
+            0.5404453277587891,
+            0.06849169731140137,
+            0.20556950569152832
+        ],
+        "translation_time": [
+            14.427336692810059,
+            11.837908744812012,
+            10.915639638900757,
+            11.269802570343018,
+            10.78449034690857,
+            11.405282735824585,
+            10.49937891960144,
+            13.15304183959961,
+            9.489170789718628,
+            11.604778289794922
+        ],
+        "jaccard_index": [
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0
+        ],
+        "total_time_avg": 11.676317811012268,
+        "spark_time_avg": 0.1376347541809082,
+        "translation_time_avg": 11.53868305683136,
+        "jaccard_index_avg": 0.8,
+        "jaccard_index_new_avg": 0.8,
+        "exact_match_avg": 0.8
+    }
+}

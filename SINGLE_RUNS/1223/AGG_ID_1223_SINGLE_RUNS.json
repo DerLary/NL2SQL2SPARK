@@ -1,0 +1,59 @@
+{
+    "google_1223": {
+        "llm": "google",
+        "query_id": 1223,
+        "nl_query": null,
+        "golden_query": "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5",
+        "sparksql_query": [
+            "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5;"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "True"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END": "True"
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "Are there more male patients with creatinine not within the normal range than female? True or False? creatinine (CRE) not within the normal range refers to CRE >= 1.5; male refers to Sex = \u2019M\u2019; female refers to Sex = \u2019F\u2019; calculation = (SUM(SEX = \u2019M\u2019) > SUM(SEX = \u2019F\u2019)) where CRE > = 1.5. Only output True or False. Do not use backticks. Use one inner join and output the result based on a case distinction. pateinet id is only 'id'. "
+        ],
+        "spark_error": [
+            null
+        ],
+        "total_time": [
+            14.909908533096313
+        ],
+        "spark_time": [
+            0.5440618991851807
+        ],
+        "translation_time": [
+            14.365846633911133
+        ],
+        "jaccard_index": [
+            1.0
+        ],
+        "jaccard_index_new": [
+            1.0
+        ],
+        "exact_match": [
+            1
+        ],
+        "total_time_avg": 14.909908533096313,
+        "spark_time_avg": 0.5440618991851807,
+        "translation_time_avg": 14.365846633911133,
+        "jaccard_index_avg": 1.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

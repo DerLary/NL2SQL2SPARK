@@ -1,0 +1,61 @@
+
+Execution Plan for: Model Query ID 944...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias((((cast('MAX(CASE WHEN isnotnull('T2.time) THEN 'T2.milliseconds END) as double) - cast('MAX(CASE WHEN ('T2.position = 1) THEN 'T2.milliseconds END) as double)) / cast('MAX(CASE WHEN isnotnull('T2.time) THEN 'T2.milliseconds END) as double)) * 100))]
++- 'Filter (('T1.year = 2008) AND ('T1.name = Australian Grand Prix))
+   +- 'Join Inner, ('T1.raceId = 'T2.raceId)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [races], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [results], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [(((cast(max(CASE WHEN isnotnull(time#23085) THEN milliseconds#23086 END) as double) - cast(max(CASE WHEN (position#23080 = 1) THEN milliseconds#23086 END) as double)) / cast(max(CASE WHEN isnotnull(time#23085) THEN milliseconds#23086 END) as double)) * 100.0) AS (((CAST(max(CASE WHEN (time IS NOT NULL) THEN milliseconds END) AS DOUBLE) - CAST(max(CASE WHEN (position = 1) THEN milliseconds END) AS DOUBLE)) / CAST(max(CASE WHEN (time IS NOT NULL) THEN milliseconds END) AS DOUBLE)) * 100)#23943]
++- Project [position#23080, time#23085, milliseconds#23086]
+   +- Join Inner, (raceId#23023 = raceId#23075)
+      :- Project [raceId#23023]
+      :  +- Filter (((isnotnull(year#23024) AND isnotnull(name#23027)) AND ((year#23024 = 2008) AND (name#23027 = Australian Grand Prix))) AND isnotnull(raceId#23023))
+      :     +- Relation [raceId#23023,year#23024,round#23025,circuitId#23026,name#23027,date#23028,time#23029,url#23030] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+      +- Project [raceId#23075, position#23080, time#23085, milliseconds#23086]
+         +- Filter isnotnull(raceId#23075)
+            +- Relation [resultId#23074,raceId#23075,driverId#23076,constructorId#23077,number#23078,grid#23079,position#23080,positionText#23081,positionOrder#23082,points#23083,laps#23084,time#23085,milliseconds#23086,fastestLap#23087,rank#23088,fastestLapTime#23089,fastestLapSpeed#23090,statusId#23091] JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[max(CASE WHEN isnotnull(time#23085) THEN milliseconds#23086 END), max(CASE WHEN (position#23080 = 1) THEN milliseconds#23086 END)], output=[(((CAST(max(CASE WHEN (time IS NOT NULL) THEN milliseconds END) AS DOUBLE) - CAST(max(CASE WHEN (position = 1) THEN milliseconds END) AS DOUBLE)) / CAST(max(CASE WHEN (time IS NOT NULL) THEN milliseconds END) AS DOUBLE)) * 100)#23943])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=40716]
+      +- HashAggregate(keys=[], functions=[partial_max(CASE WHEN isnotnull(time#23085) THEN milliseconds#23086 END), partial_max(CASE WHEN (position#23080 = 1) THEN milliseconds#23086 END)], output=[max#23946, max#23947])
+        +- Project [position#23080, time#23085, milliseconds#23086]
+            +- SortMergeJoin [raceId#23023], [raceId#23075], Inner
+              :- Sort [raceId#23023 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(raceId#23023, 200), ENSURE_REQUIREMENTS, [plan_id=40708]
+              :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#23023] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+              +- Sort [raceId#23075 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(raceId#23075, 200), ENSURE_REQUIREMENTS, [plan_id=40709]
+                    +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#23075,position#23080,time#23085,milliseconds#23086] PushedFilters: [*IsNotNull(raceId)], ReadSchema: struct<raceId:int,position:int,time:string,milliseconds:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[max(CASE WHEN isnotnull(time#23085) THEN milliseconds#23086 END), max(CASE WHEN (position#23080 = 1) THEN milliseconds#23086 END)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=40759]
+  +- HashAggregate(keys=[], functions=[partial_max(CASE WHEN isnotnull(time#23085) THEN milliseconds#23086 END), partial_max(CASE WHEN (position#23080 = 1) THEN milliseconds#23086 END)])
+  +- Project [position#23080, time#23085, milliseconds#23086]
+  +- SortMergeJoin [raceId#23023], [raceId#23075], Inner
+  :- Sort [raceId#23023 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(raceId#23023, 200), ENSURE_REQUIREMENTS, [plan_id=40751]
+  :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#23023] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  +- Sort [raceId#23075 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(raceId#23075, 200), ENSURE_REQUIREMENTS, [plan_id=40752]
+  +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#23075,position#23080,time#23085,milliseconds#23086] PushedFilters: [*IsNotNull(raceId)], ReadSchema: struct<raceId:int,position:int,time:string,milliseconds:int>
+================================================================================

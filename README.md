@@ -8,6 +8,14 @@ It leverages Large Language Models to translate natural language into Spark SQL.
 ## Goal
 The goal of this project is to provide a SDK and example workflow for building and benchmarking NL-to-SQL agent accuracy and performance on top of Spark.
 
+## Folder Overview
+The main entry point for running the automated pipeline is the file [query_workflow.py](./query_workflow.py). Based on the arguments provided to the function the pipeline evaluates the model towards a single query (by only providing one query via `id`) or a set of randomly picked queries for several iterations (by providing `run-pipeline`). After the benchmark has run, `plotting-json` together with the path of the results can be used to plot the data and `explainer-json` can be used to analyze the Spark execution plans. 
+
+All configuration is done in [config.py](./src/config.py).
+[RAW_RESULTS](./RAW_RESULTS/) stores the results after the automated pipeline has run. Each folder stores the results of one benchmarking run together with a log file. 
+[SINGLE_RUNS](./SINGLE_RUNS/) stores the results for individual run and especially also those for which the NL query was modified (HIL). 
+[EXPLAINED_RESULTS](./EXPLAINED_RESULTS/) stores the analysis results after the Spark execution plans were analyzed. 
+
 ## Instructions
 
 ### Requirements

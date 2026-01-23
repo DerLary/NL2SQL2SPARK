@@ -1,0 +1,36 @@
+
+Execution Plan for: Model Query ID 1241...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['SUM(CASE WHEN ('PLT < 100) THEN 1 ELSE 0 END) AS lower_than_normal#27604, 'SUM(CASE WHEN ('PLT > 400) THEN 1 ELSE 0 END) AS higher_than_normal#27605, ('SUM(CASE WHEN ('PLT < 100) THEN 1 ELSE 0 END) - 'SUM(CASE WHEN ('PLT > 400) THEN 1 ELSE 0 END)) AS difference#27606]
++- 'UnresolvedRelation [laboratory], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [sum(CASE WHEN (PLT#27562 < 100) THEN 1 ELSE 0 END) AS lower_than_normal#27604L, sum(CASE WHEN (PLT#27562 > 400) THEN 1 ELSE 0 END) AS higher_than_normal#27605L, (sum(CASE WHEN (PLT#27562 < 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT#27562 > 400) THEN 1 ELSE 0 END)) AS difference#27606L]
++- Project [PLT#27562]
+   +- Relation [ID#27542,Date#27543,GOT#27544,GPT#27545,LDH#27546,ALP#27547,TP#27548,ALB#27549,UA#27550,UN#27551,CRE#27552,T-BIL#27553,T-CHO#27554,TG#27555,CPK#27556,GLU#27557,WBC#27558,RBC#27559,HGB#27560,HCT#27561,PLT#27562,PT#27563,APTT#27564,FG#27565,PIC#27566,... 19 more fields] JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[sum(CASE WHEN (PLT#27562 < 100) THEN 1 ELSE 0 END), sum(CASE WHEN (PLT#27562 > 400) THEN 1 ELSE 0 END)], output=[lower_than_normal#27604L, higher_than_normal#27605L, difference#27606L])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=45675]
+      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (PLT#27562 < 100) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (PLT#27562 > 400) THEN 1 ELSE 0 END)], output=[sum#27613L, sum#27614L])
+        +- Scan JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1] [PLT#27562] PushedFilters: [], ReadSchema: struct<PLT:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (PLT#27562 < 100) THEN 1 ELSE 0 END), sum(CASE WHEN (PLT#27562 > 400) THEN 1 ELSE 0 END)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=45691]
+  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (PLT#27562 < 100) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (PLT#27562 > 400) THEN 1 ELSE 0 END)])
+  +- Scan JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1] [PLT#27562] PushedFilters: [], ReadSchema: struct<PLT:int>
+================================================================================

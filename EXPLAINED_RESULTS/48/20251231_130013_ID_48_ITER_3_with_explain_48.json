@@ -1,0 +1,98 @@
+{
+    "query_id": 48,
+    "difficulty": "moderate",
+    "is_initial": true,
+    "nl_query": "What is the ratio of merged Unified School District schools in Orange County to merged Elementary School District schools? Elementary School District refers to DOC = 52; Unified School District refers to DOC = 54.",
+    "golden_query": "SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools WHERE StatusType = 'Merged' AND County = 'Orange'",
+    "sparksql_query": "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "ground_truth": [
+        {
+            "(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))": 0.5714285714285714
+        }
+    ],
+    "query_result": [
+        [
+            "None"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 48...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias((cast('SUM(CASE WHEN ('DOC = 54) THEN 1 ELSE 0 END) as float) / 'SUM(CASE WHEN ('DOC = 52) THEN 1 ELSE 0 END)))]\n+- 'Filter (('StatusType = Merged) AND ('County = Orange))\n   +- 'UnresolvedRelation [schools], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [(cast(sum(CASE WHEN (cast(DOC#2847 as bigint) = 54) THEN 1 ELSE 0 END) as double) / cast(sum(CASE WHEN (cast(DOC#2847 as bigint) = 52) THEN 1 ELSE 0 END) as double)) AS (CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))#2873]\n+- Project [DOC#2847]\n   +- Filter ((isnotnull(StatusType#2825) AND isnotnull(County#2826)) AND ((StatusType#2825 = Merged) AND (County#2826 = Orange)))\n      +- Relation [CDSCode#2822,NCESDist#2823,NCESSchool#2824,StatusType#2825,County#2826,District#2827,School#2828,Street#2829,StreetAbr#2830,City#2831,Zip#2832,State#2833,MailStreet#2834,MailStrAbr#2835,MailCity#2836,MailZip#2837,MailState#2838,Phone#2839,Ext#2840,Website#2841,OpenDate#2842,ClosedDate#2843,Charter#2844,CharterNum#2845,FundingType#2846,... 24 more fields] JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[sum(CASE WHEN (cast(DOC#2847 as bigint) = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (cast(DOC#2847 as bigint) = 52) THEN 1 ELSE 0 END)], output=[(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))#2873])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=7478]\n      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (cast(DOC#2847 as bigint) = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (cast(DOC#2847 as bigint) = 52) THEN 1 ELSE 0 END)], output=[sum#2876L, sum#2877L])\n        +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(StatusType), *IsNotNull(County), *EqualTo(StatusType,Merged), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (cast(DOC#2847 as bigint) = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (cast(DOC#2847 as bigint) = 52) THEN 1 ELSE 0 END)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=7498]\n  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (cast(DOC#2847 as bigint) = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (cast(DOC#2847 as bigint) = 52) THEN 1 ELSE 0 END)])\n  +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(StatusType), *IsNotNull(County), *EqualTo(StatusType,Merged), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 48...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias((cast('SUM(CASE WHEN ('DOC = 54) THEN 1 ELSE 0 END) as float) / 'SUM(CASE WHEN ('DOC = 52) THEN 1 ELSE 0 END)))]\n+- 'Filter ('County = Orange County)\n   +- 'UnresolvedRelation [schools], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [(cast(sum(CASE WHEN (DOC#2847 = 54) THEN 1 ELSE 0 END) as double) / cast(sum(CASE WHEN (DOC#2847 = 52) THEN 1 ELSE 0 END) as double)) AS (CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))#2891]\n+- Project [DOC#2847]\n   +- Filter (isnotnull(County#2826) AND (County#2826 = Orange County))\n      +- Relation [CDSCode#2822,NCESDist#2823,NCESSchool#2824,StatusType#2825,County#2826,District#2827,School#2828,Street#2829,StreetAbr#2830,City#2831,Zip#2832,State#2833,MailStreet#2834,MailStrAbr#2835,MailCity#2836,MailZip#2837,MailState#2838,Phone#2839,Ext#2840,Website#2841,OpenDate#2842,ClosedDate#2843,Charter#2844,CharterNum#2845,FundingType#2846,... 24 more fields] JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[sum(CASE WHEN (DOC#2847 = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (DOC#2847 = 52) THEN 1 ELSE 0 END)], output=[(CAST(sum(CASE WHEN (DOC = 54) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN (DOC = 52) THEN 1 ELSE 0 END))#2891])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=7518]\n      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (DOC#2847 = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (DOC#2847 = 52) THEN 1 ELSE 0 END)], output=[sum#2894L, sum#2895L])\n        +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(County), *EqualTo(County,Orange County)], ReadSchema: struct<DOC:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (DOC#2847 = 54) THEN 1 ELSE 0 END), sum(CASE WHEN (DOC#2847 = 52) THEN 1 ELSE 0 END)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=7538]\n  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (DOC#2847 = 54) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (DOC#2847 = 52) THEN 1 ELSE 0 END)])\n  +- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(County), *EqualTo(County,Orange County)], ReadSchema: struct<DOC:string>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/48/20251231_130013_ID_48_ITER_3_659f5ab9.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 0,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 1
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(StatusType), *IsNotNull(County), *EqualTo(StatusType,Merged), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>",
+                    "filters": [
+                        "*IsNotNull(StatusType)",
+                        "*IsNotNull(County)",
+                        "*EqualTo(StatusType",
+                        "Merged)",
+                        "*EqualTo(County",
+                        "Orange)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(StatusType), *IsNotNull(County), *EqualTo(StatusType,Merged), *EqualTo(County,Orange)], ReadSchema: struct<DOC:string>",
+                    "filters": [
+                        "*IsNotNull(StatusType)",
+                        "*IsNotNull(County)",
+                        "*EqualTo(StatusType",
+                        "Merged)",
+                        "*EqualTo(County",
+                        "Orange)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 1
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 0,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 1
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(County), *EqualTo(County,Orange County)], ReadSchema: struct<DOC:string>",
+                    "filters": [
+                        "*IsNotNull(County)",
+                        "*EqualTo(County",
+                        "Orange County)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"CDSCode\", \"NCESDist\", \"NCESSchool\", \"StatusType\", \"County\", \"District\", \"School\", \"Street\", \"StreetAbr\", \"City\", \"Zip\", \"State\", \"MailStreet\", \"MailStrAbr\", \"MailCity\", \"MailZip\", \"MailState\", \"Phone\", \"Ext\", \"Website\", CAST(\"OpenDate\" AS TEXT) AS \"OpenDate\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"Charter\", \"CharterNum\", \"FundingType\", \"DOC\", \"DOCType\", \"SOC\", \"SOCType\", \"EdOpsCode\", \"EdOpsName\", \"EILCode\", \"EILName\", \"GSoffered\", \"GSserved\", \"Virtual\", \"Magnet\", \"Latitude\", \"Longitude\", \"AdmFName1\", \"AdmLName1\", \"AdmEmail1\", \"AdmFName2\", \"AdmLName2\", \"AdmEmail2\", \"AdmFName3\", \"AdmLName3\", \"AdmEmail3\", CAST(\"LastUpdate\" AS TEXT) AS \"LastUpdate\" FROM \"schools\") AS \"schools\") [numPartitions=1] [DOC#2847] PushedFilters: [*IsNotNull(County), *EqualTo(County,Orange County)], ReadSchema: struct<DOC:string>",
+                    "filters": [
+                        "*IsNotNull(County)",
+                        "*EqualTo(County",
+                        "Orange County)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 1
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": false
+        }
+    }
+}

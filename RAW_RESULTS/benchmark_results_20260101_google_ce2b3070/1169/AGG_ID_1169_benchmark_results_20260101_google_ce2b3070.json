@@ -1,0 +1,232 @@
+{
+    "google_1169": {
+        "llm": "google",
+        "query_id": 1169,
+        "nl_query": "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F'))",
+        "golden_query": "SELECT CAST(SUM(CASE WHEN T2.UA <= 8.0 AND T1.SEX = 'M' THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN T2.UA <= 6.5 AND T1.SEX = 'F' THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID",
+        "sparksql_query": [
+            "SELECT CAST(SUM(CASE WHEN P.SEX = 'M' AND L.UA <= 8.0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(SUM(CASE WHEN P.SEX = 'F' AND L.UA <= 6.5 THEN 1 ELSE 0 END) AS DOUBLE) FROM patient AS P JOIN laboratory AS L ON P.ID = L.ID;",
+            "SELECT SUM(CASE WHEN p.`SEX` = 'M' AND l.`UA` <= 8.0 THEN 1 ELSE 0 END) AS male_abnormal_ua_count, SUM(CASE WHEN p.`SEX` = 'F' AND l.`UA` <= 6.5 THEN 1 ELSE 0 END) AS female_abnormal_ua_count FROM `patient` AS p JOIN `laboratory` AS l ON p.`ID` = l.`ID`;",
+            "SELECT CAST(SUM(CASE WHEN P.SEX = 'M' AND L.UA <= 8.0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(SUM(CASE WHEN P.SEX = 'F' AND L.UA <= 6.5 THEN 1 ELSE 0 END) AS DOUBLE) AS male_to_female_abnormal_ua_ratio FROM patient AS P JOIN laboratory AS L ON P.ID = L.ID;",
+            "SELECT SUM(CASE WHEN `p`.`SEX` = 'M' AND `l`.`UA` <= 8.0 THEN 1 ELSE 0 END) AS `male_abnormal_ua_count`, SUM(CASE WHEN `p`.`SEX` = 'F' AND `l`.`UA` <= 6.5 THEN 1 ELSE 0 END) AS `female_abnormal_ua_count` FROM `patient` AS `p` JOIN `laboratory` AS `l` ON `p`.`ID` = `l`.`ID`;",
+            "SELECT SUM(CASE WHEN `p`.`SEX` = 'M' AND `l`.`UA` <= 8.0 THEN 1 ELSE 0 END) AS `male_abnormal_ua_count`, SUM(CASE WHEN `p`.`SEX` = 'F' AND `l`.`UA` <= 6.5 THEN 1 ELSE 0 END) AS `female_abnormal_ua_count` FROM `patient` AS `p` JOIN `laboratory` AS `l` ON `p`.`ID` = `l`.`ID`;",
+            "SELECT SUM(CASE WHEN `p`.`SEX` = 'M' AND `l`.`UA` <= 8.0 THEN 1 ELSE 0 END) AS `male_abnormal_ua_count`, SUM(CASE WHEN `p`.`SEX` = 'F' AND `l`.`UA` <= 6.5 THEN 1 ELSE 0 END) AS `female_abnormal_ua_count` FROM `patient` AS `p` JOIN `laboratory` AS `l` ON `p`.`ID` = `l`.`ID`;",
+            "SELECT CAST(SUM(CASE WHEN P.`SEX` = 'M' AND L.`UA` <= 8.0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(SUM(CASE WHEN P.`SEX` = 'F' AND L.`UA` <= 6.5 THEN 1 ELSE 0 END) AS DOUBLE) FROM `patient` AS P JOIN `laboratory` AS L ON P.`ID` = L.`ID`;",
+            "SELECT CAST(SUM(CASE WHEN P.SEX = 'M' AND L.UA <= 8.0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(SUM(CASE WHEN P.SEX = 'F' AND L.UA <= 6.5 THEN 1 ELSE 0 END) AS DOUBLE) AS male_to_female_abnormal_ua_ratio FROM patient AS P JOIN laboratory AS L ON P.ID = L.ID;",
+            "SELECT SUM(CASE WHEN `p`.`SEX` = 'M' AND `l`.`UA` <= 8.0 THEN 1 ELSE 0 END) AS `male_abnormal_ua_count`, SUM(CASE WHEN `p`.`SEX` = 'F' AND `l`.`UA` <= 6.5 THEN 1 ELSE 0 END) AS `female_abnormal_ua_count` FROM `patient` AS `p` JOIN `laboratory` AS `l` ON `p`.`ID` = `l`.`ID`;",
+            "SELECT CAST(SUM(CASE WHEN `p`.`SEX` = 'M' AND `l`.`UA` <= 8.0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(SUM(CASE WHEN `p`.`SEX` = 'F' AND `l`.`UA` <= 6.5 THEN 1 ELSE 0 END) AS DOUBLE) AS `male_to_female_abnormal_ua_ratio` FROM `patient` AS `p` JOIN `laboratory` AS `l` ON `p`.`ID` = `l`.`ID`;"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "1807",
+                    "8786"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "1807",
+                    "8786"
+                ]
+            ],
+            [
+                [
+                    "1807",
+                    "8786"
+                ]
+            ],
+            [
+                [
+                    "1807",
+                    "8786"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ],
+            [
+                [
+                    "1807",
+                    "8786"
+                ]
+            ],
+            [
+                [
+                    "0.20566810835419985"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ],
+            [
+                {
+                    "(CAST(sum(CASE WHEN ((UA <= 8.0) AND (SEX = M)) THEN 1 ELSE 0 END) AS FLOAT) / sum(CASE WHEN ((UA <= 6.5) AND (SEX = F)) THEN 1 ELSE 0 END))": 0.20566810835419985
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            14.69872260093689,
+            14.539286851882935,
+            16.33370804786682,
+            22.0857892036438,
+            21.09462332725525,
+            21.135759830474854,
+            14.049278736114502,
+            17.584270477294922,
+            21.21486496925354,
+            15.387558698654175
+        ],
+        "spark_time": [
+            0.17725801467895508,
+            0.11670374870300293,
+            0.1804041862487793,
+            0.2988748550415039,
+            0.8711929321289062,
+            0.1622459888458252,
+            0.1631162166595459,
+            0.13241291046142578,
+            0.13577723503112793,
+            0.15719175338745117
+        ],
+        "translation_time": [
+            14.521464586257935,
+            14.422583103179932,
+            16.153303861618042,
+            21.786914348602295,
+            20.223430395126343,
+            20.97351384162903,
+            13.886162519454956,
+            17.451857566833496,
+            21.079087734222412,
+            15.230366945266724
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            0.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 17.81238627433777,
+        "spark_time_avg": 0.23951778411865235,
+        "translation_time_avg": 17.572868490219115,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.5,
+        "exact_match_avg": 0.0
+    }
+}

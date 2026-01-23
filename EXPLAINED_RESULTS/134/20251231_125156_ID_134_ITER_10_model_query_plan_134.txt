@@ -1,0 +1,61 @@
+
+Execution Plan for: Model Query ID 134...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias('COUNT('account_id))]
++- 'Filter ('district_id = scalar-subquery#4261 [])
+   :  +- 'GlobalLimit 1
+   :     +- 'LocalLimit 1
+   :        +- 'Sort ['A16 DESC NULLS LAST], true
+   :           +- 'Project ['district_id]
+   :              +- 'UnresolvedRelation [district], [], false
+   +- 'UnresolvedRelation [account], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [count(account_id#4194) AS count(account_id)#4263L]
++- Project [account_id#4194]
+   +- Filter (isnotnull(district_id#4195) AND (district_id#4195 = scalar-subquery#4261 []))
+      :  +- GlobalLimit 1
+      :     +- LocalLimit 1
+      :        +- Project [district_id#4210]
+      :           +- Sort [A16#4225 DESC NULLS LAST], true
+      :              +- Project [district_id#4210, A16#4225]
+      :                 +- Relation [district_id#4210,A2#4211,A3#4212,A4#4213,A5#4214,A6#4215,A7#4216,A8#4217,A9#4218,A10#4219,A11#4220,A12#4221,A13#4222,A14#4223,A15#4224,A16#4225] JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1]
+      +- Relation [account_id#4194,district_id#4195,frequency#4196,date#4197] JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[count(account_id#4194)], output=[count(account_id)#4263L])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8807]
+      +- HashAggregate(keys=[], functions=[partial_count(account_id#4194)], output=[count#4265L])
+        +- Project [account_id#4194]
+            +- Filter (district_id#4195 = Subquery subquery#4261, [id=#8801])
+              :  +- Subquery subquery#4261, [id=#8801]
+              :     +- AdaptiveSparkPlan isFinalPlan=false
+              :        +- TakeOrderedAndProject(limit=1, orderBy=[A16#4225 DESC NULLS LAST], output=[district_id#4210])
+              :           +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#4210,A16#4225] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>
+              +- Scan JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1] [account_id#4194,district_id#4195] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[count(account_id#4194)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=8837]
+  +- HashAggregate(keys=[], functions=[partial_count(account_id#4194)])
+  +- Project [account_id#4194]
+  +- Filter (district_id#4195 = Subquery subquery#4266, [id=#8831])
+  :  +- Subquery subquery#4266, [id=#8831]
+  :     +- AdaptiveSparkPlan isFinalPlan=false
+  :        +- TakeOrderedAndProject(limit=1, orderBy=[A16#4225 DESC NULLS LAST], output=[district_id#4210])
+  :           +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#4210,A16#4225] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>
+  +- Scan JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1] [account_id#4194,district_id#4195] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>
+================================================================================

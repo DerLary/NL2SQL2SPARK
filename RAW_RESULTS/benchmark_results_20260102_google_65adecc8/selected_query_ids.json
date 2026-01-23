@@ -1,0 +1,13 @@
+{
+    "provider": "google",
+    "output_folder": "benchmark_results_20260102_google_65adecc8",
+    "iterations": 10,
+    "query_ids": {
+        "1241": {
+            "database_name": "thrombosis_prediction",
+            "difficulty": "challenging",
+            "nl_query": "For patients with abnormal platelet level, state the number of patients with lower than normal range. How is it compare to the number of patients with higher than normal range? abnormal platelet level refers to PLT <= 100 or PLT >= 400; platelet level lower than normal range refers to PLT < 100; calculation = SUBTRACT(SUM(PLT < 100), SUM(PLT > 400)); platelet level higher than normal range refers to PLT > 400;",
+            "golden_query": "SELECT SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID"
+        }
+    }
+}

@@ -1,0 +1,227 @@
+{
+    "google_1374": {
+        "llm": "google",
+        "query_id": 1374,
+        "nl_query": "How many events did the member with the phone number \"954-555-6240\" attend? ",
+        "golden_query": "SELECT COUNT(T2.link_to_event) FROM member AS T1 INNER JOIN attendance AS T2 ON T1.member_id = T2.link_to_member WHERE T1.phone = '954-555-6240'",
+        "sparksql_query": [
+            "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = '954-555-6240';\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "\nSELECT\n  COUNT(T1.link_to_event)\nFROM attendance AS T1\nINNER JOIN member AS T2\n  ON T1.link_to_member = T2.member_id\nWHERE\n  T2.phone = \"954-555-6240\";\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = '954-555-6240';\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = \"954-555-6240\";\n",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'",
+            "SELECT COUNT(T1.link_to_event) FROM attendance AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.phone = '954-555-6240'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ],
+            [
+                [
+                    "11"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ],
+            [
+                {
+                    "count(link_to_event)": 11
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            17.174961805343628,
+            13.195545673370361,
+            26.897483587265015,
+            10.632525444030762,
+            10.461965084075928,
+            18.602643728256226,
+            10.349784135818481,
+            11.956676721572876,
+            10.785505056381226,
+            12.401479721069336
+        ],
+        "spark_time": [
+            0.08623266220092773,
+            0.09597611427307129,
+            0.09622049331665039,
+            0.10767841339111328,
+            0.10433697700500488,
+            0.8636438846588135,
+            0.1062006950378418,
+            0.11792564392089844,
+            0.10552787780761719,
+            0.15087056159973145
+        ],
+        "translation_time": [
+            17.0887291431427,
+            13.09956955909729,
+            26.801263093948364,
+            10.524847030639648,
+            10.357628107070923,
+            17.738999843597412,
+            10.24358344078064,
+            11.838751077651978,
+            10.679977178573608,
+            12.250609159469604
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 14.245857095718383,
+        "spark_time_avg": 0.183461332321167,
+        "translation_time_avg": 14.062395763397216,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

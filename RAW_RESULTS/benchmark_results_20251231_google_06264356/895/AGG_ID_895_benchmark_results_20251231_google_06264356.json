@@ -1,0 +1,227 @@
+{
+    "google_895": {
+        "llm": "google",
+        "query_id": 895,
+        "nl_query": "What is the average lap time for Lewis Hamilton in the 2009 Malaysian Grand Prix? average lap time = AVG(milliseconds); 'Lewis Hamilton' refers to the full name of the driver; Full name of the driver refers to drivers.forename and drivers.surname; 'Malaysian Grand Prix' refers to races.name = 'Malaysian Grand Prix'",
+        "golden_query": "SELECT AVG(T2.milliseconds) FROM races AS T1 INNER JOIN lapTimes AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T3.forename = 'Lewis' AND T3.surname = 'Hamilton' AND T1.year = 2009 AND T1.name = 'Malaysian Grand Prix'",
+        "sparksql_query": [
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(LT.milliseconds) FROM laptimes AS LT JOIN drivers AS D ON LT.driverId = D.driverId JOIN races AS R ON LT.raceId = R.raceId WHERE D.forename = 'Lewis' AND D.surname = 'Hamilton' AND R.name = 'Malaysian Grand Prix' AND R.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009;",
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+            "SELECT AVG(lt.milliseconds) FROM laptimes AS lt JOIN drivers AS d ON lt.driverId = d.driverId JOIN races AS r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ],
+            [
+                [
+                    "109398.54838709677"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ],
+            [
+                {
+                    "avg(milliseconds)": 109398.54838709677
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            11.685348987579346,
+            15.388404369354248,
+            9.885918140411377,
+            9.933424234390259,
+            10.947020530700684,
+            9.988013505935669,
+            11.999223470687866,
+            11.706602811813354,
+            10.254921674728394,
+            11.67326021194458
+        ],
+        "spark_time": [
+            0.2184140682220459,
+            0.22132110595703125,
+            0.2010936737060547,
+            0.22387409210205078,
+            0.21541666984558105,
+            0.20566582679748535,
+            0.19521594047546387,
+            0.20071721076965332,
+            0.6229591369628906,
+            0.216264009475708
+        ],
+        "translation_time": [
+            11.4669349193573,
+            15.167083263397217,
+            9.684824466705322,
+            9.709550142288208,
+            10.731603860855103,
+            9.782347679138184,
+            11.804007530212402,
+            11.505885601043701,
+            9.631962537765503,
+            11.456996202468872
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 11.346213793754577,
+        "spark_time_avg": 0.2520941734313965,
+        "translation_time_avg": 11.09411962032318,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

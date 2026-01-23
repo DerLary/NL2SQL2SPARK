@@ -1,0 +1,124 @@
+{
+    "query_id": 1429,
+    "difficulty": "challenging",
+    "is_initial": true,
+    "nl_query": "What is the name of the social event that was attended by the vice president of the Student_Club located at 900 E. Washington St.? name of social event refers to event_name where type = 'Social'; 'Vice President' is position; located at refers to location",
+    "golden_query": "SELECT T2.event_name FROM attendance AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event INNER JOIN member AS T3 ON T1.link_to_member = T3.member_id WHERE T3.position = 'Vice President' AND T2.location = '900 E. Washington St.' AND T2.type = 'Social'",
+    "sparksql_query": "SELECT T1.`event_name` FROM `event` AS T1 JOIN `attendance` AS T2 ON T1.`event_id` = T2.`link_to_event` JOIN `member` AS T3 ON T2.`link_to_member` = T3.`member_id` WHERE T1.`type` = 'Social' AND T1.`location` = '900 E. Washington St.' AND T3.`position` = 'Vice President'",
+    "jaccard_index": 1.0,
+    "exact_match": 1,
+    "ground_truth": [
+        {
+            "event_name": "Laugh Out Loud"
+        }
+    ],
+    "query_result": [
+        [
+            "Laugh Out Loud"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 1429...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['T2.event_name]\n+- 'Filter ((('T3.position = Vice President) AND ('T2.location = 900 E. Washington St.)) AND ('T2.type = Social))\n   +- 'Join Inner, ('T1.link_to_member = 'T3.member_id)\n      :- 'Join Inner, ('T2.event_id = 'T1.link_to_event)\n      :  :- 'SubqueryAlias T1\n      :  :  +- 'UnresolvedRelation [attendance], [], false\n      :  +- 'SubqueryAlias T2\n      :     +- 'UnresolvedRelation [event], [], false\n      +- 'SubqueryAlias T3\n         +- 'UnresolvedRelation [member], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [event_name#14541]\n+- Join Inner, (link_to_member#14558 = member_id#14579)\n   :- Project [link_to_member#14558, event_name#14541]\n   :  +- Join Inner, (event_id#14540 = link_to_event#14557)\n   :     :- Filter (isnotnull(link_to_event#14557) AND isnotnull(link_to_member#14558))\n   :     :  +- Relation [link_to_event#14557,link_to_member#14558] JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1]\n   :     +- Project [event_id#14540, event_name#14541]\n   :        +- Filter (((isnotnull(location#14545) AND isnotnull(type#14543)) AND ((location#14545 = 900 E. Washington St.) AND (type#14543 = Social))) AND isnotnull(event_id#14540))\n   :           +- Relation [event_id#14540,event_name#14541,event_date#14542,type#14543,notes#14544,location#14545,status#14546] JDBCRelation((SELECT \"event_id\", \"event_name\", \"event_date\", \"type\", \"notes\", \"location\", \"status\" FROM \"event\") AS \"event\") [numPartitions=1]\n   +- Project [member_id#14579]\n      +- Filter ((isnotnull(position#14583) AND (position#14583 = Vice President)) AND isnotnull(member_id#14579))\n         +- Relation [member_id#14579,first_name#14580,last_name#14581,email#14582,position#14583,t_shirt_size#14584,phone#14585,zip#14586,link_to_major#14587] JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [event_name#14541]\n  +- SortMergeJoin [link_to_member#14558], [member_id#14579], Inner\n      :- Sort [link_to_member#14558 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(link_to_member#14558, 200), ENSURE_REQUIREMENTS, [plan_id=33951]\n      :     +- Project [link_to_member#14558, event_name#14541]\n      :        +- SortMergeJoin [link_to_event#14557], [event_id#14540], Inner\n      :           :- Sort [link_to_event#14557 ASC NULLS FIRST], false, 0\n      :           :  +- Exchange hashpartitioning(link_to_event#14557, 200), ENSURE_REQUIREMENTS, [plan_id=33943]\n      :           :     +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>\n      :           +- Sort [event_id#14540 ASC NULLS FIRST], false, 0\n      :              +- Exchange hashpartitioning(event_id#14540, 200), ENSURE_REQUIREMENTS, [plan_id=33944]\n      :                 +- Scan JDBCRelation((SELECT \"event_id\", \"event_name\", \"event_date\", \"type\", \"notes\", \"location\", \"status\" FROM \"event\") AS \"event\") [numPartitions=1] [event_id#14540,event_name#14541] PushedFilters: [*EqualTo(location,900 E. Washington St.), *EqualTo(type,Social), *IsNotNull(type), *IsNotNull(ev..., ReadSchema: struct<event_id:string,event_name:string>\n      +- Sort [member_id#14579 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(member_id#14579, 200), ENSURE_REQUIREMENTS, [plan_id=33952]\n            +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [event_name#14541]\n  +- SortMergeJoin [link_to_member#14558], [member_id#14579], Inner\n  :- Sort [link_to_member#14558 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(link_to_member#14558, 200), ENSURE_REQUIREMENTS, [plan_id=34005]\n  :     +- Project [link_to_member#14558, event_name#14541]\n  :        +- SortMergeJoin [link_to_event#14557], [event_id#14540], Inner\n  :           :- Sort [link_to_event#14557 ASC NULLS FIRST], false, 0\n  :           :  +- Exchange hashpartitioning(link_to_event#14557, 200), ENSURE_REQUIREMENTS, [plan_id=33997]\n  :           :     +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>\n  :           +- Sort [event_id#14540 ASC NULLS FIRST], false, 0\n  :              +- Exchange hashpartitioning(event_id#14540, 200), ENSURE_REQUIREMENTS, [plan_id=33998]\n  :                 +- Scan JDBCRelation((SELECT \"event_id\", \"event_name\", \"event_date\", \"type\", \"notes\", \"location\", \"status\" FROM \"event\") AS \"event\") [numPartitions=1] [event_id#14540,event_name#14541] PushedFilters: [*EqualTo(location,900 E. Washington St.), *EqualTo(type,Social), *IsNotNull(type), *IsNotNull(ev..., ReadSchema: struct<event_id:string,event_name:string>\n  +- Sort [member_id#14579 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(member_id#14579, 200), ENSURE_REQUIREMENTS, [plan_id=34006]\n  +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 1429...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project ['T1.event_name]\n+- 'Filter ((('T1.type = Social) AND ('T1.location = 900 E. Washington St.)) AND ('T3.position = Vice President))\n   +- 'Join Inner, ('T2.link_to_member = 'T3.member_id)\n      :- 'Join Inner, ('T1.event_id = 'T2.link_to_event)\n      :  :- 'SubqueryAlias T1\n      :  :  +- 'UnresolvedRelation [event], [], false\n      :  +- 'SubqueryAlias T2\n      :     +- 'UnresolvedRelation [attendance], [], false\n      +- 'SubqueryAlias T3\n         +- 'UnresolvedRelation [member], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nProject [event_name#14541]\n+- Join Inner, (link_to_member#14558 = member_id#14579)\n   :- Project [event_name#14541, link_to_member#14558]\n   :  +- Join Inner, (event_id#14540 = link_to_event#14557)\n   :     :- Project [event_id#14540, event_name#14541]\n   :     :  +- Filter (((isnotnull(type#14543) AND isnotnull(location#14545)) AND ((type#14543 = Social) AND (location#14545 = 900 E. Washington St.))) AND isnotnull(event_id#14540))\n   :     :     +- Relation [event_id#14540,event_name#14541,event_date#14542,type#14543,notes#14544,location#14545,status#14546] JDBCRelation((SELECT \"event_id\", \"event_name\", \"event_date\", \"type\", \"notes\", \"location\", \"status\" FROM \"event\") AS \"event\") [numPartitions=1]\n   :     +- Filter (isnotnull(link_to_event#14557) AND isnotnull(link_to_member#14558))\n   :        +- Relation [link_to_event#14557,link_to_member#14558] JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1]\n   +- Project [member_id#14579]\n      +- Filter ((isnotnull(position#14583) AND (position#14583 = Vice President)) AND isnotnull(member_id#14579))\n         +- Relation [member_id#14579,first_name#14580,last_name#14581,email#14582,position#14583,t_shirt_size#14584,phone#14585,zip#14586,link_to_major#14587] JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- Project [event_name#14541]\n  +- SortMergeJoin [link_to_member#14558], [member_id#14579], Inner\n      :- Sort [link_to_member#14558 ASC NULLS FIRST], false, 0\n      :  +- Exchange hashpartitioning(link_to_member#14558, 200), ENSURE_REQUIREMENTS, [plan_id=34059]\n      :     +- Project [event_name#14541, link_to_member#14558]\n      :        +- SortMergeJoin [event_id#14540], [link_to_event#14557], Inner\n      :           :- Sort [event_id#14540 ASC NULLS FIRST], false, 0\n      :           :  +- Exchange hashpartitioning(event_id#14540, 200), ENSURE_REQUIREMENTS, [plan_id=34051]\n      :           :     +- Scan JDBCRelation((SELECT \"event_id\", \"event_name\", \"event_date\", \"type\", \"notes\", \"location\", \"status\" FROM \"event\") AS \"event\") [numPartitions=1] [event_id#14540,event_name#14541] PushedFilters: [*EqualTo(location,900 E. Washington St.), *EqualTo(type,Social), *IsNotNull(type), *IsNotNull(ev..., ReadSchema: struct<event_id:string,event_name:string>\n      :           +- Sort [link_to_event#14557 ASC NULLS FIRST], false, 0\n      :              +- Exchange hashpartitioning(link_to_event#14557, 200), ENSURE_REQUIREMENTS, [plan_id=34052]\n      :                 +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>\n      +- Sort [member_id#14579 ASC NULLS FIRST], false, 0\n        +- Exchange hashpartitioning(member_id#14579, 200), ENSURE_REQUIREMENTS, [plan_id=34060]\n            +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- Project [event_name#14541]\n  +- SortMergeJoin [link_to_member#14558], [member_id#14579], Inner\n  :- Sort [link_to_member#14558 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(link_to_member#14558, 200), ENSURE_REQUIREMENTS, [plan_id=34113]\n  :     +- Project [event_name#14541, link_to_member#14558]\n  :        +- SortMergeJoin [event_id#14540], [link_to_event#14557], Inner\n  :           :- Sort [event_id#14540 ASC NULLS FIRST], false, 0\n  :           :  +- Exchange hashpartitioning(event_id#14540, 200), ENSURE_REQUIREMENTS, [plan_id=34105]\n  :           :     +- Scan JDBCRelation((SELECT \"event_id\", \"event_name\", \"event_date\", \"type\", \"notes\", \"location\", \"status\" FROM \"event\") AS \"event\") [numPartitions=1] [event_id#14540,event_name#14541] PushedFilters: [*EqualTo(location,900 E. Washington St.), *EqualTo(type,Social), *IsNotNull(type), *IsNotNull(ev..., ReadSchema: struct<event_id:string,event_name:string>\n  :           +- Sort [link_to_event#14557 ASC NULLS FIRST], false, 0\n  :              +- Exchange hashpartitioning(link_to_event#14557, 200), ENSURE_REQUIREMENTS, [plan_id=34106]\n  :                 +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>\n  +- Sort [member_id#14579 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(member_id#14579, 200), ENSURE_REQUIREMENTS, [plan_id=34114]\n  +- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20260102_google_fbc1edf3/1429/20260102_165113_ID_1429_ITER_10_382b8c97.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 4,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 4
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":           :     +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_event)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>",
+                    "filters": [
+                        "*IsNotNull(position)",
+                        "*EqualTo(position",
+                        "Vice President)",
+                        "*IsNotNull(member_id)"
+                    ]
+                },
+                {
+                    "scan_line": ":           :     +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_event)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>",
+                    "filters": [
+                        "*IsNotNull(position)",
+                        "*EqualTo(position",
+                        "Vice President)",
+                        "*IsNotNull(member_id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 3
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 4,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 4
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":                 +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_event)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>",
+                    "filters": [
+                        "*IsNotNull(position)",
+                        "*EqualTo(position",
+                        "Vice President)",
+                        "*IsNotNull(member_id)"
+                    ]
+                },
+                {
+                    "scan_line": ":                 +- Scan JDBCRelation((SELECT \"link_to_event\", \"link_to_member\" FROM \"attendance\") AS \"attendance\") [numPartitions=1] [link_to_event#14557,link_to_member#14558] PushedFilters: [*IsNotNull(link_to_event), *IsNotNull(link_to_member)], ReadSchema: struct<link_to_event:string,link_to_member:string>",
+                    "filters": [
+                        "*IsNotNull(link_to_event)",
+                        "*IsNotNull(link_to_member)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"member_id\", \"first_name\", \"last_name\", \"email\", \"position\", \"t_shirt_size\", \"phone\", \"zip\", \"link_to_major\" FROM \"member\") AS \"member\") [numPartitions=1] [member_id#14579] PushedFilters: [*IsNotNull(position), *EqualTo(position,Vice President), *IsNotNull(member_id)], ReadSchema: struct<member_id:string>",
+                    "filters": [
+                        "*IsNotNull(position)",
+                        "*EqualTo(position",
+                        "Vice President)",
+                        "*IsNotNull(member_id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 3
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": false
+        }
+    }
+}

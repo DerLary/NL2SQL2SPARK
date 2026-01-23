@@ -1,0 +1,19 @@
+{
+    "provider": "google",
+    "output_folder": "benchmark_results_20260102_google_fbc1edf3",
+    "iterations": 10,
+    "query_ids": {
+        "879": {
+            "database_name": "formula_1",
+            "difficulty": "moderate",
+            "nl_query": "For the driver who set the fastest lap speed, what is his nationality? the fastest lap speed refers to (MAX) fastestLapSpeed;",
+            "golden_query": "SELECT T1.nationality FROM drivers AS T1 INNER JOIN results AS T2 ON T2.driverId = T1.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1"
+        },
+        "1429": {
+            "database_name": "student_club",
+            "difficulty": "challenging",
+            "nl_query": "What is the name of the social event that was attended by the vice president of the Student_Club located at 900 E. Washington St.? name of social event refers to event_name where type = 'Social'; 'Vice President' is position; located at refers to location",
+            "golden_query": "SELECT T2.event_name FROM attendance AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event INNER JOIN member AS T3 ON T1.link_to_member = T3.member_id WHERE T3.position = 'Vice President' AND T2.location = '900 E. Washington St.' AND T2.type = 'Social'"
+        }
+    }
+}

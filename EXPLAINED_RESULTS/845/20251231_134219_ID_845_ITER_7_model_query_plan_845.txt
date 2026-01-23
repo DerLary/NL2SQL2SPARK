@@ -1,0 +1,95 @@
+
+Execution Plan for: Model Query ID 845...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['T3.power_name]
++- 'Filter ('T1.height_cm > scalar-subquery#4885 [])
+   :  +- 'Project [unresolvedalias(('AVG('height_cm) * 0.8))]
+   :     +- 'UnresolvedRelation [superhero], [], false
+   +- 'Join Inner, ('T2.power_id = 'T3.id)
+      :- 'Join Inner, ('T1.id = 'T2.hero_id)
+      :  :- 'SubqueryAlias T1
+      :  :  +- 'UnresolvedRelation [superhero], [], false
+      :  +- 'SubqueryAlias T2
+      :     +- 'UnresolvedRelation [hero_power], [], false
+      +- 'SubqueryAlias T3
+         +- 'UnresolvedRelation [superpower], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [power_name#4840]
++- Join Inner, (power_id#4842 = id#4839)
+   :- Project [power_id#4842]
+   :  +- Join Inner, (id#4824 = hero_id#4841)
+   :     :- Project [id#4824]
+   :     :  +- Filter ((isnotnull(height_cm#4834) AND (cast(height_cm#4834 as double) > scalar-subquery#4885 [])) AND isnotnull(id#4824))
+   :     :     :  +- Aggregate [(avg(height_cm#4898) * 0.8) AS (avg(height_cm) * 0.8)#4887]
+   :     :     :     +- Project [height_cm#4898]
+   :     :     :        +- Relation [id#4888,superhero_name#4889,full_name#4890,gender_id#4891,eye_colour_id#4892,hair_colour_id#4893,skin_colour_id#4894,race_id#4895,publisher_id#4896,alignment_id#4897,height_cm#4898,weight_kg#4899] JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1]
+   :     :     +- Relation [id#4824,superhero_name#4825,full_name#4826,gender_id#4827,eye_colour_id#4828,hair_colour_id#4829,skin_colour_id#4830,race_id#4831,publisher_id#4832,alignment_id#4833,height_cm#4834,weight_kg#4835] JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1]
+   :     +- Filter (isnotnull(hero_id#4841) AND isnotnull(power_id#4842))
+   :        +- Relation [hero_id#4841,power_id#4842] JDBCRelation((SELECT "hero_id", "power_id" FROM "hero_power") AS "hero_power") [numPartitions=1]
+   +- Filter isnotnull(id#4839)
+      +- Relation [id#4839,power_name#4840] JDBCRelation((SELECT "id", "power_name" FROM "superpower") AS "superpower") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [power_name#4840]
+  +- SortMergeJoin [power_id#4842], [id#4839], Inner
+      :- Sort [power_id#4842 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(power_id#4842, 200), ENSURE_REQUIREMENTS, [plan_id=10112]
+      :     +- Project [power_id#4842]
+      :        +- SortMergeJoin [id#4824], [hero_id#4841], Inner
+      :           :- Sort [id#4824 ASC NULLS FIRST], false, 0
+      :           :  +- Exchange hashpartitioning(id#4824, 200), ENSURE_REQUIREMENTS, [plan_id=10104]
+      :           :     +- Project [id#4824]
+      :           :        +- Filter (cast(height_cm#4834 as double) > Subquery subquery#4885, [id=#10095])
+      :           :           :  +- Subquery subquery#4885, [id=#10095]
+      :           :           :     +- AdaptiveSparkPlan isFinalPlan=false
+      :           :           :        +- HashAggregate(keys=[], functions=[avg(height_cm#4898)], output=[(avg(height_cm) * 0.8)#4887])
+      :           :           :           +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=10093]
+      :           :           :              +- HashAggregate(keys=[], functions=[partial_avg(height_cm#4898)], output=[sum#4902, count#4903L])
+      :           :           :                 +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [height_cm#4898] PushedFilters: [], ReadSchema: struct<height_cm:int>
+      :           :           +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [id#4824,height_cm#4834] PushedFilters: [*IsNotNull(height_cm), *IsNotNull(id)], ReadSchema: struct<id:int,height_cm:int>
+      :           +- Sort [hero_id#4841 ASC NULLS FIRST], false, 0
+      :              +- Exchange hashpartitioning(hero_id#4841, 200), ENSURE_REQUIREMENTS, [plan_id=10105]
+      :                 +- Scan JDBCRelation((SELECT "hero_id", "power_id" FROM "hero_power") AS "hero_power") [numPartitions=1] [hero_id#4841,power_id#4842] PushedFilters: [*IsNotNull(hero_id), *IsNotNull(power_id)], ReadSchema: struct<hero_id:int,power_id:int>
+      +- Sort [id#4839 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(id#4839, 200), ENSURE_REQUIREMENTS, [plan_id=10113]
+            +- Scan JDBCRelation((SELECT "id", "power_name" FROM "superpower") AS "superpower") [numPartitions=1] [id#4839,power_name#4840] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,power_name:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [power_name#4840]
+  +- SortMergeJoin [power_id#4842], [id#4839], Inner
+  :- Sort [power_id#4842 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(power_id#4842, 200), ENSURE_REQUIREMENTS, [plan_id=10179]
+  :     +- Project [power_id#4842]
+  :        +- SortMergeJoin [id#4824], [hero_id#4841], Inner
+  :           :- Sort [id#4824 ASC NULLS FIRST], false, 0
+  :           :  +- Exchange hashpartitioning(id#4824, 200), ENSURE_REQUIREMENTS, [plan_id=10171]
+  :           :     +- Project [id#4824]
+  :           :        +- Filter (cast(height_cm#4834 as double) > Subquery subquery#4904, [id=#10162])
+  :           :           :  +- Subquery subquery#4904, [id=#10162]
+  :           :           :     +- AdaptiveSparkPlan isFinalPlan=false
+  :           :           :        +- HashAggregate(keys=[], functions=[avg(height_cm#4921)])
+  :           :           :           +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=10160]
+  :           :           :              +- HashAggregate(keys=[], functions=[partial_avg(height_cm#4921)])
+  :           :           :                 +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [height_cm#4921] PushedFilters: [], ReadSchema: struct<height_cm:int>
+  :           :           +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [id#4824,height_cm#4834] PushedFilters: [*IsNotNull(height_cm), *IsNotNull(id)], ReadSchema: struct<id:int,height_cm:int>
+  :           +- Sort [hero_id#4841 ASC NULLS FIRST], false, 0
+  :              +- Exchange hashpartitioning(hero_id#4841, 200), ENSURE_REQUIREMENTS, [plan_id=10172]
+  :                 +- Scan JDBCRelation((SELECT "hero_id", "power_id" FROM "hero_power") AS "hero_power") [numPartitions=1] [hero_id#4841,power_id#4842] PushedFilters: [*IsNotNull(hero_id), *IsNotNull(power_id)], ReadSchema: struct<hero_id:int,power_id:int>
+  +- Sort [id#4839 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(id#4839, 200), ENSURE_REQUIREMENTS, [plan_id=10180]
+  +- Scan JDBCRelation((SELECT "id", "power_name" FROM "superpower") AS "superpower") [numPartitions=1] [id#4839,power_name#4840] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,power_name:string>
+================================================================================

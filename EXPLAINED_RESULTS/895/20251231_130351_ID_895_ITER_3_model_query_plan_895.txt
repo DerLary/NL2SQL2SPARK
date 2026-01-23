@@ -1,0 +1,83 @@
+
+Execution Plan for: Model Query ID 895...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias('AVG('LT.milliseconds))]
++- 'Filter ((('D.forename = Lewis) AND ('D.surname = Hamilton)) AND (('R.name = Malaysian Grand Prix) AND ('R.year = 2009)))
+   +- 'Join Inner, ('LT.raceId = 'R.raceId)
+      :- 'Join Inner, ('LT.driverId = 'D.driverId)
+      :  :- 'SubqueryAlias LT
+      :  :  +- 'UnresolvedRelation [laptimes], [], false
+      :  +- 'SubqueryAlias D
+      :     +- 'UnresolvedRelation [drivers], [], false
+      +- 'SubqueryAlias R
+         +- 'UnresolvedRelation [races], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [avg(milliseconds#577) AS avg(milliseconds)#631]
++- Project [milliseconds#577]
+   +- Join Inner, (raceId#572 = raceId#545)
+      :- Project [raceId#572, milliseconds#577]
+      :  +- Join Inner, (driverId#573 = driverId#534)
+      :     :- Project [raceId#572, driverId#573, milliseconds#577]
+      :     :  +- Filter (isnotnull(driverId#573) AND isnotnull(raceId#572))
+      :     :     +- Relation [raceId#572,driverId#573,lap#574,position#575,time#576,milliseconds#577] JDBCRelation((SELECT "raceId", "driverId", "lap", "position", "time", "milliseconds" FROM "lapTimes") AS "lapTimes") [numPartitions=1]
+      :     +- Project [driverId#534]
+      :        +- Filter (((isnotnull(forename#538) AND isnotnull(surname#539)) AND ((forename#538 = Lewis) AND (surname#539 = Hamilton))) AND isnotnull(driverId#534))
+      :           +- Relation [driverId#534,driverRef#535,number#536,code#537,forename#538,surname#539,dob#540,nationality#541,url#542] JDBCRelation((SELECT "driverId", "driverRef", "number", "code", "forename", "surname", CAST("dob" AS TEXT) AS "dob", "nationality", "url" FROM "drivers") AS "drivers") [numPartitions=1]
+      +- Project [raceId#545]
+         +- Filter (((isnotnull(name#549) AND isnotnull(year#546)) AND ((name#549 = Malaysian Grand Prix) AND (year#546 = 2009))) AND isnotnull(raceId#545))
+            +- Relation [raceId#545,year#546,round#547,circuitId#548,name#549,date#550,time#551,url#552] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[avg(milliseconds#577)], output=[avg(milliseconds)#631])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=2848]
+      +- HashAggregate(keys=[], functions=[partial_avg(milliseconds#577)], output=[sum#634, count#635L])
+        +- Project [milliseconds#577]
+            +- SortMergeJoin [raceId#572], [raceId#545], Inner
+              :- Sort [raceId#572 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(raceId#572, 200), ENSURE_REQUIREMENTS, [plan_id=2840]
+              :     +- Project [raceId#572, milliseconds#577]
+              :        +- SortMergeJoin [driverId#573], [driverId#534], Inner
+              :           :- Sort [driverId#573 ASC NULLS FIRST], false, 0
+              :           :  +- Exchange hashpartitioning(driverId#573, 200), ENSURE_REQUIREMENTS, [plan_id=2832]
+              :           :     +- Scan JDBCRelation((SELECT "raceId", "driverId", "lap", "position", "time", "milliseconds" FROM "lapTimes") AS "lapTimes") [numPartitions=1] [raceId#572,driverId#573,milliseconds#577] PushedFilters: [*IsNotNull(driverId), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,driverId:int,milliseconds:int>
+              :           +- Sort [driverId#534 ASC NULLS FIRST], false, 0
+              :              +- Exchange hashpartitioning(driverId#534, 200), ENSURE_REQUIREMENTS, [plan_id=2833]
+              :                 +- Scan JDBCRelation((SELECT "driverId", "driverRef", "number", "code", "forename", "surname", CAST("dob" AS TEXT) AS "dob", "nationality", "url" FROM "drivers") AS "drivers") [numPartitions=1] [driverId#534] PushedFilters: [*IsNotNull(driverId), *IsNotNull(forename), *EqualTo(surname,Hamilton), *IsNotNull(surname), *Eq..., ReadSchema: struct<driverId:int>
+              +- Sort [raceId#545 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(raceId#545, 200), ENSURE_REQUIREMENTS, [plan_id=2841]
+                    +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#545] PushedFilters: [*EqualTo(name,Malaysian Grand Prix), *IsNotNull(year), *EqualTo(year,2009), *IsNotNull(name), *I..., ReadSchema: struct<raceId:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[avg(milliseconds#577)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=2915]
+  +- HashAggregate(keys=[], functions=[partial_avg(milliseconds#577)])
+  +- Project [milliseconds#577]
+  +- SortMergeJoin [raceId#572], [raceId#545], Inner
+  :- Sort [raceId#572 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(raceId#572, 200), ENSURE_REQUIREMENTS, [plan_id=2907]
+  :     +- Project [raceId#572, milliseconds#577]
+  :        +- SortMergeJoin [driverId#573], [driverId#534], Inner
+  :           :- Sort [driverId#573 ASC NULLS FIRST], false, 0
+  :           :  +- Exchange hashpartitioning(driverId#573, 200), ENSURE_REQUIREMENTS, [plan_id=2899]
+  :           :     +- Scan JDBCRelation((SELECT "raceId", "driverId", "lap", "position", "time", "milliseconds" FROM "lapTimes") AS "lapTimes") [numPartitions=1] [raceId#572,driverId#573,milliseconds#577] PushedFilters: [*IsNotNull(driverId), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,driverId:int,milliseconds:int>
+  :           +- Sort [driverId#534 ASC NULLS FIRST], false, 0
+  :              +- Exchange hashpartitioning(driverId#534, 200), ENSURE_REQUIREMENTS, [plan_id=2900]
+  :                 +- Scan JDBCRelation((SELECT "driverId", "driverRef", "number", "code", "forename", "surname", CAST("dob" AS TEXT) AS "dob", "nationality", "url" FROM "drivers") AS "drivers") [numPartitions=1] [driverId#534] PushedFilters: [*IsNotNull(driverId), *IsNotNull(forename), *EqualTo(surname,Hamilton), *IsNotNull(surname), *Eq..., ReadSchema: struct<driverId:int>
+  +- Sort [raceId#545 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(raceId#545, 200), ENSURE_REQUIREMENTS, [plan_id=2908]
+  +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#545] PushedFilters: [*EqualTo(name,Malaysian Grand Prix), *IsNotNull(year), *EqualTo(year,2009), *IsNotNull(name), *I..., ReadSchema: struct<raceId:int>
+================================================================================

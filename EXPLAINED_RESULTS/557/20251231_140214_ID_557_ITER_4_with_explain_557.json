@@ -1,0 +1,120 @@
+{
+    "query_id": 557,
+    "difficulty": "moderate",
+    "is_initial": true,
+    "nl_query": "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65), Count(Id)) * 100",
+    "golden_query": "SELECT CAST(SUM(IF(T2.Age > 65, 1, 0)) AS FLOAT) * 100 / COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+    "sparksql_query": "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "ground_truth": [
+        {
+            "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+        }
+    ],
+    "query_result": [
+        [
+            "0.16899404073646"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 557...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias(((cast('SUM('IF(('T2.Age > 65), 1, 0)) as float) * 100) / 'COUNT('T1.Id)))]\n+- 'Filter ('T1.Score > 5)\n   +- 'Join Inner, ('T1.OwnerUserId = 'T2.Id)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [posts], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [users], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [((cast(sum(if ((Age#25827 > 65)) 1 else 0) as double) * 100.0) / cast(count(Id#25789) as double)) AS ((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))#25837]\n+- Project [Id#25789, Age#25827]\n   +- Join Inner, (OwnerUserId#25796 = Id#25815)\n      :- Project [Id#25789, OwnerUserId#25796]\n      :  +- Filter ((isnotnull(Score#25793) AND (Score#25793 > 5)) AND isnotnull(OwnerUserId#25796))\n      :     +- Relation [Id#25789,PostTypeId#25790,AcceptedAnswerId#25791,CreaionDate#25792,Score#25793,ViewCount#25794,Body#25795,OwnerUserId#25796,LasActivityDate#25797,Title#25798,Tags#25799,AnswerCount#25800,CommentCount#25801,FavoriteCount#25802,LastEditorUserId#25803,LastEditDate#25804,CommunityOwnedDate#25805,ParentId#25806,ClosedDate#25807,OwnerDisplayName#25808,LastEditorDisplayName#25809] JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1]\n      +- Project [Id#25815, Age#25827]\n         +- Filter isnotnull(Id#25815)\n            +- Relation [Id#25815,Reputation#25816,CreationDate#25817,DisplayName#25818,LastAccessDate#25819,WebsiteUrl#25820,Location#25821,AboutMe#25822,Views#25823,UpVotes#25824,DownVotes#25825,AccountId#25826,Age#25827,ProfileImageUrl#25828] JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[sum(if ((Age#25827 > 65)) 1 else 0), count(Id#25789)], output=[((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))#25837])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=42896]\n      +- HashAggregate(keys=[], functions=[partial_sum(if ((Age#25827 > 65)) 1 else 0), partial_count(Id#25789)], output=[sum#25840L, count#25841L])\n        +- Project [Id#25789, Age#25827]\n            +- SortMergeJoin [OwnerUserId#25796], [Id#25815], Inner\n              :- Sort [OwnerUserId#25796 ASC NULLS FIRST], false, 0\n              :  +- Exchange hashpartitioning(OwnerUserId#25796, 200), ENSURE_REQUIREMENTS, [plan_id=42888]\n              :     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>\n              +- Sort [Id#25815 ASC NULLS FIRST], false, 0\n                  +- Exchange hashpartitioning(Id#25815, 200), ENSURE_REQUIREMENTS, [plan_id=42889]\n                    +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[sum(if ((Age#25827 > 65)) 1 else 0), count(Id#25789)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=42939]\n  +- HashAggregate(keys=[], functions=[partial_sum(if ((Age#25827 > 65)) 1 else 0), partial_count(Id#25789)])\n  +- Project [Id#25789, Age#25827]\n  +- SortMergeJoin [OwnerUserId#25796], [Id#25815], Inner\n  :- Sort [OwnerUserId#25796 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(OwnerUserId#25796, 200), ENSURE_REQUIREMENTS, [plan_id=42931]\n  :     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>\n  +- Sort [Id#25815 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(Id#25815, 200), ENSURE_REQUIREMENTS, [plan_id=42932]\n  +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 557...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'Project [unresolvedalias((('SUM(CASE WHEN ('T2.Age > 65) THEN 1 ELSE 0 END) * 100.0) / 'COUNT('T1.Id)))]\n+- 'Filter ('T1.Score > 5)\n   +- 'Join Inner, ('T1.OwnerUserId = 'T2.Id)\n      :- 'SubqueryAlias T1\n      :  +- 'UnresolvedRelation [posts], [], false\n      +- 'SubqueryAlias T2\n         +- 'UnresolvedRelation [users], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nAggregate [((cast(sum(CASE WHEN (Age#25827 > 65) THEN 1 ELSE 0 END) as decimal(20,0)) * 100.0) / cast(count(Id#25789) as decimal(20,0))) AS ((sum(CASE WHEN (Age > 65) THEN 1 ELSE 0 END) * 100.0) / count(Id))#25855]\n+- Project [Id#25789, Age#25827]\n   +- Join Inner, (OwnerUserId#25796 = Id#25815)\n      :- Project [Id#25789, OwnerUserId#25796]\n      :  +- Filter ((isnotnull(Score#25793) AND (Score#25793 > 5)) AND isnotnull(OwnerUserId#25796))\n      :     +- Relation [Id#25789,PostTypeId#25790,AcceptedAnswerId#25791,CreaionDate#25792,Score#25793,ViewCount#25794,Body#25795,OwnerUserId#25796,LasActivityDate#25797,Title#25798,Tags#25799,AnswerCount#25800,CommentCount#25801,FavoriteCount#25802,LastEditorUserId#25803,LastEditDate#25804,CommunityOwnedDate#25805,ParentId#25806,ClosedDate#25807,OwnerDisplayName#25808,LastEditorDisplayName#25809] JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1]\n      +- Project [Id#25815, Age#25827]\n         +- Filter isnotnull(Id#25815)\n            +- Relation [Id#25815,Reputation#25816,CreationDate#25817,DisplayName#25818,LastAccessDate#25819,WebsiteUrl#25820,Location#25821,AboutMe#25822,Views#25823,UpVotes#25824,DownVotes#25825,AccountId#25826,Age#25827,ProfileImageUrl#25828] JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- HashAggregate(keys=[], functions=[sum(CASE WHEN (Age#25827 > 65) THEN 1 ELSE 0 END), count(Id#25789)], output=[((sum(CASE WHEN (Age > 65) THEN 1 ELSE 0 END) * 100.0) / count(Id))#25855])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=42982]\n      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (Age#25827 > 65) THEN 1 ELSE 0 END), partial_count(Id#25789)], output=[sum#25858L, count#25859L])\n        +- Project [Id#25789, Age#25827]\n            +- SortMergeJoin [OwnerUserId#25796], [Id#25815], Inner\n              :- Sort [OwnerUserId#25796 ASC NULLS FIRST], false, 0\n              :  +- Exchange hashpartitioning(OwnerUserId#25796, 200), ENSURE_REQUIREMENTS, [plan_id=42974]\n              :     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>\n              +- Sort [Id#25815 ASC NULLS FIRST], false, 0\n                  +- Exchange hashpartitioning(Id#25815, 200), ENSURE_REQUIREMENTS, [plan_id=42975]\n                    +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (Age#25827 > 65) THEN 1 ELSE 0 END), count(Id#25789)])\n  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=43025]\n  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (Age#25827 > 65) THEN 1 ELSE 0 END), partial_count(Id#25789)])\n  +- Project [Id#25789, Age#25827]\n  +- SortMergeJoin [OwnerUserId#25796], [Id#25815], Inner\n  :- Sort [OwnerUserId#25796 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(OwnerUserId#25796, 200), ENSURE_REQUIREMENTS, [plan_id=43017]\n  :     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>\n  +- Sort [Id#25815 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(Id#25815, 200), ENSURE_REQUIREMENTS, [plan_id=43018]\n  +- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_0d79378d/557/20251231_140214_ID_557_ITER_4_96a58d74.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 3
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>",
+                    "filters": [
+                        "*IsNotNull(Score)",
+                        "*GreaterThan(Score",
+                        "5)",
+                        "*IsNotNull(OwnerUserId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>",
+                    "filters": [
+                        "*IsNotNull(Id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>",
+                    "filters": [
+                        "*IsNotNull(Score)",
+                        "*GreaterThan(Score",
+                        "5)",
+                        "*IsNotNull(OwnerUserId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>",
+                    "filters": [
+                        "*IsNotNull(Id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 1,
+                "ShuffleExchange": 0,
+                "TOTAL": 3
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>",
+                    "filters": [
+                        "*IsNotNull(Score)",
+                        "*GreaterThan(Score",
+                        "5)",
+                        "*IsNotNull(OwnerUserId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>",
+                    "filters": [
+                        "*IsNotNull(Id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"Id\", \"PostTypeId\", \"AcceptedAnswerId\", CAST(\"CreaionDate\" AS TEXT) AS \"CreaionDate\", \"Score\", \"ViewCount\", \"Body\", \"OwnerUserId\", CAST(\"LasActivityDate\" AS TEXT) AS \"LasActivityDate\", \"Title\", \"Tags\", \"AnswerCount\", \"CommentCount\", \"FavoriteCount\", \"LastEditorUserId\", CAST(\"LastEditDate\" AS TEXT) AS \"LastEditDate\", CAST(\"CommunityOwnedDate\" AS TEXT) AS \"CommunityOwnedDate\", \"ParentId\", CAST(\"ClosedDate\" AS TEXT) AS \"ClosedDate\", \"OwnerDisplayName\", \"LastEditorDisplayName\" FROM \"posts\") AS \"posts\") [numPartitions=1] [Id#25789,OwnerUserId#25796] PushedFilters: [*IsNotNull(Score), *GreaterThan(Score,5), *IsNotNull(OwnerUserId)], ReadSchema: struct<Id:int,OwnerUserId:int>",
+                    "filters": [
+                        "*IsNotNull(Score)",
+                        "*GreaterThan(Score",
+                        "5)",
+                        "*IsNotNull(OwnerUserId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"Id\", \"Reputation\", CAST(\"CreationDate\" AS TEXT) AS \"CreationDate\", \"DisplayName\", CAST(\"LastAccessDate\" AS TEXT) AS \"LastAccessDate\", \"WebsiteUrl\", \"Location\", \"AboutMe\", \"Views\", \"UpVotes\", \"DownVotes\", \"AccountId\", \"Age\", \"ProfileImageUrl\" FROM \"users\") AS \"users\") [numPartitions=1] [Id#25815,Age#25827] PushedFilters: [*IsNotNull(Id)], ReadSchema: struct<Id:int,Age:int>",
+                    "filters": [
+                        "*IsNotNull(Id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": false
+        }
+    }
+}

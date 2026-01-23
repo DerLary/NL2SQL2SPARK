@@ -1,0 +1,75 @@
+
+Execution Plan for: Model Query ID 778...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['T1.superhero_name]
++- 'Filter ('T3.power_name = Adaptation)
+   +- 'Join Inner, ('T2.power_id = 'T3.id)
+      :- 'Join Inner, ('T1.id = 'T2.hero_id)
+      :  :- 'SubqueryAlias T1
+      :  :  +- 'UnresolvedRelation [superhero], [], false
+      :  +- 'SubqueryAlias T2
+      :     +- 'UnresolvedRelation [hero_power], [], false
+      +- 'SubqueryAlias T3
+         +- 'UnresolvedRelation [superpower], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [superhero_name#247]
++- Join Inner, (power_id#264 = id#261)
+   :- Project [superhero_name#247, power_id#264]
+   :  +- Join Inner, (id#246 = hero_id#263)
+   :     :- Project [id#246, superhero_name#247]
+   :     :  +- Filter isnotnull(id#246)
+   :     :     +- Relation [id#246,superhero_name#247,full_name#248,gender_id#249,eye_colour_id#250,hair_colour_id#251,skin_colour_id#252,race_id#253,publisher_id#254,alignment_id#255,height_cm#256,weight_kg#257] JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1]
+   :     +- Filter (isnotnull(hero_id#263) AND isnotnull(power_id#264))
+   :        +- Relation [hero_id#263,power_id#264] JDBCRelation((SELECT "hero_id", "power_id" FROM "hero_power") AS "hero_power") [numPartitions=1]
+   +- Project [id#261]
+      +- Filter ((isnotnull(power_name#262) AND (power_name#262 = Adaptation)) AND isnotnull(id#261))
+         +- Relation [id#261,power_name#262] JDBCRelation((SELECT "id", "power_name" FROM "superpower") AS "superpower") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [superhero_name#247]
+  +- SortMergeJoin [power_id#264], [id#261], Inner
+      :- Sort [power_id#264 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(power_id#264, 200), ENSURE_REQUIREMENTS, [plan_id=1551]
+      :     +- Project [superhero_name#247, power_id#264]
+      :        +- SortMergeJoin [id#246], [hero_id#263], Inner
+      :           :- Sort [id#246 ASC NULLS FIRST], false, 0
+      :           :  +- Exchange hashpartitioning(id#246, 200), ENSURE_REQUIREMENTS, [plan_id=1543]
+      :           :     +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [id#246,superhero_name#247] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,superhero_name:string>
+      :           +- Sort [hero_id#263 ASC NULLS FIRST], false, 0
+      :              +- Exchange hashpartitioning(hero_id#263, 200), ENSURE_REQUIREMENTS, [plan_id=1544]
+      :                 +- Scan JDBCRelation((SELECT "hero_id", "power_id" FROM "hero_power") AS "hero_power") [numPartitions=1] [hero_id#263,power_id#264] PushedFilters: [*IsNotNull(hero_id), *IsNotNull(power_id)], ReadSchema: struct<hero_id:int,power_id:int>
+      +- Sort [id#261 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(id#261, 200), ENSURE_REQUIREMENTS, [plan_id=1552]
+            +- Scan JDBCRelation((SELECT "id", "power_name" FROM "superpower") AS "superpower") [numPartitions=1] [id#261] PushedFilters: [*IsNotNull(power_name), *EqualTo(power_name,Adaptation), *IsNotNull(id)], ReadSchema: struct<id:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [superhero_name#247]
+  +- SortMergeJoin [power_id#264], [id#261], Inner
+  :- Sort [power_id#264 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(power_id#264, 200), ENSURE_REQUIREMENTS, [plan_id=1601]
+  :     +- Project [superhero_name#247, power_id#264]
+  :        +- SortMergeJoin [id#246], [hero_id#263], Inner
+  :           :- Sort [id#246 ASC NULLS FIRST], false, 0
+  :           :  +- Exchange hashpartitioning(id#246, 200), ENSURE_REQUIREMENTS, [plan_id=1593]
+  :           :     +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [id#246,superhero_name#247] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,superhero_name:string>
+  :           +- Sort [hero_id#263 ASC NULLS FIRST], false, 0
+  :              +- Exchange hashpartitioning(hero_id#263, 200), ENSURE_REQUIREMENTS, [plan_id=1594]
+  :                 +- Scan JDBCRelation((SELECT "hero_id", "power_id" FROM "hero_power") AS "hero_power") [numPartitions=1] [hero_id#263,power_id#264] PushedFilters: [*IsNotNull(hero_id), *IsNotNull(power_id)], ReadSchema: struct<hero_id:int,power_id:int>
+  +- Sort [id#261 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(id#261, 200), ENSURE_REQUIREMENTS, [plan_id=1602]
+  +- Scan JDBCRelation((SELECT "id", "power_name" FROM "superpower") AS "superpower") [numPartitions=1] [id#261] PushedFilters: [*IsNotNull(power_name), *EqualTo(power_name,Adaptation), *IsNotNull(id)], ReadSchema: struct<id:int>
+================================================================================

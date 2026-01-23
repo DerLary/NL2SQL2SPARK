@@ -1,0 +1,53 @@
+
+Execution Plan for: Golden Query ID 776...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['T1.superhero_name, 'T2.race]
++- 'Filter ('T1.full_name = Charles Chandler)
+   +- 'Join Inner, ('T1.race_id = 'T2.id)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [superhero], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [race], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [superhero_name#13150, race#13148]
++- Join Inner, (race_id#13156 = id#13147)
+   :- Project [superhero_name#13150, race_id#13156]
+   :  +- Filter ((isnotnull(full_name#13151) AND (full_name#13151 = Charles Chandler)) AND isnotnull(race_id#13156))
+   :     +- Relation [id#13149,superhero_name#13150,full_name#13151,gender_id#13152,eye_colour_id#13153,hair_colour_id#13154,skin_colour_id#13155,race_id#13156,publisher_id#13157,alignment_id#13158,height_cm#13159,weight_kg#13160] JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1]
+   +- Filter isnotnull(id#13147)
+      +- Relation [id#13147,race#13148] JDBCRelation((SELECT "id", "race" FROM "race") AS "race") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [superhero_name#13150, race#13148]
+  +- SortMergeJoin [race_id#13156], [id#13147], Inner
+      :- Sort [race_id#13156 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(race_id#13156, 200), ENSURE_REQUIREMENTS, [plan_id=30843]
+      :     +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [superhero_name#13150,race_id#13156] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>
+      +- Sort [id#13147 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(id#13147, 200), ENSURE_REQUIREMENTS, [plan_id=30844]
+            +- Scan JDBCRelation((SELECT "id", "race" FROM "race") AS "race") [numPartitions=1] [id#13147,race#13148] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [superhero_name#13150, race#13148]
+  +- SortMergeJoin [race_id#13156], [id#13147], Inner
+  :- Sort [race_id#13156 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(race_id#13156, 200), ENSURE_REQUIREMENTS, [plan_id=30873]
+  :     +- Scan JDBCRelation((SELECT "id", "superhero_name", "full_name", "gender_id", "eye_colour_id", "hair_colour_id", "skin_colour_id", "race_id", "publisher_id", "alignment_id", "height_cm", "weight_kg" FROM "superhero") AS "superhero") [numPartitions=1] [superhero_name#13150,race_id#13156] PushedFilters: [*IsNotNull(full_name), *EqualTo(full_name,Charles Chandler), *IsNotNull(race_id)], ReadSchema: struct<superhero_name:string,race_id:int>
+  +- Sort [id#13147 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(id#13147, 200), ENSURE_REQUIREMENTS, [plan_id=30874]
+  +- Scan JDBCRelation((SELECT "id", "race" FROM "race") AS "race") [numPartitions=1] [id#13147,race#13148] PushedFilters: [*IsNotNull(id)], ReadSchema: struct<id:int,race:string>
+================================================================================

@@ -1,0 +1,79 @@
+{
+    "google_944": {
+        "llm": "google",
+        "query_id": 944,
+        "nl_query": null,
+        "golden_query": "WITH time_in_seconds AS (SELECT T1.positionOrder, CASE WHEN T1.positionOrder = 1 THEN (CAST(SUBSTRING(T1.time, 1, 1) AS FLOAT) * 3600) + (CAST(SUBSTRING(T1.time, 3, 2) AS FLOAT) * 60) + CAST(SUBSTRING(T1.time, 6) AS FLOAT) ELSE CAST(SUBSTRING(T1.time, 2) AS FLOAT) END AS time_seconds FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId WHERE T2.name = 'Australian Grand Prix' AND NOT T1.time IS NULL AND T2.year = 2008), champion_time AS (SELECT time_seconds FROM time_in_seconds WHERE positionOrder = 1), last_driver_incremental AS (SELECT time_seconds FROM time_in_seconds WHERE positionOrder = (SELECT MAX(positionOrder) FROM time_in_seconds)) SELECT (CAST((SELECT time_seconds FROM last_driver_incremental) AS FLOAT) * 100) / (SELECT time_seconds + (SELECT time_seconds FROM last_driver_incremental) FROM champion_time)",
+        "sparksql_query": [
+            "\nWITH race_results AS (\n    SELECT\n        R.positionOrder,\n        R.time AS time_string\n    FROM\n        results AS R\n    JOIN\n        races AS RA\n    ON\n        R.raceId = RA.raceId\n    WHERE\n        RA.year = 2008\n        AND RA.name = 'Australian Grand Prix'\n        AND R.time IS NOT NULL\n),\ntime_in_seconds AS (\n    SELECT\n        positionOrder,\n        time_string,\n        CASE\n            WHEN positionOrder = 1 THEN\n                -- Format for winner: H:MM:SS.ms (e.g., '1:34:11.123')\n                (CAST(SUBSTRING(time_string, 1, 1) AS DOUBLE) * 3600) +\n                (CAST(SUBSTRING(time_string, 3, 2) AS DOUBLE) * 60) +\n                CAST(SUBSTRING(time_string, 6) AS DOUBLE)\n            ELSE\n                -- For non-1st positions, time_string is a difference, e.g., '+1.234' or '+1:23.456'\n                -- Remove the leading '+' and parse based on format\n                CASE\n                    WHEN time_string LIKE '+%:%' THEN -- Format like '+M:S.ms' (e.g., '+1:23.456')\n                        (CAST(SUBSTRING(time_string, 2, INSTR(time_string, ':') - 2) AS DOUBLE) * 60) + -- Minutes\n                        CAST(SUBSTRING(time_string, INSTR(time_string, ':') + 1) AS DOUBLE) -- Seconds.ms\n                    WHEN time_string LIKE '+%' THEN -- Format like '+S.ms' (e.g., '+1.234')\n                        CAST(SUBSTRING(time_string, 2) AS DOUBLE)\n                    ELSE\n                        NULL -- Handle unexpected formats by returning NULL\n                END\n        END AS converted_time_value\n    FROM\n        race_results\n    WHERE\n        -- Exclude drivers who are 'Laps' behind, as their time difference cannot be directly converted to seconds\n        -- for this calculation without further assumptions.\n        NOT (time_string LIKE '%Lap%' AND positionOrder != 1)\n)\nSELECT\n    (champion_and_last_driver_times.last_driver_incremental_time / (champion_and_last_driver_times.champion_time + champion_and_last_driver_times.last_driver_incremental_time)) * 100 AS percentage_faster\nFROM\n    (\n        SELECT\n            MAX(CASE WHEN positionOrder = 1 THEN converted_time_value ELSE NULL END) AS champion_time,\n            MAX(CASE WHEN positionOrder = (SELECT MAX(positionOrder) FROM time_in_seconds) THEN converted_time_value ELSE NULL END) AS last_driver_incremental_time\n        FROM\n            time_in_seconds\n    ) AS champion_and_last_driver_times\n",
+            "WITH time_in_seconds AS (SELECT `r`.`raceId`, `r`.`name` AS `race_name`, `r`.`year`, `res`.`driverId`, `d`.`forename`, `d`.`surname`, `res`.`position`, `res`.`positionOrder`, `res`.`time` AS `race_time_string`, `res`.`milliseconds` AS `race_time_ms` FROM `races` AS `r` JOIN `results` AS `res` ON `r`.`raceId` = `res`.`raceId` JOIN `drivers` AS `d` ON `res`.`driverId` = `d`.`driverId` WHERE `r`.`year` = 2008 AND `r`.`name` = 'Australian Grand Prix' AND `res`.`time` IS NOT NULL), champion_and_last_driver_times AS (SELECT (SELECT `race_time_ms` FROM `time_in_seconds` WHERE `position` = 1) AS `champion_time_ms`, (SELECT `race_time_ms` FROM `time_in_seconds` ORDER BY `positionOrder` DESC LIMIT 1) AS `last_driver_time_ms`) SELECT CAST((`last_driver_time_ms` - `champion_time_ms`) AS FLOAT) / CAST(`last_driver_time_ms` AS FLOAT) * 100 AS `percentage_faster` FROM `champion_and_last_driver_times`;"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0.31555732286030097"
+                ]
+            ],
+            [
+                [
+                    "0.31555732286030097"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "((CAST(scalarsubquery() AS FLOAT) * 100) / scalarsubquery())": 0.31555732173208506
+                }
+            ],
+            [
+                {
+                    "((CAST(scalarsubquery() AS FLOAT) * 100) / scalarsubquery())": 0.31555732173208506
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "How much faster in percentage is the champion than the driver who finished the race last in the 2008 Australian Grand Prix? how much faster in percentage = divide(subtract(incremental time, champion time),last_driver time) * 100; last driver finished time = incremental time + champion time; only champion\u2019s finished time is represented by \u2019HH:MM:SS.mmm\u2019; finished the game refers to time is not null. Extract the time values of the time string and convert them to floats before processing them. Use a construction that start with 'WITH time_in_seconds ( ... )'. Time_in_seconds can be computed as: SELECT T1.positionOrder, CASE WHEN T1.positionOrder = 1 THEN (CAST(SUBSTRING(T1.time, 1, 1) AS FLOAT) * 3600) + (CAST(SUBSTRING(T1.time, 3, 2) AS FLOAT) * 60) + CAST(SUBSTRING(T1.time, 6) AS FLOAT) ELSE CAST(SUBSTRING(T1.time, 2) AS FLOAT) END A ",
+            "How much faster in percentage is the champion than the driver who finished the race last in the 2008 Australian Grand Prix? how much faster in percentage = divide(subtract(incremental time, champion time),last_driver time) * 100; last driver finished time = incremental time + champion time; only champion\u2019s finished time is represented by \u2019HH:MM:SS.mmm\u2019; finished the game refers to time is not null. Cast the time values as float. Use a construction that start with 'WITH time_in_seconds ( ... )' "
+        ],
+        "spark_error": [
+            null,
+            null
+        ],
+        "total_time": [
+            45.10256505012512,
+            27.584123373031616
+        ],
+        "spark_time": [
+            1.0465269088745117,
+            0.7443733215332031
+        ],
+        "translation_time": [
+            44.05603814125061,
+            26.839750051498413
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0
+        ],
+        "total_time_avg": 36.34334421157837,
+        "spark_time_avg": 0.8954501152038574,
+        "translation_time_avg": 35.44789409637451,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

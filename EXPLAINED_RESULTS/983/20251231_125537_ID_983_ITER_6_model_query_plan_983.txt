@@ -1,0 +1,70 @@
+
+Execution Plan for: Model Query ID 983...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 1
++- 'LocalLimit 1
+   +- 'Sort ['SUM('T2.points) DESC NULLS LAST], true
+      +- 'Aggregate ['T1.name, 'T1.url], ['T1.name, 'T1.url]
+         +- 'Filter ('T1.nationality = Italian)
+            +- 'Join Inner, ('T1.constructorId = 'T2.constructorId)
+               :- 'SubqueryAlias T1
+               :  +- 'UnresolvedRelation [constructors], [], false
+               +- 'SubqueryAlias T2
+                  +- 'UnresolvedRelation [constructorstandings], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 1
++- LocalLimit 1
+   +- Project [name#2579, url#2581]
+      +- Sort [sum(points#2609)#2667 DESC NULLS LAST], true
+         +- Aggregate [name#2579, url#2581], [name#2579, url#2581, sum(points#2609) AS sum(points#2609)#2667]
+            +- Project [name#2579, url#2581, points#2609]
+               +- Join Inner, (constructorId#2577 = constructorId#2608)
+                  :- Project [constructorId#2577, name#2579, url#2581]
+                  :  +- Filter ((isnotnull(nationality#2580) AND (nationality#2580 = Italian)) AND isnotnull(constructorId#2577))
+                  :     +- Relation [constructorId#2577,constructorRef#2578,name#2579,nationality#2580,url#2581] JDBCRelation((SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors") AS "constructors") [numPartitions=1]
+                  +- Project [constructorId#2608, points#2609]
+                     +- Filter isnotnull(constructorId#2608)
+                        +- Relation [constructorStandingsId#2606,raceId#2607,constructorId#2608,points#2609,position#2610,positionText#2611,wins#2612] JDBCRelation((SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings") AS "constructorStandings") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- TakeOrderedAndProject(limit=1, orderBy=[sum(points#2609)#2667 DESC NULLS LAST], output=[name#2579,url#2581])
+  +- HashAggregate(keys=[name#2579, url#2581], functions=[sum(points#2609)], output=[name#2579, url#2581, sum(points#2609)#2667])
+      +- Exchange hashpartitioning(name#2579, url#2581, 200), ENSURE_REQUIREMENTS, [plan_id=7218]
+        +- HashAggregate(keys=[name#2579, url#2581], functions=[partial_sum(points#2609)], output=[name#2579, url#2581, sum#2669])
+            +- Project [name#2579, url#2581, points#2609]
+              +- SortMergeJoin [constructorId#2577], [constructorId#2608], Inner
+                  :- Sort [constructorId#2577 ASC NULLS FIRST], false, 0
+                  :  +- Exchange hashpartitioning(constructorId#2577, 200), ENSURE_REQUIREMENTS, [plan_id=7210]
+                  :     +- Scan JDBCRelation((SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors") AS "constructors") [numPartitions=1] [constructorId#2577,name#2579,url#2581] PushedFilters: [*IsNotNull(nationality), *EqualTo(nationality,Italian), *IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,name:string,url:string>
+                  +- Sort [constructorId#2608 ASC NULLS FIRST], false, 0
+                    +- Exchange hashpartitioning(constructorId#2608, 200), ENSURE_REQUIREMENTS, [plan_id=7211]
+                        +- Scan JDBCRelation((SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings") AS "constructorStandings") [numPartitions=1] [constructorId#2608,points#2609] PushedFilters: [*IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,points:double>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- TakeOrderedAndProject(limit=1, orderBy=[sum(points#2609)#2675 DESC NULLS LAST], output=[name#2579,url#2581])
+  +- HashAggregate(keys=[name#2579, url#2581], functions=[sum(points#2609)])
+  +- Exchange hashpartitioning(name#2579, url#2581, 200), ENSURE_REQUIREMENTS, [plan_id=7266]
+  +- HashAggregate(keys=[name#2579, url#2581], functions=[partial_sum(points#2609)])
+  +- Project [name#2579, url#2581, points#2609]
+  +- SortMergeJoin [constructorId#2577], [constructorId#2608], Inner
+  :- Sort [constructorId#2577 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(constructorId#2577, 200), ENSURE_REQUIREMENTS, [plan_id=7258]
+  :     +- Scan JDBCRelation((SELECT "constructorId", "constructorRef", "name", "nationality", "url" FROM "constructors") AS "constructors") [numPartitions=1] [constructorId#2577,name#2579,url#2581] PushedFilters: [*IsNotNull(nationality), *EqualTo(nationality,Italian), *IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,name:string,url:string>
+  +- Sort [constructorId#2608 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(constructorId#2608, 200), ENSURE_REQUIREMENTS, [plan_id=7259]
+  +- Scan JDBCRelation((SELECT "constructorStandingsId", "raceId", "constructorId", "points", "position", "positionText", "wins" FROM "constructorStandings") AS "constructorStandings") [numPartitions=1] [constructorId#2608,points#2609] PushedFilters: [*IsNotNull(constructorId)], ReadSchema: struct<constructorId:int,points:double>
+================================================================================

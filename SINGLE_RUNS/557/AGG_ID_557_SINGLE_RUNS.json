@@ -1,0 +1,139 @@
+{
+    "google_557": {
+        "llm": "google",
+        "query_id": 557,
+        "nl_query": null,
+        "golden_query": "SELECT CAST(SUM(IF(T2.Age > 65, 1, 0)) AS FLOAT) * 100 / COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+        "sparksql_query": [
+            "SELECT CAST(SUM(CASE WHEN T2.Age > 65 THEN 1 ELSE 0 END) AS FLOAT) * 100 / COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5;",
+            "SELECT CAST(SUM(IF(T2.Age > 65, 1, 0)) AS FLOAT) * 100 / COUNT(T1.Id) FROM posts AS T1 JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+            "SELECT CAST(SUM(IF(T2.`Age` > 65, 1, 0)) AS FLOAT) / COUNT(T1.`Id`) * 100 FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5",
+            "SELECT CAST(SUM(IF(`T2`.`Age` > 65, 1, 0)) AS FLOAT) * 100 / COUNT(`T1`.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON `T1`.`OwnerUserId` = `T2`.`Id` WHERE `T1`.`Score` > 5;",
+            "SELECT CAST(SUM(IF(`T2`.`Age` > 65, 1, 0)) AS FLOAT) * 100 / COUNT(`T1`.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON `T1`.`OwnerUserId` = `T2`.`Id` WHERE `T1`.`Score` > 5;"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ],
+            [
+                [
+                    "0.16899404073645824"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ],
+            [
+                {
+                    "((CAST(sum((IF((Age > 65), 1, 0))) AS FLOAT) * 100) / count(Id))": 0.16899404073645824
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65), Count(Id)) * 100. Cast the sum as float.",
+            "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65) * 100, Count(Id)) . Cast the sum as float. Use IF instead of CASE(WHEN(:::))",
+            "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65), Count(Id)) * 100. Cast the sum as float. Use IF instead of CASE(WHEN(:::))",
+            "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65) * 100, Count(Id)) . Cast the sum as float. Use IF instead of CASE(WHEN(:::))",
+            "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65) * 100, Count(Id)) . Cast the sum as float. Use IF instead of CASE(WHEN(:::))"
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            13.036118745803833,
+            18.98704767227173,
+            17.049878120422363,
+            14.710224390029907,
+            15.928759813308716
+        ],
+        "spark_time": [
+            0.7180197238922119,
+            0.6933517456054688,
+            0.6422069072723389,
+            0.6404473781585693,
+            0.6901304721832275
+        ],
+        "translation_time": [
+            12.318099021911621,
+            18.29369592666626,
+            16.407671213150024,
+            14.069777011871338,
+            15.238629341125488
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            1,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 15.94240574836731,
+        "spark_time_avg": 0.6768312454223633,
+        "translation_time_avg": 15.265574502944947,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.2
+    }
+}

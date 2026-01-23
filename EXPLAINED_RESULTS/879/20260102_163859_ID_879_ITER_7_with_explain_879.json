@@ -1,0 +1,108 @@
+{
+    "query_id": 879,
+    "difficulty": "moderate",
+    "is_initial": true,
+    "nl_query": "For the driver who set the fastest lap speed, what is his nationality? the fastest lap speed refers to (MAX) fastestLapSpeed;",
+    "golden_query": "SELECT T1.nationality FROM drivers AS T1 INNER JOIN results AS T2 ON T2.driverId = T1.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+    "sparksql_query": "SELECT T1.nationality FROM drivers AS T1 JOIN results AS T2 ON T1.driverId = T2.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+    "jaccard_index": 1.0,
+    "exact_match": 1,
+    "ground_truth": [
+        {
+            "nationality": "Italian"
+        }
+    ],
+    "query_result": [
+        [
+            "Italian"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 879...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'GlobalLimit 1\n+- 'LocalLimit 1\n   +- 'Sort ['T2.fastestLapSpeed DESC NULLS LAST], true\n      +- 'Project ['T1.nationality]\n         +- 'Join Inner, ('T2.driverId = 'T1.driverId)\n            :- 'SubqueryAlias T1\n            :  +- 'UnresolvedRelation [drivers], [], false\n            +- 'SubqueryAlias T2\n               +- 'UnresolvedRelation [results], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nGlobalLimit 1\n+- LocalLimit 1\n   +- Project [nationality#13563]\n      +- Sort [fastestLapSpeed#13634 DESC NULLS LAST], true\n         +- Project [nationality#13563, fastestLapSpeed#13634]\n            +- Join Inner, (driverId#13620 = driverId#13556)\n               :- Project [driverId#13556, nationality#13563]\n               :  +- Filter isnotnull(driverId#13556)\n               :     +- Relation [driverId#13556,driverRef#13557,number#13558,code#13559,forename#13560,surname#13561,dob#13562,nationality#13563,url#13564] JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1]\n               +- Project [driverId#13620, fastestLapSpeed#13634]\n                  +- Filter isnotnull(driverId#13620)\n                     +- Relation [resultId#13618,raceId#13619,driverId#13620,constructorId#13621,number#13622,grid#13623,position#13624,positionText#13625,positionOrder#13626,points#13627,laps#13628,time#13629,milliseconds#13630,fastestLap#13631,rank#13632,fastestLapTime#13633,fastestLapSpeed#13634,statusId#13635] JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- TakeOrderedAndProject(limit=1, orderBy=[fastestLapSpeed#13634 DESC NULLS LAST], output=[nationality#13563])\n  +- Project [nationality#13563, fastestLapSpeed#13634]\n      +- SortMergeJoin [driverId#13556], [driverId#13620], Inner\n        :- Sort [driverId#13556 ASC NULLS FIRST], false, 0\n        :  +- Exchange hashpartitioning(driverId#13556, 200), ENSURE_REQUIREMENTS, [plan_id=31928]\n        :     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>\n        +- Sort [driverId#13620 ASC NULLS FIRST], false, 0\n            +- Exchange hashpartitioning(driverId#13620, 200), ENSURE_REQUIREMENTS, [plan_id=31929]\n              +- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- TakeOrderedAndProject(limit=1, orderBy=[fastestLapSpeed#13634 DESC NULLS LAST], output=[nationality#13563])\n  +- Project [nationality#13563, fastestLapSpeed#13634]\n  +- SortMergeJoin [driverId#13556], [driverId#13620], Inner\n  :- Sort [driverId#13556 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(driverId#13556, 200), ENSURE_REQUIREMENTS, [plan_id=31958]\n  :     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>\n  +- Sort [driverId#13620 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(driverId#13620, 200), ENSURE_REQUIREMENTS, [plan_id=31959]\n  +- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 879...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'GlobalLimit 1\n+- 'LocalLimit 1\n   +- 'Sort ['T2.fastestLapSpeed DESC NULLS LAST], true\n      +- 'Project ['T1.nationality]\n         +- 'Join Inner, ('T1.driverId = 'T2.driverId)\n            :- 'SubqueryAlias T1\n            :  +- 'UnresolvedRelation [drivers], [], false\n            +- 'SubqueryAlias T2\n               +- 'UnresolvedRelation [results], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nGlobalLimit 1\n+- LocalLimit 1\n   +- Project [nationality#13563]\n      +- Sort [fastestLapSpeed#13634 DESC NULLS LAST], true\n         +- Project [nationality#13563, fastestLapSpeed#13634]\n            +- Join Inner, (driverId#13556 = driverId#13620)\n               :- Project [driverId#13556, nationality#13563]\n               :  +- Filter isnotnull(driverId#13556)\n               :     +- Relation [driverId#13556,driverRef#13557,number#13558,code#13559,forename#13560,surname#13561,dob#13562,nationality#13563,url#13564] JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1]\n               +- Project [driverId#13620, fastestLapSpeed#13634]\n                  +- Filter isnotnull(driverId#13620)\n                     +- Relation [resultId#13618,raceId#13619,driverId#13620,constructorId#13621,number#13622,grid#13623,position#13624,positionText#13625,positionOrder#13626,points#13627,laps#13628,time#13629,milliseconds#13630,fastestLap#13631,rank#13632,fastestLapTime#13633,fastestLapSpeed#13634,statusId#13635] JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- TakeOrderedAndProject(limit=1, orderBy=[fastestLapSpeed#13634 DESC NULLS LAST], output=[nationality#13563])\n  +- Project [nationality#13563, fastestLapSpeed#13634]\n      +- SortMergeJoin [driverId#13556], [driverId#13620], Inner\n        :- Sort [driverId#13556 ASC NULLS FIRST], false, 0\n        :  +- Exchange hashpartitioning(driverId#13556, 200), ENSURE_REQUIREMENTS, [plan_id=31988]\n        :     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>\n        +- Sort [driverId#13620 ASC NULLS FIRST], false, 0\n            +- Exchange hashpartitioning(driverId#13620, 200), ENSURE_REQUIREMENTS, [plan_id=31989]\n              +- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- TakeOrderedAndProject(limit=1, orderBy=[fastestLapSpeed#13634 DESC NULLS LAST], output=[nationality#13563])\n  +- Project [nationality#13563, fastestLapSpeed#13634]\n  +- SortMergeJoin [driverId#13556], [driverId#13620], Inner\n  :- Sort [driverId#13556 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(driverId#13556, 200), ENSURE_REQUIREMENTS, [plan_id=32018]\n  :     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>\n  +- Sort [driverId#13620 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(driverId#13620, 200), ENSURE_REQUIREMENTS, [plan_id=32019]\n  +- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20260102_google_fbc1edf3/879/20260102_163859_ID_879_ITER_7_0c9b2ac4.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 2
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 2,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 2
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"driverId\", \"driverRef\", \"number\", \"code\", \"forename\", \"surname\", CAST(\"dob\" AS TEXT) AS \"dob\", \"nationality\", \"url\" FROM \"drivers\") AS \"drivers\") [numPartitions=1] [driverId#13556,nationality#13563] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,nationality:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"resultId\", \"raceId\", \"driverId\", \"constructorId\", \"number\", \"grid\", \"position\", \"positionText\", \"positionOrder\", \"points\", \"laps\", \"time\", \"milliseconds\", \"fastestLap\", \"rank\", \"fastestLapTime\", \"fastestLapSpeed\", \"statusId\" FROM \"results\") AS \"results\") [numPartitions=1] [driverId#13620,fastestLapSpeed#13634] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,fastestLapSpeed:string>",
+                    "filters": [
+                        "*IsNotNull(driverId)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": true
+        }
+    }
+}

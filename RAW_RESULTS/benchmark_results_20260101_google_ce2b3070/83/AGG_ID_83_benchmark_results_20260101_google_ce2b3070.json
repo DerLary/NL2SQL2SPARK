@@ -1,0 +1,306 @@
+{
+    "google_83": {
+        "llm": "google",
+        "query_id": 83,
+        "nl_query": "Of the schools that offers a magnet program serving a grade span of Kindergarten to 8th grade, how many offers Multiple Provision Types? List the number of cities that offers a Kindergarten to 8th grade span and indicate how many schools are there serving such grade span for each city. Kindergarten to 8th grade refers to K-8; 'Offers a magnet program' means Magnet = 1; Multiple Provision Types refers to `NSLP Provision Status` = 'Multiple Provision Types'",
+        "golden_query": "SELECT T2.City, COUNT(T2.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.Magnet = 1 AND T2.GSoffered = 'K-8' AND T1.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T2.City",
+        "sparksql_query": [
+            "SELECT DISTINCT GSserved FROM schools LIMIT 10",
+            "SELECT COUNT(DISTINCT s.School) FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND f.`Low Grade` = 'K' AND f.`High Grade` = '8' AND f.`NSLP Provision Status` = 'Multiple Provision Types'",
+            "SELECT COUNT(T1.CDSCode) FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.Magnet = 1 AND T1.GSserved = 'K-8' AND T2.`NSLP Provision Status` = 'Multiple Provision Types'",
+            "SELECT COUNT(DISTINCT s.CDSCode) FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND s.GSserved = 'K-8' AND f.\"NSLP Provision Status\" = 'Multiple Provision Types'",
+            "SELECT DISTINCT GSserved FROM schools LIMIT 10",
+            "SELECT COUNT(DISTINCT s.CDSCode) FROM schools s JOIN frpm f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND s.GSserved = 'K-8' AND f.`NSLP Provision Status` = 'Multiple Provision Types'",
+            "SELECT COUNT(DISTINCT s.CDSCode) FROM schools s JOIN frpm f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND s.GSserved = 'K-8' AND f.`NSLP Provision Status` = 'Multiple Provision Types'",
+            "SELECT COUNT(DISTINCT s.School) FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND f.`Low Grade` = 'K' AND f.`High Grade` = '8' AND f.`NSLP Provision Status` = 'Multiple Provision Types'",
+            "SELECT DISTINCT GSserved FROM schools LIMIT 10",
+            "SELECT COUNT(DISTINCT s.CDSCode) FROM schools s JOIN frpm f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND s.GSserved = 'K-8' AND f.`NSLP Provision Status` = 'Multiple Provision Types'"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "K"
+                ],
+                [
+                    "5-9"
+                ],
+                [
+                    "7"
+                ],
+                [
+                    "6-8"
+                ],
+                [
+                    "2-7"
+                ],
+                [
+                    "11"
+                ],
+                [
+                    "3-7"
+                ],
+                [
+                    "1-12"
+                ],
+                [
+                    "3"
+                ],
+                [
+                    "2-5"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            null,
+            [
+                [
+                    "K"
+                ],
+                [
+                    "5-9"
+                ],
+                [
+                    "7"
+                ],
+                [
+                    "6-8"
+                ],
+                [
+                    "2-7"
+                ],
+                [
+                    "11"
+                ],
+                [
+                    "3-7"
+                ],
+                [
+                    "1-12"
+                ],
+                [
+                    "3"
+                ],
+                [
+                    "2-5"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ],
+            [
+                [
+                    "K"
+                ],
+                [
+                    "5-9"
+                ],
+                [
+                    "7"
+                ],
+                [
+                    "6-8"
+                ],
+                [
+                    "2-7"
+                ],
+                [
+                    "11"
+                ],
+                [
+                    "3-7"
+                ],
+                [
+                    "1-12"
+                ],
+                [
+                    "3"
+                ],
+                [
+                    "2-5"
+                ]
+            ],
+            [
+                [
+                    "1"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ],
+            [
+                {
+                    "City": "Adelanto",
+                    "count(CDSCode)": 1
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            "\n[PARSE_SYNTAX_ERROR] Syntax error at or near '\"NSLP Provision Status\"'. SQLSTATE: 42601 (line 1, pos 139)\n\n== SQL ==\nSELECT COUNT(DISTINCT s.CDSCode) FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.Magnet = 1 AND s.GSserved = 'K-8' AND f.\"NSLP Provision Status\" = 'Multiple Provision Types'\n-------------------------------------------------------------------------------------------------------------------------------------------^^^\n",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            6.6912596225738525,
+            22.362964868545532,
+            21.81971573829651,
+            19.6162052154541,
+            6.580224990844727,
+            20.909162521362305,
+            22.20417881011963,
+            20.28813123703003,
+            7.8754425048828125,
+            13.493478775024414
+        ],
+        "spark_time": [
+            0.06481099128723145,
+            0.11090517044067383,
+            0.1587235927581787,
+            0.021201133728027344,
+            0.20716261863708496,
+            0.2513742446899414,
+            0.09227585792541504,
+            0.3758430480957031,
+            0.0670936107635498,
+            0.0881650447845459
+        ],
+        "translation_time": [
+            6.626448631286621,
+            22.25205969810486,
+            21.66099214553833,
+            19.595004081726074,
+            6.373062372207642,
+            20.657788276672363,
+            22.111902952194214,
+            19.912288188934326,
+            7.808348894119263,
+            13.405313730239868
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 16.18407642841339,
+        "spark_time_avg": 0.14375553131103516,
+        "translation_time_avg": 16.040320897102355,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

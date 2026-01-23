@@ -1,0 +1,59 @@
+{
+    "google_983": {
+        "llm": "google",
+        "query_id": 983,
+        "nl_query": null,
+        "golden_query": "SELECT T1.url FROM constructors AS T1 INNER JOIN constructorStandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1",
+        "sparksql_query": [
+            "SELECT T1.url FROM constructors AS T1 INNER JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1;"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "url": "http://en.wikipedia.org/wiki/Scuderia_Ferrari"
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "Which of the Italian constructor got the highest point to date? Give its introduction website? introduction website refers to url; Italian is a nationality. Only give the url. The total points are given by constructorStandings.points so you do not need to sum the points to get the total points. "
+        ],
+        "spark_error": [
+            null
+        ],
+        "total_time": [
+            9.441336870193481
+        ],
+        "spark_time": [
+            0.6948602199554443
+        ],
+        "translation_time": [
+            8.746476650238037
+        ],
+        "jaccard_index": [
+            1.0
+        ],
+        "jaccard_index_new": [
+            1.0
+        ],
+        "exact_match": [
+            1
+        ],
+        "total_time_avg": 9.441336870193481,
+        "spark_time_avg": 0.6948602199554443,
+        "translation_time_avg": 8.746476650238037,
+        "jaccard_index_avg": 1.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

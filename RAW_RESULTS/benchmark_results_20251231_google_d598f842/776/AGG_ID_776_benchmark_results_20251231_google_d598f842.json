@@ -1,0 +1,247 @@
+{
+    "google_776": {
+        "llm": "google",
+        "query_id": 776,
+        "nl_query": "Provide the hero name and race of Charles Chandler. hero name refers to superhero_name; Charles Chandler is the full name of superhero;",
+        "golden_query": "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+        "sparksql_query": [
+            "SELECT T1.superhero_name, T2.race FROM superhero AS T1 JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.`superhero_name`, r.`race` FROM `superhero` AS s JOIN `race` AS r ON s.`race_id` = r.`id` WHERE s.`full_name` = 'Charles Chandler'",
+            "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.`superhero_name`, r.`race` FROM `superhero` AS s JOIN `race` AS r ON s.`race_id` = r.`id` WHERE s.`full_name` = 'Charles Chandler'",
+            "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'",
+            "SELECT s.superhero_name, r.race FROM superhero AS s JOIN race AS r ON s.race_id = r.id WHERE s.full_name = 'Charles Chandler'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ],
+            [
+                [
+                    "3-D Man",
+                    "-"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ],
+            [
+                {
+                    "superhero_name": "3-D Man",
+                    "race": "-"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            8.73984694480896,
+            8.89984393119812,
+            10.705979585647583,
+            8.239360809326172,
+            9.179917097091675,
+            9.34341835975647,
+            12.515836477279663,
+            10.326587200164795,
+            11.369319915771484,
+            9.086520910263062
+        ],
+        "spark_time": [
+            0.08393239974975586,
+            0.09273934364318848,
+            0.0747528076171875,
+            0.061046600341796875,
+            0.06409454345703125,
+            0.05232119560241699,
+            0.07121777534484863,
+            0.04494762420654297,
+            0.06346440315246582,
+            0.07452535629272461
+        ],
+        "translation_time": [
+            8.655914545059204,
+            8.807104587554932,
+            10.631226778030396,
+            8.178314208984375,
+            9.115822553634644,
+            9.291097164154053,
+            12.444618701934814,
+            10.281639575958252,
+            11.305855512619019,
+            9.011995553970337
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        "total_time_avg": 9.840663123130799,
+        "spark_time_avg": 0.06830420494079589,
+        "translation_time_avg": 9.772358918190003,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 1.0
+    }
+}

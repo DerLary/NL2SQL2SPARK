@@ -1,0 +1,79 @@
+{
+    "google_1241": {
+        "llm": "google",
+        "query_id": 1241,
+        "nl_query": null,
+        "golden_query": "SELECT SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID",
+        "sparksql_query": [
+            "SELECT (SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN 1 ELSE 0 END)) FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID",
+            "SELECT SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN 1 ELSE 0 END) FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "-562"
+                ]
+            ],
+            [
+                [
+                    "-562"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ],
+            [
+                {
+                    "(sum(CASE WHEN (PLT <= 100) THEN 1 ELSE 0 END) - sum(CASE WHEN (PLT >= 400) THEN 1 ELSE 0 END))": -562
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "For patients with abnormal platelet level, state the number of patients with lower than normal range. How is it compare to the number of patients with higher than normal range? abnormal platelet level refers to PLT <= 100 or PLT >= 400; calculation = SUBTRACT(SUM(PLT <= 100), SUM(PLT >= 400)); Return exactly one value: (count_low - count_high). Do not output the individual counts. Inner join patient and laboratory.",
+            "For patients with abnormal platelet level, state the number of patients with lower than normal range. How is it compare to the number of patients with higher than normal range? abnormal platelet level refers to PLT <= 100 or PLT >= 400; calculation = SUBTRACT(SUM(PLT <= 100), SUM(PLT >= 400)); Return exactly one value: (count_low - count_high). Do not output the individual counts. Inner join patient and laboratory. Avoid unnecessary parantheses. Patient id is just 'ID'"
+        ],
+        "spark_error": [
+            null,
+            null
+        ],
+        "total_time": [
+            12.42232084274292,
+            13.521725177764893
+        ],
+        "spark_time": [
+            0.547116756439209,
+            0.5975885391235352
+        ],
+        "translation_time": [
+            11.875204086303711,
+            12.924136638641357
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            1
+        ],
+        "total_time_avg": 12.972023010253906,
+        "spark_time_avg": 0.5723526477813721,
+        "translation_time_avg": 12.399670362472534,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.5
+    }
+}

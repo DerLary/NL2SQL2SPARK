@@ -1,0 +1,63 @@
+
+Execution Plan for: Golden Query ID 1532...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 1
++- 'LocalLimit 1
+   +- 'Sort ['T1.Price DESC NULLS LAST], true
+      +- 'Project ['T2.Country]
+         +- 'Filter ('T1.ProductID = 2)
+            +- 'Join Inner, ('T1.GasStationID = 'T2.GasStationID)
+               :- 'SubqueryAlias T1
+               :  +- 'UnresolvedRelation [transactions_1k], [], false
+               +- 'SubqueryAlias T2
+                  +- 'UnresolvedRelation [gasstations], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 1
++- LocalLimit 1
+   +- Project [Country#9793]
+      +- Sort [Price#9805 DESC NULLS LAST], true
+         +- Project [Country#9793, Price#9805]
+            +- Join Inner, (GasStationID#9802 = GasStationID#9791)
+               :- Project [GasStationID#9802, Price#9805]
+               :  +- Filter ((isnotnull(ProductID#9803) AND (ProductID#9803 = 2)) AND isnotnull(GasStationID#9802))
+               :     +- Relation [TransactionID#9797,Date#9798,Time#9799,CustomerID#9800,CardID#9801,GasStationID#9802,ProductID#9803,Amount#9804,Price#9805] JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1]
+               +- Project [GasStationID#9791, Country#9793]
+                  +- Filter isnotnull(GasStationID#9791)
+                     +- Relation [GasStationID#9791,ChainID#9792,Country#9793,Segment#9794] JDBCRelation((SELECT "GasStationID", "ChainID", "Country", "Segment" FROM "gasstations") AS "gasstations") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- TakeOrderedAndProject(limit=1, orderBy=[Price#9805 DESC NULLS LAST], output=[Country#9793])
+  +- Project [Country#9793, Price#9805]
+      +- SortMergeJoin [GasStationID#9802], [GasStationID#9791], Inner
+        :- Sort [GasStationID#9802 ASC NULLS FIRST], false, 0
+        :  +- Exchange hashpartitioning(GasStationID#9802, 200), ENSURE_REQUIREMENTS, [plan_id=23019]
+        :     +- Scan JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1] [GasStationID#9802,Price#9805] PushedFilters: [*IsNotNull(ProductID), *EqualTo(ProductID,2), *IsNotNull(GasStationID)], ReadSchema: struct<GasStationID:int,Price:double>
+        +- Sort [GasStationID#9791 ASC NULLS FIRST], false, 0
+            +- Exchange hashpartitioning(GasStationID#9791, 200), ENSURE_REQUIREMENTS, [plan_id=23020]
+              +- Scan JDBCRelation((SELECT "GasStationID", "ChainID", "Country", "Segment" FROM "gasstations") AS "gasstations") [numPartitions=1] [GasStationID#9791,Country#9793] PushedFilters: [*IsNotNull(GasStationID)], ReadSchema: struct<GasStationID:int,Country:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- TakeOrderedAndProject(limit=1, orderBy=[Price#9805 DESC NULLS LAST], output=[Country#9793])
+  +- Project [Country#9793, Price#9805]
+  +- SortMergeJoin [GasStationID#9802], [GasStationID#9791], Inner
+  :- Sort [GasStationID#9802 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(GasStationID#9802, 200), ENSURE_REQUIREMENTS, [plan_id=23054]
+  :     +- Scan JDBCRelation((SELECT "TransactionID", CAST("Date" AS TEXT) AS "Date", "Time", "CustomerID", "CardID", "GasStationID", "ProductID", "Amount", "Price" FROM "transactions_1k") AS "transactions_1k") [numPartitions=1] [GasStationID#9802,Price#9805] PushedFilters: [*IsNotNull(ProductID), *EqualTo(ProductID,2), *IsNotNull(GasStationID)], ReadSchema: struct<GasStationID:int,Price:double>
+  +- Sort [GasStationID#9791 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(GasStationID#9791, 200), ENSURE_REQUIREMENTS, [plan_id=23055]
+  +- Scan JDBCRelation((SELECT "GasStationID", "ChainID", "Country", "Segment" FROM "gasstations") AS "gasstations") [numPartitions=1] [GasStationID#9791,Country#9793] PushedFilters: [*IsNotNull(GasStationID)], ReadSchema: struct<GasStationID:int,Country:string>
+================================================================================

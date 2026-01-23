@@ -1,0 +1,29 @@
+
+Execution Plan for: Model Query ID 944...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['raceId]
++- 'Filter (('year = 2008) AND ('name = Australian Grand Prix))
+   +- 'UnresolvedRelation [races], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [raceId#16131]
++- Filter ((isnotnull(year#16132) AND isnotnull(name#16135)) AND ((year#16132 = 2008) AND (name#16135 = Australian Grand Prix)))
+   +- Relation [raceId#16131,year#16132,round#16133,circuitId#16134,name#16135,date#16136,time#16137,url#16138] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+*(1) Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#16131] PushedFilters: [*IsNotNull(year), *IsNotNull(name), *EqualTo(year,2008), *EqualTo(name,Australian Grand Prix)], ReadSchema: struct<raceId:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  *(1) Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#16131] PushedFilters: [*IsNotNull(year), *IsNotNull(name), *EqualTo(year,2008), *EqualTo(name,Australian Grand Prix)], ReadSchema: struct<raceId:int>
+================================================================================

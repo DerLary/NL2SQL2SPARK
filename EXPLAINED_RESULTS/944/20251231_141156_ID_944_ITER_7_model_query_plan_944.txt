@@ -1,0 +1,149 @@
+
+Execution Plan for: Model Query ID 944...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+CTE [RaceResults]
+:  +- 'SubqueryAlias RaceResults
+:     +- 'Project ['T2.milliseconds, 'T2.position]
+:        +- 'Filter ((('T1.year = 2008) AND ('T1.name = Australian Grand Prix)) AND isnotnull('T2.time))
+:           +- 'Join Inner, ('T1.raceId = 'T2.raceId)
+:              :- 'SubqueryAlias T1
+:              :  +- 'UnresolvedRelation [races], [], false
+:              +- 'SubqueryAlias T2
+:                 +- 'UnresolvedRelation [results], [], false
++- 'Project [(((scalar-subquery#18944 [] - scalar-subquery#18945 []) * 100.0) / scalar-subquery#18946 []) AS percentage_faster#18947]
+   :  :- 'GlobalLimit 1
+   :  :  +- 'LocalLimit 1
+   :  :     +- 'Sort ['position DESC NULLS LAST], true
+   :  :        +- 'Project ['milliseconds]
+   :  :           +- 'UnresolvedRelation [RaceResults], [], false
+   :  :- 'Project ['milliseconds]
+   :  :  +- 'Filter ('position = 1)
+   :  :     +- 'UnresolvedRelation [RaceResults], [], false
+   :  +- 'GlobalLimit 1
+   :     +- 'LocalLimit 1
+   :        +- 'Sort ['position DESC NULLS LAST], true
+   :           +- 'Project ['milliseconds]
+   :              +- 'UnresolvedRelation [RaceResults], [], false
+   +- OneRowRelation
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [((cast((scalar-subquery#18944 [] - scalar-subquery#18945 []) as decimal(10,0)) * 100.0) / cast(scalar-subquery#18946 [] as decimal(10,0))) AS percentage_faster#18947]
+:  :- GlobalLimit 1
+:  :  +- LocalLimit 1
+:  :     +- Project [milliseconds#18090]
+:  :        +- Sort [position#18084 DESC NULLS LAST], true
+:  :           +- Project [milliseconds#18090, position#18084]
+:  :              +- Join Inner, (raceId#18027 = raceId#18079)
+:  :                 :- Project [raceId#18027]
+:  :                 :  +- Filter (((isnotnull(year#18028) AND isnotnull(name#18031)) AND ((year#18028 = 2008) AND (name#18031 = Australian Grand Prix))) AND isnotnull(raceId#18027))
+:  :                 :     +- Relation [raceId#18027,year#18028,round#18029,circuitId#18030,name#18031,date#18032,time#18033,url#18034] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+:  :                 +- Project [raceId#18079, position#18084, milliseconds#18090]
+:  :                    +- Filter (isnotnull(time#18089) AND isnotnull(raceId#18079))
+:  :                       +- Relation [resultId#18078,raceId#18079,driverId#18080,constructorId#18081,number#18082,grid#18083,position#18084,positionText#18085,positionOrder#18086,points#18087,laps#18088,time#18089,milliseconds#18090,fastestLap#18091,rank#18092,fastestLapTime#18093,fastestLapSpeed#18094,statusId#18095] JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1]
+:  :- Project [milliseconds#19024 AS milliseconds#18948]
+:  :  +- Join Inner, (raceId#19004 = raceId#19013)
+:  :     :- Project [raceId#19004]
+:  :     :  +- Filter (((isnotnull(year#19005) AND isnotnull(name#19008)) AND ((year#19005 = 2008) AND (name#19008 = Australian Grand Prix))) AND isnotnull(raceId#19004))
+:  :     :     +- Relation [raceId#19004,year#19005,round#19006,circuitId#19007,name#19008,date#19009,time#19010,url#19011] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+:  :     +- Project [raceId#19013, milliseconds#19024]
+:  :        +- Filter ((isnotnull(position#19018) AND (isnotnull(time#19023) AND (position#19018 = 1))) AND isnotnull(raceId#19013))
+:  :           +- Relation [resultId#19012,raceId#19013,driverId#19014,constructorId#19015,number#19016,grid#19017,position#19018,positionText#19019,positionOrder#19020,points#19021,laps#19022,time#19023,milliseconds#19024,fastestLap#19025,rank#19026,fastestLapTime#19027,fastestLapSpeed#19028,statusId#19029] JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1]
+:  +- GlobalLimit 1
+:     +- LocalLimit 1
+:        +- Project [milliseconds#18950]
+:           +- Sort [position#19044 DESC NULLS LAST], true
+:              +- Project [milliseconds#19050 AS milliseconds#18950, position#19044]
+:                 +- Join Inner, (raceId#19030 = raceId#19039)
+:                    :- Project [raceId#19030]
+:                    :  +- Filter (((isnotnull(year#19031) AND isnotnull(name#19034)) AND ((year#19031 = 2008) AND (name#19034 = Australian Grand Prix))) AND isnotnull(raceId#19030))
+:                    :     +- Relation [raceId#19030,year#19031,round#19032,circuitId#19033,name#19034,date#19035,time#19036,url#19037] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+:                    +- Project [raceId#19039, position#19044, milliseconds#19050]
+:                       +- Filter (isnotnull(time#19049) AND isnotnull(raceId#19039))
+:                          +- Relation [resultId#19038,raceId#19039,driverId#19040,constructorId#19041,number#19042,grid#19043,position#19044,positionText#19045,positionOrder#19046,points#19047,laps#19048,time#19049,milliseconds#19050,fastestLap#19051,rank#19052,fastestLapTime#19053,fastestLapSpeed#19054,statusId#19055] JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1]
++- OneRowRelation
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [((cast((Subquery subquery#18944, [id=#37876] - Subquery subquery#18945, [id=#37877]) as decimal(10,0)) * 100.0) / cast(Subquery subquery#18946, [id=#37878] as decimal(10,0))) AS percentage_faster#18947]
+  :  :- Subquery subquery#18944, [id=#37876]
+  :  :  +- AdaptiveSparkPlan isFinalPlan=false
+  :  :     +- TakeOrderedAndProject(limit=1, orderBy=[position#18084 DESC NULLS LAST], output=[milliseconds#18090])
+  :  :        +- Project [milliseconds#18090, position#18084]
+  :  :           +- SortMergeJoin [raceId#18027], [raceId#18079], Inner
+  :  :              :- Sort [raceId#18027 ASC NULLS FIRST], false, 0
+  :  :              :  +- Exchange hashpartitioning(raceId#18027, 200), ENSURE_REQUIREMENTS, [plan_id=37819]
+  :  :              :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#18027] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  :  :              +- Sort [raceId#18079 ASC NULLS FIRST], false, 0
+  :  :                 +- Exchange hashpartitioning(raceId#18079, 200), ENSURE_REQUIREMENTS, [plan_id=37820]
+  :  :                    +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#18079,position#18084,milliseconds#18090] PushedFilters: [*IsNotNull(time), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,position:int,milliseconds:int>
+  :  :- Subquery subquery#18945, [id=#37877]
+  :  :  +- AdaptiveSparkPlan isFinalPlan=false
+  :  :     +- Project [milliseconds#19024 AS milliseconds#18948]
+  :  :        +- SortMergeJoin [raceId#19004], [raceId#19013], Inner
+  :  :           :- Sort [raceId#19004 ASC NULLS FIRST], false, 0
+  :  :           :  +- Exchange hashpartitioning(raceId#19004, 200), ENSURE_REQUIREMENTS, [plan_id=37843]
+  :  :           :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#19004] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  :  :           +- Sort [raceId#19013 ASC NULLS FIRST], false, 0
+  :  :              +- Exchange hashpartitioning(raceId#19013, 200), ENSURE_REQUIREMENTS, [plan_id=37844]
+  :  :                 +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#19013,milliseconds#19024] PushedFilters: [*IsNotNull(position), *IsNotNull(time), *EqualTo(position,1), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,milliseconds:int>
+  :  +- Subquery subquery#18946, [id=#37878]
+  :     +- AdaptiveSparkPlan isFinalPlan=false
+  :        +- TakeOrderedAndProject(limit=1, orderBy=[position#19044 DESC NULLS LAST], output=[milliseconds#18950])
+  :           +- Project [milliseconds#19050 AS milliseconds#18950, position#19044]
+  :              +- SortMergeJoin [raceId#19030], [raceId#19039], Inner
+  :                 :- Sort [raceId#19030 ASC NULLS FIRST], false, 0
+  :                 :  +- Exchange hashpartitioning(raceId#19030, 200), ENSURE_REQUIREMENTS, [plan_id=37869]
+  :                 :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#19030] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  :                 +- Sort [raceId#19039 ASC NULLS FIRST], false, 0
+  :                    +- Exchange hashpartitioning(raceId#19039, 200), ENSURE_REQUIREMENTS, [plan_id=37870]
+  :                       +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#19039,position#19044,milliseconds#19050] PushedFilters: [*IsNotNull(time), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,position:int,milliseconds:int>
+  +- Scan OneRowRelation[]
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [((cast((Subquery subquery#19056, [id=#38005] - Subquery subquery#19057, [id=#38006]) as decimal(10,0)) * 100.0) / cast(Subquery subquery#19058, [id=#38007] as decimal(10,0))) AS percentage_faster#19059]
+  :  :- Subquery subquery#19056, [id=#38005]
+  :  :  +- AdaptiveSparkPlan isFinalPlan=false
+  :  :     +- TakeOrderedAndProject(limit=1, orderBy=[position#18084 DESC NULLS LAST], output=[milliseconds#18090])
+  :  :        +- Project [milliseconds#18090, position#18084]
+  :  :           +- SortMergeJoin [raceId#18027], [raceId#18079], Inner
+  :  :              :- Sort [raceId#18027 ASC NULLS FIRST], false, 0
+  :  :              :  +- Exchange hashpartitioning(raceId#18027, 200), ENSURE_REQUIREMENTS, [plan_id=37948]
+  :  :              :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#18027] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  :  :              +- Sort [raceId#18079 ASC NULLS FIRST], false, 0
+  :  :                 +- Exchange hashpartitioning(raceId#18079, 200), ENSURE_REQUIREMENTS, [plan_id=37949]
+  :  :                    +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#18079,position#18084,milliseconds#18090] PushedFilters: [*IsNotNull(time), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,position:int,milliseconds:int>
+  :  :- Subquery subquery#19057, [id=#38006]
+  :  :  +- AdaptiveSparkPlan isFinalPlan=false
+  :  :     +- Project [milliseconds#19140 AS milliseconds#19064]
+  :  :        +- SortMergeJoin [raceId#19120], [raceId#19129], Inner
+  :  :           :- Sort [raceId#19120 ASC NULLS FIRST], false, 0
+  :  :           :  +- Exchange hashpartitioning(raceId#19120, 200), ENSURE_REQUIREMENTS, [plan_id=37972]
+  :  :           :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#19120] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  :  :           +- Sort [raceId#19129 ASC NULLS FIRST], false, 0
+  :  :              +- Exchange hashpartitioning(raceId#19129, 200), ENSURE_REQUIREMENTS, [plan_id=37973]
+  :  :                 +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#19129,milliseconds#19140] PushedFilters: [*IsNotNull(position), *IsNotNull(time), *EqualTo(position,1), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,milliseconds:int>
+  :  +- Subquery subquery#19058, [id=#38007]
+  :     +- AdaptiveSparkPlan isFinalPlan=false
+  :        +- TakeOrderedAndProject(limit=1, orderBy=[position#19160 DESC NULLS LAST], output=[milliseconds#19066])
+  :           +- Project [milliseconds#19166 AS milliseconds#19066, position#19160]
+  :              +- SortMergeJoin [raceId#19146], [raceId#19155], Inner
+  :                 :- Sort [raceId#19146 ASC NULLS FIRST], false, 0
+  :                 :  +- Exchange hashpartitioning(raceId#19146, 200), ENSURE_REQUIREMENTS, [plan_id=37998]
+  :                 :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#19146] PushedFilters: [*EqualTo(year,2008), *IsNotNull(year), *EqualTo(name,Australian Grand Prix), *IsNotNull(name), *..., ReadSchema: struct<raceId:int>
+  :                 +- Sort [raceId#19155 ASC NULLS FIRST], false, 0
+  :                    +- Exchange hashpartitioning(raceId#19155, 200), ENSURE_REQUIREMENTS, [plan_id=37999]
+  :                       +- Scan JDBCRelation((SELECT "resultId", "raceId", "driverId", "constructorId", "number", "grid", "position", "positionText", "positionOrder", "points", "laps", "time", "milliseconds", "fastestLap", "rank", "fastestLapTime", "fastestLapSpeed", "statusId" FROM "results") AS "results") [numPartitions=1] [raceId#19155,position#19160,milliseconds#19166] PushedFilters: [*IsNotNull(time), *IsNotNull(raceId)], ReadSchema: struct<raceId:int,position:int,milliseconds:int>
+  +- Scan OneRowRelation[]
+================================================================================

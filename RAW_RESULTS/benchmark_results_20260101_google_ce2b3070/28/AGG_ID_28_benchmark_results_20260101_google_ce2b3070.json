@@ -1,0 +1,2226 @@
+{
+    "google_28": {
+        "llm": "google",
+        "query_id": 28,
+        "nl_query": "Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that are locally funded, list the names and DOC type of schools which has a difference above this average. Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)` - `Enrollment (Ages 5-17)`",
+        "golden_query": "SELECT T2.School, T2.DOC FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.FundingType = 'Locally funded' AND (T1.`Enrollment (K-12)` - T1.`Enrollment (Ages 5-17)`) > (SELECT AVG(T3.`Enrollment (K-12)` - T3.`Enrollment (Ages 5-17)`) FROM frpm AS T3 INNER JOIN schools AS T4 ON T3.CDSCode = T4.CDSCode WHERE T4.FundingType = 'Locally funded')",
+        "sparksql_query": [
+            "SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.FundingType = 'Local'",
+            "SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;",
+            "SELECT AVG(\"Enrollment (K-12)\" - \"Enrollment (Ages 5-17)\") FROM frpm WHERE \"Charter Funding Type\" = 'Local'",
+            "SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;",
+            "SELECT AVG(`Enrollment (K-12)` - `Enrollment (Ages 5-17)`) FROM frpm WHERE `Charter Funding Type` = 'Local'",
+            "SELECT s.School, s.DOCType FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.FundingType = 'Local' AND (f.`Enrollment (K-12)` - f.`Enrollment (Ages 5-17)`) > ( SELECT AVG(f2.`Enrollment (K-12)` - f2.`Enrollment (Ages 5-17)`) FROM schools AS s2 JOIN frpm AS f2 ON s2.CDSCode = f2.CDSCode WHERE s2.FundingType = 'Local' ) ORDER BY s.School;",
+            "SELECT s.School, s.DOCType FROM schools AS s JOIN frpm AS f ON s.CDSCode = f.CDSCode WHERE s.FundingType = 'Local' AND (f.`Enrollment (K-12)` - f.`Enrollment (Ages 5-17)`) > ( SELECT AVG(f2.`Enrollment (K-12)` - f2.`Enrollment (Ages 5-17)`) FROM schools AS s2 JOIN frpm AS f2 ON s2.CDSCode = f2.CDSCode WHERE s2.FundingType = 'Local' ) ORDER BY s.School;",
+            "SELECT DISTINCT FundingType FROM schools",
+            "SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;",
+            "SELECT T1.School, T1.DOCType FROM schools AS T1 JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.`Charter Funding Type` = 'Local' AND (T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) > (SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM frpm AS T2 WHERE T2.`Charter Funding Type` = 'Local') ORDER BY T1.School;"
+        ],
+        "difficulty": "challenging",
+        "execution_status": [
+            "VALID",
+            "VALID",
+            "ERROR",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "None"
+                ]
+            ],
+            [],
+            null,
+            [],
+            [
+                [
+                    "None"
+                ]
+            ],
+            [],
+            [],
+            [
+                [
+                    "Directly funded"
+                ],
+                [
+                    "Locally funded"
+                ],
+                [
+                    "Not in CS funding model"
+                ],
+                [
+                    "None"
+                ]
+            ],
+            [],
+            []
+        ],
+        "ground_truth": [
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ],
+            [
+                {
+                    "School": "Forest Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "YES Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "The Education Corps",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Denair Charter Academy",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Yuba County Career Preparatory Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Pomelo Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Elk Grove Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Taft Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter Online",
+                    "DOC": "52"
+                },
+                {
+                    "School": "San Juan Choices Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Madera County Independent Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Monterey County Home Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Stanislaus Alternative Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Rosemary Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Pioneer Technical Center",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Butterfield Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Sylmar Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Stockton High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grover Cleveland Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Home Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Westwood Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Calahan Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Delta Charter",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Arundel Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Carpenter Community Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Lynhaven Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Clovis Online Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visalia Charter Independent Study",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Chatsworth Charter High",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Pacific Coast Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Mountain Oaks",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Gateway to College Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Wilbur Charter For Enriched Academics",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Grizzly ChalleNGe Charter",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Kings River-Hardwick Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Riverside Preparatory",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Summit Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "George Washington Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Visions In Education",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Castlemont Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Castle Rock",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Natomas Charter",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Washington Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "YouthBuild Charter School of California",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Soledad Enrichment Action Charter High",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Mattole Valley Charter (#159)",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Kern Workforce 2000 Academy",
+                    "DOC": "56"
+                },
+                {
+                    "School": "Fammatre Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "West Park Charter Academy",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Serrania Avenue Charter For Enriched Studies",
+                    "DOC": "54"
+                },
+                {
+                    "School": "School of Extended Educational Options",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Come Back Kids",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Marlton",
+                    "DOC": "54"
+                },
+                {
+                    "School": "Union Hill Elementary",
+                    "DOC": "52"
+                },
+                {
+                    "School": "Fairmont Charter Elementary",
+                    "DOC": "54"
+                },
+                {
+                    "School": "College Bridge Academy",
+                    "DOC": "00"
+                },
+                {
+                    "School": "Charter Community School Home Study Academy",
+                    "DOC": "00"
+                }
+            ]
+        ],
+        "spark_error": [
+            null,
+            null,
+            "[DATATYPE_MISMATCH.BINARY_OP_WRONG_TYPE] Cannot resolve \"(Enrollment (K-12) - Enrollment (Ages 5-17))\" due to data type mismatch: the binary operator requires the input type (\"NUMERIC\" or \"INTERVAL DAY TO SECOND\" or \"INTERVAL YEAR TO MONTH\" or \"INTERVAL\"), not \"STRING\". SQLSTATE: 42K09; line 1 pos 11;\n'Project [unresolvedalias('AVG((Enrollment (K-12) - Enrollment (Ages 5-17))))]\n+- Filter (Charter Funding Type = Local)\n   +- SubqueryAlias frpm\n      +- View (`frpm`, [CDSCode#18276, Academic Year#18277, County Code#18278, District Code#18279, School Code#18280, County Name#18281, District Name#18282, School Name#18283, District Type#18284, School Type#18285, Educational Option Type#18286, NSLP Provision Status#18287, Charter School (Y/N)#18288, Charter School Number#18289, Charter Funding Type#18290, IRC#18291, Low Grade#18292, High Grade#18293, Enrollment (K-12)#18294, Free Meal Count (K-12)#18295, Percent (%) Eligible Free (K-12)#18296, FRPM Count (K-12)#18297, Percent (%) Eligible FRPM (K-12)#18298, Enrollment (Ages 5-17)#18299, Free Meal Count (Ages 5-17)#18300, ... 4 more fields])\n         +- Relation [CDSCode#18276,Academic Year#18277,County Code#18278,District Code#18279,School Code#18280,County Name#18281,District Name#18282,School Name#18283,District Type#18284,School Type#18285,Educational Option Type#18286,NSLP Provision Status#18287,Charter School (Y/N)#18288,Charter School Number#18289,Charter Funding Type#18290,IRC#18291,Low Grade#18292,High Grade#18293,Enrollment (K-12)#18294,Free Meal Count (K-12)#18295,Percent (%) Eligible Free (K-12)#18296,FRPM Count (K-12)#18297,Percent (%) Eligible FRPM (K-12)#18298,Enrollment (Ages 5-17)#18299,Free Meal Count (Ages 5-17)#18300,... 4 more fields] JDBCRelation(\"frpm\") [numPartitions=1]\n",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ],
+        "total_time": [
+            10.478360414505005,
+            11.250777959823608,
+            10.459366798400879,
+            14.811610460281372,
+            14.422448873519897,
+            15.098823547363281,
+            13.77942419052124,
+            5.118881702423096,
+            10.983605861663818,
+            13.916701078414917
+        ],
+        "spark_time": [
+            0.059762001037597656,
+            0.07369327545166016,
+            0.16385960578918457,
+            0.047239065170288086,
+            0.39771008491516113,
+            0.08274412155151367,
+            0.07198214530944824,
+            0.09247207641601562,
+            0.09695005416870117,
+            0.06073808670043945
+        ],
+        "translation_time": [
+            10.418598413467407,
+            11.177084684371948,
+            10.295507192611694,
+            14.764371395111084,
+            14.024738788604736,
+            15.016079425811768,
+            13.707442045211792,
+            5.02640962600708,
+            10.886655807495117,
+            13.855962991714478
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        ],
+        "exact_match": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "total_time_avg": 12.032000088691712,
+        "spark_time_avg": 0.11471505165100097,
+        "translation_time_avg": 11.91728503704071,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 0.0,
+        "exact_match_avg": 0.0
+    }
+}

@@ -1,0 +1,83 @@
+
+Execution Plan for: Golden Query ID 892...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'GlobalLimit 1
++- 'LocalLimit 1
+   +- 'Sort ['T2.points DESC NULLS LAST], true
+      +- 'Project ['T3.forename, 'T3.surname, 'T2.points]
+         +- 'Join Inner, ('T3.driverId = 'T2.driverId)
+            :- 'Join Inner, ('T2.raceId = 'T1.raceId)
+            :  :- 'SubqueryAlias T1
+            :  :  +- 'UnresolvedRelation [races], [], false
+            :  +- 'SubqueryAlias T2
+            :     +- 'UnresolvedRelation [driverStandings], [], false
+            +- 'SubqueryAlias T3
+               +- 'UnresolvedRelation [drivers], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+GlobalLimit 1
++- LocalLimit 1
+   +- Sort [points#9278 DESC NULLS LAST], true
+      +- Project [forename#9248, surname#9249, points#9278]
+         +- Join Inner, (driverId#9244 = driverId#9277)
+            :- Project [driverId#9277, points#9278]
+            :  +- Join Inner, (raceId#9276 = raceId#9255)
+            :     :- Project [raceId#9255]
+            :     :  +- Filter isnotnull(raceId#9255)
+            :     :     +- Relation [raceId#9255,year#9256,round#9257,circuitId#9258,name#9259,date#9260,time#9261,url#9262] JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1]
+            :     +- Project [raceId#9276, driverId#9277, points#9278]
+            :        +- Filter (isnotnull(raceId#9276) AND isnotnull(driverId#9277))
+            :           +- Relation [driverStandingsId#9275,raceId#9276,driverId#9277,points#9278,position#9279,positionText#9280,wins#9281] JDBCRelation((SELECT "driverStandingsId", "raceId", "driverId", "points", "position", "positionText", "wins" FROM "driverStandings") AS "driverStandings") [numPartitions=1]
+            +- Project [driverId#9244, forename#9248, surname#9249]
+               +- Filter isnotnull(driverId#9244)
+                  +- Relation [driverId#9244,driverRef#9245,number#9246,code#9247,forename#9248,surname#9249,dob#9250,nationality#9251,url#9252] JDBCRelation((SELECT "driverId", "driverRef", "number", "code", "forename", "surname", CAST("dob" AS TEXT) AS "dob", "nationality", "url" FROM "drivers") AS "drivers") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- TakeOrderedAndProject(limit=1, orderBy=[points#9278 DESC NULLS LAST], output=[forename#9248,surname#9249,points#9278])
+  +- Project [forename#9248, surname#9249, points#9278]
+      +- SortMergeJoin [driverId#9277], [driverId#9244], Inner
+        :- Sort [driverId#9277 ASC NULLS FIRST], false, 0
+        :  +- Exchange hashpartitioning(driverId#9277, 200), ENSURE_REQUIREMENTS, [plan_id=21188]
+        :     +- Project [driverId#9277, points#9278]
+        :        +- SortMergeJoin [raceId#9255], [raceId#9276], Inner
+        :           :- Sort [raceId#9255 ASC NULLS FIRST], false, 0
+        :           :  +- Exchange hashpartitioning(raceId#9255, 200), ENSURE_REQUIREMENTS, [plan_id=21180]
+        :           :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#9255] PushedFilters: [*IsNotNull(raceId)], ReadSchema: struct<raceId:int>
+        :           +- Sort [raceId#9276 ASC NULLS FIRST], false, 0
+        :              +- Exchange hashpartitioning(raceId#9276, 200), ENSURE_REQUIREMENTS, [plan_id=21181]
+        :                 +- Scan JDBCRelation((SELECT "driverStandingsId", "raceId", "driverId", "points", "position", "positionText", "wins" FROM "driverStandings") AS "driverStandings") [numPartitions=1] [raceId#9276,driverId#9277,points#9278] PushedFilters: [*IsNotNull(raceId), *IsNotNull(driverId)], ReadSchema: struct<raceId:int,driverId:int,points:double>
+        +- Sort [driverId#9244 ASC NULLS FIRST], false, 0
+            +- Exchange hashpartitioning(driverId#9244, 200), ENSURE_REQUIREMENTS, [plan_id=21189]
+              +- Scan JDBCRelation((SELECT "driverId", "driverRef", "number", "code", "forename", "surname", CAST("dob" AS TEXT) AS "dob", "nationality", "url" FROM "drivers") AS "drivers") [numPartitions=1] [driverId#9244,forename#9248,surname#9249] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,forename:string,surname:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- TakeOrderedAndProject(limit=1, orderBy=[points#9278 DESC NULLS LAST], output=[forename#9248,surname#9249,points#9278])
+  +- Project [forename#9248, surname#9249, points#9278]
+  +- SortMergeJoin [driverId#9277], [driverId#9244], Inner
+  :- Sort [driverId#9277 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(driverId#9277, 200), ENSURE_REQUIREMENTS, [plan_id=21238]
+  :     +- Project [driverId#9277, points#9278]
+  :        +- SortMergeJoin [raceId#9255], [raceId#9276], Inner
+  :           :- Sort [raceId#9255 ASC NULLS FIRST], false, 0
+  :           :  +- Exchange hashpartitioning(raceId#9255, 200), ENSURE_REQUIREMENTS, [plan_id=21230]
+  :           :     +- Scan JDBCRelation((SELECT "raceId", "year", "round", "circuitId", "name", CAST("date" AS TEXT) AS "date", "time", "url" FROM "races") AS "races") [numPartitions=1] [raceId#9255] PushedFilters: [*IsNotNull(raceId)], ReadSchema: struct<raceId:int>
+  :           +- Sort [raceId#9276 ASC NULLS FIRST], false, 0
+  :              +- Exchange hashpartitioning(raceId#9276, 200), ENSURE_REQUIREMENTS, [plan_id=21231]
+  :                 +- Scan JDBCRelation((SELECT "driverStandingsId", "raceId", "driverId", "points", "position", "positionText", "wins" FROM "driverStandings") AS "driverStandings") [numPartitions=1] [raceId#9276,driverId#9277,points#9278] PushedFilters: [*IsNotNull(raceId), *IsNotNull(driverId)], ReadSchema: struct<raceId:int,driverId:int,points:double>
+  +- Sort [driverId#9244 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(driverId#9244, 200), ENSURE_REQUIREMENTS, [plan_id=21239]
+  +- Scan JDBCRelation((SELECT "driverId", "driverRef", "number", "code", "forename", "surname", CAST("dob" AS TEXT) AS "dob", "nationality", "url" FROM "drivers") AS "drivers") [numPartitions=1] [driverId#9244,forename#9248,surname#9249] PushedFilters: [*IsNotNull(driverId)], ReadSchema: struct<driverId:int,forename:string,surname:string>
+================================================================================

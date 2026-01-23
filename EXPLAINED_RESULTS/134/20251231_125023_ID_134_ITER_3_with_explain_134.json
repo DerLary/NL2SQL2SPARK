@@ -1,0 +1,92 @@
+{
+    "query_id": 134,
+    "difficulty": "simple",
+    "is_initial": true,
+    "nl_query": "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996",
+    "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id GROUP BY T1.A16 ORDER BY T1.A16 DESC LIMIT 1",
+    "sparksql_query": "SELECT district_id FROM district ORDER BY A16 DESC LIMIT 1",
+    "jaccard_index": 0.0,
+    "exact_match": 0,
+    "ground_truth": [
+        {
+            "count(account_id)": 554
+        }
+    ],
+    "query_result": [
+        [
+            "1"
+        ]
+    ],
+    "execution_plans": {
+        "golden_query": "\nExecution Plan for: Golden Query ID 134...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'GlobalLimit 1\n+- 'LocalLimit 1\n   +- 'Sort ['T1.A16 DESC NULLS LAST], true\n      +- 'Aggregate ['T1.A16], [unresolvedalias('COUNT('T2.account_id))]\n         +- 'Join Inner, ('T1.district_id = 'T2.district_id)\n            :- 'SubqueryAlias T1\n            :  +- 'UnresolvedRelation [district], [], false\n            +- 'SubqueryAlias T2\n               +- 'UnresolvedRelation [account], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nGlobalLimit 1\n+- LocalLimit 1\n   +- Project [count(account_id)#4797L]\n      +- Sort [A16#4772 DESC NULLS LAST], true\n         +- Aggregate [A16#4772], [count(account_id#4741) AS count(account_id)#4797L, A16#4772]\n            +- Project [A16#4772, account_id#4741]\n               +- Join Inner, (district_id#4757 = district_id#4742)\n                  :- Project [district_id#4757, A16#4772]\n                  :  +- Filter isnotnull(district_id#4757)\n                  :     +- Relation [district_id#4757,A2#4758,A3#4759,A4#4760,A5#4761,A6#4762,A7#4763,A8#4764,A9#4765,A10#4766,A11#4767,A12#4768,A13#4769,A14#4770,A15#4771,A16#4772] JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1]\n                  +- Project [account_id#4741, district_id#4742]\n                     +- Filter isnotnull(district_id#4742)\n                        +- Relation [account_id#4741,district_id#4742,frequency#4743,date#4744] JDBCRelation((SELECT \"account_id\", \"district_id\", \"frequency\", CAST(\"date\" AS TEXT) AS \"date\" FROM \"account\") AS \"account\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nAdaptiveSparkPlan isFinalPlan=false\n+- TakeOrderedAndProject(limit=1, orderBy=[A16#4772 DESC NULLS LAST], output=[count(account_id)#4797L])\n  +- HashAggregate(keys=[A16#4772], functions=[count(account_id#4741)], output=[count(account_id)#4797L, A16#4772])\n      +- Exchange hashpartitioning(A16#4772, 200), ENSURE_REQUIREMENTS, [plan_id=9821]\n        +- HashAggregate(keys=[A16#4772], functions=[partial_count(account_id#4741)], output=[A16#4772, count#4799L])\n            +- Project [A16#4772, account_id#4741]\n              +- SortMergeJoin [district_id#4757], [district_id#4742], Inner\n                  :- Sort [district_id#4757 ASC NULLS FIRST], false, 0\n                  :  +- Exchange hashpartitioning(district_id#4757, 200), ENSURE_REQUIREMENTS, [plan_id=9813]\n                  :     +- Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int,A16:int>\n                  +- Sort [district_id#4742 ASC NULLS FIRST], false, 0\n                    +- Exchange hashpartitioning(district_id#4742, 200), ENSURE_REQUIREMENTS, [plan_id=9814]\n                        +- Scan JDBCRelation((SELECT \"account_id\", \"district_id\", \"frequency\", CAST(\"date\" AS TEXT) AS \"date\" FROM \"account\") AS \"account\") [numPartitions=1] [account_id#4741,district_id#4742] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  AdaptiveSparkPlan isFinalPlan=false\n  +- TakeOrderedAndProject(limit=1, orderBy=[A16#4772 DESC NULLS LAST], output=[count(account_id)#4805L])\n  +- HashAggregate(keys=[A16#4772], functions=[count(account_id#4741)])\n  +- Exchange hashpartitioning(A16#4772, 200), ENSURE_REQUIREMENTS, [plan_id=9862]\n  +- HashAggregate(keys=[A16#4772], functions=[partial_count(account_id#4741)])\n  +- Project [A16#4772, account_id#4741]\n  +- SortMergeJoin [district_id#4757], [district_id#4742], Inner\n  :- Sort [district_id#4757 ASC NULLS FIRST], false, 0\n  :  +- Exchange hashpartitioning(district_id#4757, 200), ENSURE_REQUIREMENTS, [plan_id=9854]\n  :     +- Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int,A16:int>\n  +- Sort [district_id#4742 ASC NULLS FIRST], false, 0\n  +- Exchange hashpartitioning(district_id#4742, 200), ENSURE_REQUIREMENTS, [plan_id=9855]\n  +- Scan JDBCRelation((SELECT \"account_id\", \"district_id\", \"frequency\", CAST(\"date\" AS TEXT) AS \"date\" FROM \"account\") AS \"account\") [numPartitions=1] [account_id#4741,district_id#4742] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>\n================================================================================",
+        "model_query": "\nExecution Plan for: Model Query ID 134...\n================================================================================\n\n1. Logical plan:\n----------------------------------------\n'GlobalLimit 1\n+- 'LocalLimit 1\n   +- 'Sort ['A16 DESC NULLS LAST], true\n      +- 'Project ['district_id]\n         +- 'UnresolvedRelation [district], [], false\n\n\n2. Optimized logical plan (After Catalyst AFAIK):\n----------------------------------------\nGlobalLimit 1\n+- LocalLimit 1\n   +- Project [district_id#4757]\n      +- Sort [A16#4772 DESC NULLS LAST], true\n         +- Project [district_id#4757, A16#4772]\n            +- Relation [district_id#4757,A2#4758,A3#4759,A4#4760,A5#4761,A6#4762,A7#4763,A8#4764,A9#4765,A10#4766,A11#4767,A12#4768,A13#4769,A14#4770,A15#4771,A16#4772] JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1]\n\n\n3. Physical plan:\n----------------------------------------\nTakeOrderedAndProject(limit=1, orderBy=[A16#4772 DESC NULLS LAST], output=[district_id#4757])\n+- *(1) Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>\n\n4. Explain output:\n----------------------------------------\n\nPhysical Plan ==:\n-----------------\n  TakeOrderedAndProject(limit=1, orderBy=[A16#4772 DESC NULLS LAST], output=[district_id#4757])\n  +- *(1) Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>\n================================================================================"
+    },
+    "result_file_path": "/home/lars/Privat/RWTH/Auslandssemester/#KURSE/Safe Distributed Systems/Exercises/Practical_Exercise/NL2SQL2SPARK/RAW_RESULTS/benchmark_results_20251231_google_06264356/134/20251231_125023_ID_134_ITER_3_0dc1a0b4.json",
+    "explainer_metrics": {
+        "golden_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 3,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 3
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": true,
+            "pushed_filters": [
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int,A16:int>",
+                    "filters": [
+                        "*IsNotNull(district_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"account_id\", \"district_id\", \"frequency\", CAST(\"date\" AS TEXT) AS \"date\" FROM \"account\") AS \"account\") [numPartitions=1] [account_id#4741,district_id#4742] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>",
+                    "filters": [
+                        "*IsNotNull(district_id)"
+                    ]
+                },
+                {
+                    "scan_line": ":     +- Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int,A16:int>",
+                    "filters": [
+                        "*IsNotNull(district_id)"
+                    ]
+                },
+                {
+                    "scan_line": "+- Scan JDBCRelation((SELECT \"account_id\", \"district_id\", \"frequency\", CAST(\"date\" AS TEXT) AS \"date\" FROM \"account\") AS \"account\") [numPartitions=1] [account_id#4741,district_id#4742] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>",
+                    "filters": [
+                        "*IsNotNull(district_id)"
+                    ]
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 2
+        },
+        "model_query": {
+            "shuffle_count": {
+                "Exchange\\s+hashpartitioning\\(": 0,
+                "Exchange\\s+rangepartitioning\\(": 0,
+                "Exchange\\s+SinglePartition": 0,
+                "ShuffleExchange": 0,
+                "TOTAL": 0
+            },
+            "has_broadcast_join": false,
+            "has_predicate_pushdown": false,
+            "pushed_filters": [
+                {
+                    "scan_line": "+- *(1) Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>",
+                    "filters": []
+                },
+                {
+                    "scan_line": "+- *(1) Scan JDBCRelation((SELECT \"district_id\", \"A2\", \"A3\", \"A4\", \"A5\", \"A6\", \"A7\", \"A8\", \"A9\", \"A10\", \"A11\", \"A12\", \"A13\", \"A14\", \"A15\", \"A16\" FROM \"district\") AS \"district\") [numPartitions=1] [district_id#4757,A16#4772] PushedFilters: [], ReadSchema: struct<district_id:int,A16:int>",
+                    "filters": []
+                }
+            ],
+            "filter_count_before_optimization": 0,
+            "filter_count_after_optimization": 0
+        },
+        "plan_equivalence": {
+            "golden_vs_model_physical_equivalent": false
+        }
+    }
+}

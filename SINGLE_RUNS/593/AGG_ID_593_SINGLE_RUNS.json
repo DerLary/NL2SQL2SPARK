@@ -1,0 +1,79 @@
+{
+    "google_593": {
+        "llm": "google",
+        "query_id": 593,
+        "nl_query": null,
+        "golden_query": "SELECT COUNT(DISTINCT T1.Id) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name IN ('Supporter', 'Teacher') AND T2.Location = 'New York'",
+        "sparksql_query": [
+            "SELECT COUNT(b.Id) FROM badges AS b JOIN users AS u ON b.UserId = u.Id WHERE b.Name IN ('Teacher', 'Supporter') AND u.Location = 'New York'",
+            "SELECT COUNT(DISTINCT T1.Id) FROM badges AS T1 JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name IN ('Teacher', 'Supporter') AND T2.Location = 'New York'"
+        ],
+        "difficulty": "simple",
+        "execution_status": [
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "9"
+                ]
+            ],
+            [
+                [
+                    "9"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ],
+            [
+                {
+                    "count(DISTINCT Id)": 9
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "How many badge records (badge in (Teacher,Supporter)) belong to users from New York? Supporter and Teachers are both Name of badge; \u2019New York\u2019 is the Location; user refers to UserId. ",
+            "How many distinct badge records (badge in (Teacher,Supporter)) belong to users from New York? Supporter and Teachers are both Name of badge; \u2019New York\u2019 is the Location; user refers to UserId. "
+        ],
+        "spark_error": [
+            null,
+            null
+        ],
+        "total_time": [
+            18.151243686676025,
+            13.02477741241455
+        ],
+        "spark_time": [
+            0.9953324794769287,
+            1.089123010635376
+        ],
+        "translation_time": [
+            17.155911207199097,
+            11.935654401779175
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            0,
+            1
+        ],
+        "total_time_avg": 15.588010549545288,
+        "spark_time_avg": 1.0422277450561523,
+        "translation_time_avg": 14.545782804489136,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.5
+    }
+}

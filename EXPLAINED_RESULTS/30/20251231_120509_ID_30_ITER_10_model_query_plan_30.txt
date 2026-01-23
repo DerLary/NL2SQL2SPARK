@@ -1,0 +1,9 @@
+
+Execution Plan for: Model Query ID 30...
+================================================================================
+Could not create DataFrame for the query: 
+[PARSE_SYNTAX_ERROR] Syntax error at or near '"Enrollment (K-12)"'. SQLSTATE: 42601 (line 1, pos 21)
+
+== SQL ==
+SELECT s.City, SUM(f."Enrollment (K-12)") AS TotalEnrollmentK12 FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode WHERE f."Enrollment (K-12)" IS NOT NULL GROUP BY s.City ORDER BY TotalEnrollmentK12 ASC LIMIT 5;
+---------------------^^^

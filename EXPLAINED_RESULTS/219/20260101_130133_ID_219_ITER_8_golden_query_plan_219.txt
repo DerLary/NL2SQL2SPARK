@@ -1,0 +1,88 @@
+
+Execution Plan for: Golden Query ID 219...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias(((cast('COUNT(distinct CASE WHEN ('T2.label = +) THEN 'T2.molecule_id ELSE null END) as float) * 100) / 'COUNT(distinct 'T2.molecule_id)))]
++- 'Filter ('T3.bond_type = #)
+   +- 'Join Inner, ('T2.molecule_id = 'T3.molecule_id)
+      :- 'Join Inner, ('T1.molecule_id = 'T2.molecule_id)
+      :  :- 'SubqueryAlias T1
+      :  :  +- 'UnresolvedRelation [atom], [], false
+      :  +- 'SubqueryAlias T2
+      :     +- 'UnresolvedRelation [molecule], [], false
+      +- 'SubqueryAlias T3
+         +- 'UnresolvedRelation [bond], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [((cast(count(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901) FILTER (WHERE (gid#31900 = 1)) as double) * 100.0) / cast(count(T2.molecule_id#31902) FILTER (WHERE (gid#31900 = 2)) as double)) AS ((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))#31899]
++- Aggregate [CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900], [CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900]
+   +- Expand [[CASE WHEN (label#31896 = +) THEN molecule_id#31895 END, null, 1], [null, molecule_id#31895, 2]], [CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900]
+      +- Project [molecule_id#31895, label#31896]
+         +- Join Inner, (molecule_id#31895 = molecule_id#31890)
+            :- Project [molecule_id#31895, label#31896]
+            :  +- Join Inner, (molecule_id#31887 = molecule_id#31895)
+            :     :- Project [molecule_id#31887]
+            :     :  +- Filter isnotnull(molecule_id#31887)
+            :     :     +- Relation [atom_id#31886,molecule_id#31887,element#31888] JDBCRelation((SELECT "atom_id", "molecule_id", "element" FROM "atom") AS "atom") [numPartitions=1]
+            :     +- Filter isnotnull(molecule_id#31895)
+            :        +- Relation [molecule_id#31895,label#31896] JDBCRelation((SELECT "molecule_id", "label" FROM "molecule") AS "molecule") [numPartitions=1]
+            +- Project [molecule_id#31890]
+               +- Filter ((isnotnull(bond_type#31891) AND (bond_type#31891 = #)) AND isnotnull(molecule_id#31890))
+                  +- Relation [bond_id#31889,molecule_id#31890,bond_type#31891] JDBCRelation((SELECT "bond_id", "molecule_id", "bond_type" FROM "bond") AS "bond") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[count(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901), count(T2.molecule_id#31902)], output=[((CAST(count(DISTINCT CASE WHEN (label = +) THEN molecule_id ELSE NULL END) AS FLOAT) * 100) / count(DISTINCT molecule_id))#31899])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=54921]
+      +- HashAggregate(keys=[], functions=[partial_count(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901) FILTER (WHERE (gid#31900 = 1)), partial_count(T2.molecule_id#31902) FILTER (WHERE (gid#31900 = 2))], output=[count#31905L, count#31906L])
+        +- HashAggregate(keys=[CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900], functions=[], output=[CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900])
+            +- Exchange hashpartitioning(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900, 200), ENSURE_REQUIREMENTS, [plan_id=54917]
+              +- HashAggregate(keys=[CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900], functions=[], output=[CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900])
+                  +- Expand [[CASE WHEN (label#31896 = +) THEN molecule_id#31895 END, null, 1], [null, molecule_id#31895, 2]], [CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31901, T2.molecule_id#31902, gid#31900]
+                    +- Project [molecule_id#31895, label#31896]
+                        +- SortMergeJoin [molecule_id#31895], [molecule_id#31890], Inner
+                          :- Project [molecule_id#31895, label#31896]
+                          :  +- SortMergeJoin [molecule_id#31887], [molecule_id#31895], Inner
+                          :     :- Sort [molecule_id#31887 ASC NULLS FIRST], false, 0
+                          :     :  +- Exchange hashpartitioning(molecule_id#31887, 200), ENSURE_REQUIREMENTS, [plan_id=54902]
+                          :     :     +- Scan JDBCRelation((SELECT "atom_id", "molecule_id", "element" FROM "atom") AS "atom") [numPartitions=1] [molecule_id#31887] PushedFilters: [*IsNotNull(molecule_id)], ReadSchema: struct<molecule_id:string>
+                          :     +- Sort [molecule_id#31895 ASC NULLS FIRST], false, 0
+                          :        +- Exchange hashpartitioning(molecule_id#31895, 200), ENSURE_REQUIREMENTS, [plan_id=54903]
+                          :           +- Scan JDBCRelation((SELECT "molecule_id", "label" FROM "molecule") AS "molecule") [numPartitions=1] [molecule_id#31895,label#31896] PushedFilters: [*IsNotNull(molecule_id)], ReadSchema: struct<molecule_id:string,label:string>
+                          +- Sort [molecule_id#31890 ASC NULLS FIRST], false, 0
+                              +- Exchange hashpartitioning(molecule_id#31890, 200), ENSURE_REQUIREMENTS, [plan_id=54910]
+                                +- Scan JDBCRelation((SELECT "bond_id", "molecule_id", "bond_type" FROM "bond") AS "bond") [numPartitions=1] [molecule_id#31890] PushedFilters: [*IsNotNull(bond_type), *EqualTo(bond_type,#), *IsNotNull(molecule_id)], ReadSchema: struct<molecule_id:string>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[count(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31915), count(T2.molecule_id#31916)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=55001]
+  +- HashAggregate(keys=[], functions=[partial_count(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31915) FILTER (WHERE (gid#31914 = 1)), partial_count(T2.molecule_id#31916) FILTER (WHERE (gid#31914 = 2))])
+  +- HashAggregate(keys=[CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31915, T2.molecule_id#31916, gid#31914], functions=[])
+  +- Exchange hashpartitioning(CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31915, T2.molecule_id#31916, gid#31914, 200), ENSURE_REQUIREMENTS, [plan_id=54997]
+  +- HashAggregate(keys=[CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31915, T2.molecule_id#31916, gid#31914], functions=[])
+  +- Expand [[CASE WHEN (label#31896 = +) THEN molecule_id#31895 END, null, 1], [null, molecule_id#31895, 2]], [CASE WHEN (T2.label = '+') THEN T2.molecule_id END#31915, T2.molecule_id#31916, gid#31914]
+  +- Project [molecule_id#31895, label#31896]
+  +- SortMergeJoin [molecule_id#31895], [molecule_id#31890], Inner
+  :- Project [molecule_id#31895, label#31896]
+  :  +- SortMergeJoin [molecule_id#31887], [molecule_id#31895], Inner
+  :     :- Sort [molecule_id#31887 ASC NULLS FIRST], false, 0
+  :     :  +- Exchange hashpartitioning(molecule_id#31887, 200), ENSURE_REQUIREMENTS, [plan_id=54982]
+  :     :     +- Scan JDBCRelation((SELECT "atom_id", "molecule_id", "element" FROM "atom") AS "atom") [numPartitions=1] [molecule_id#31887] PushedFilters: [*IsNotNull(molecule_id)], ReadSchema: struct<molecule_id:string>
+  :     +- Sort [molecule_id#31895 ASC NULLS FIRST], false, 0
+  :        +- Exchange hashpartitioning(molecule_id#31895, 200), ENSURE_REQUIREMENTS, [plan_id=54983]
+  :           +- Scan JDBCRelation((SELECT "molecule_id", "label" FROM "molecule") AS "molecule") [numPartitions=1] [molecule_id#31895,label#31896] PushedFilters: [*IsNotNull(molecule_id)], ReadSchema: struct<molecule_id:string,label:string>
+  +- Sort [molecule_id#31890 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(molecule_id#31890, 200), ENSURE_REQUIREMENTS, [plan_id=54990]
+  +- Scan JDBCRelation((SELECT "bond_id", "molecule_id", "bond_type" FROM "bond") AS "bond") [numPartitions=1] [molecule_id#31890] PushedFilters: [*IsNotNull(bond_type), *EqualTo(bond_type,#), *IsNotNull(molecule_id)], ReadSchema: struct<molecule_id:string>
+================================================================================

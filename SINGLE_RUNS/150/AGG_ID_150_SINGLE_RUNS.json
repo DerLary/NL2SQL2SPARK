@@ -1,0 +1,79 @@
+{
+    "google_150": {
+        "llm": "google",
+        "query_id": 150,
+        "nl_query": null,
+        "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T3.bank = 'AB' AND T1.A3 = 'north Bohemia'",
+        "sparksql_query": [
+            "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T1.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+            "SELECT COUNT(T3.trans_id) FROM district AS T1 JOIN account AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T1.A3 = 'north Bohemia' AND T3.bank = 'AB'"
+        ],
+        "difficulty": "moderate",
+        "execution_status": [
+            "VALID",
+            "VALID"
+        ],
+        "query_result": [
+            [
+                [
+                    "2260"
+                ]
+            ],
+            [
+                [
+                    "2260"
+                ]
+            ]
+        ],
+        "ground_truth": [
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ],
+            [
+                {
+                    "count(account_id)": 2260
+                }
+            ]
+        ],
+        "used_hil_query": [
+            "How many transactions of accounts in North Bohemia has made a transaction with the partner\u2019s bank being AB? A3 contains the region names; 'north Bohemia' is a region. First join district with account and then trans. Return the total (not distinct) account ids.",
+            "How many transactions of accounts in North Bohemia has made a transaction with the partner\u2019s bank being AB? A3 contains the region names; 'north Bohemia' is a region. Give the total (not distinct) account ids. First join district with account and then trans."
+        ],
+        "spark_error": [
+            null,
+            null
+        ],
+        "total_time": [
+            14.895055532455444,
+            11.755603551864624
+        ],
+        "spark_time": [
+            0.565833330154419,
+            0.7614200115203857
+        ],
+        "translation_time": [
+            14.329222202301025,
+            10.994183540344238
+        ],
+        "jaccard_index": [
+            0.0,
+            0.0
+        ],
+        "jaccard_index_new": [
+            1.0,
+            1.0
+        ],
+        "exact_match": [
+            1,
+            0
+        ],
+        "total_time_avg": 13.325329542160034,
+        "spark_time_avg": 0.6636266708374023,
+        "translation_time_avg": 12.661702871322632,
+        "jaccard_index_avg": 0.0,
+        "jaccard_index_new_avg": 1.0,
+        "exact_match_avg": 0.5
+    }
+}

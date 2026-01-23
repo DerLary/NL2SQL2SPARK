@@ -1,0 +1,61 @@
+
+Execution Plan for: Golden Query ID 1223...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project [unresolvedalias(CASE WHEN ('SUM(CASE WHEN ('T1.SEX = M) THEN 1 ELSE 0 END) > 'SUM(CASE WHEN ('T1.SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END)]
++- 'Filter ('T2.CRE >= 1.5)
+   +- 'Join Inner, ('T1.ID = 'T2.ID)
+      :- 'SubqueryAlias T1
+      :  +- 'UnresolvedRelation [Patient], [], false
+      +- 'SubqueryAlias T2
+         +- 'UnresolvedRelation [Laboratory], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Aggregate [CASE WHEN (sum(CASE WHEN (SEX#31174 = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX#31174 = F) THEN 1 ELSE 0 END)) THEN True ELSE False END AS CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END#31226]
++- Project [SEX#31174]
+   +- Join Inner, (ID#31173 = ID#31180)
+      :- Project [ID#31173, SEX#31174]
+      :  +- Filter isnotnull(ID#31173)
+      :     +- Relation [ID#31173,SEX#31174,Birthday#31175,Description#31176,First Date#31177,Admission#31178,Diagnosis#31179] JDBCRelation((SELECT "ID", "SEX", CAST("Birthday" AS TEXT) AS "Birthday", CAST("Description" AS TEXT) AS "Description", CAST("First Date" AS TEXT) AS "First Date", "Admission", "Diagnosis" FROM "Patient") AS "Patient") [numPartitions=1]
+      +- Project [ID#31180]
+         +- Filter ((isnotnull(CRE#31190) AND (CRE#31190 >= 1.5)) AND isnotnull(ID#31180))
+            +- Relation [ID#31180,Date#31181,GOT#31182,GPT#31183,LDH#31184,ALP#31185,TP#31186,ALB#31187,UA#31188,UN#31189,CRE#31190,T-BIL#31191,T-CHO#31192,TG#31193,CPK#31194,GLU#31195,WBC#31196,RBC#31197,HGB#31198,HCT#31199,PLT#31200,PT#31201,APTT#31202,FG#31203,PIC#31204,... 19 more fields] JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[], functions=[sum(CASE WHEN (SEX#31174 = M) THEN 1 ELSE 0 END), sum(CASE WHEN (SEX#31174 = F) THEN 1 ELSE 0 END)], output=[CASE WHEN (sum(CASE WHEN (SEX = M) THEN 1 ELSE 0 END) > sum(CASE WHEN (SEX = F) THEN 1 ELSE 0 END)) THEN True ELSE False END#31226])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=52609]
+      +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (SEX#31174 = M) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (SEX#31174 = F) THEN 1 ELSE 0 END)], output=[sum#31229L, sum#31230L])
+        +- Project [SEX#31174]
+            +- SortMergeJoin [ID#31173], [ID#31180], Inner
+              :- Sort [ID#31173 ASC NULLS FIRST], false, 0
+              :  +- Exchange hashpartitioning(ID#31173, 200), ENSURE_REQUIREMENTS, [plan_id=52601]
+              :     +- Scan JDBCRelation((SELECT "ID", "SEX", CAST("Birthday" AS TEXT) AS "Birthday", CAST("Description" AS TEXT) AS "Description", CAST("First Date" AS TEXT) AS "First Date", "Admission", "Diagnosis" FROM "Patient") AS "Patient") [numPartitions=1] [ID#31173,SEX#31174] PushedFilters: [*IsNotNull(ID)], ReadSchema: struct<ID:int,SEX:string>
+              +- Sort [ID#31180 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(ID#31180, 200), ENSURE_REQUIREMENTS, [plan_id=52602]
+                    +- Scan JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1] [ID#31180] PushedFilters: [*IsNotNull(CRE), *GreaterThanOrEqual(CRE,1.5), *IsNotNull(ID)], ReadSchema: struct<ID:int>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- HashAggregate(keys=[], functions=[sum(CASE WHEN (SEX#31174 = M) THEN 1 ELSE 0 END), sum(CASE WHEN (SEX#31174 = F) THEN 1 ELSE 0 END)])
+  +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=52652]
+  +- HashAggregate(keys=[], functions=[partial_sum(CASE WHEN (SEX#31174 = M) THEN 1 ELSE 0 END), partial_sum(CASE WHEN (SEX#31174 = F) THEN 1 ELSE 0 END)])
+  +- Project [SEX#31174]
+  +- SortMergeJoin [ID#31173], [ID#31180], Inner
+  :- Sort [ID#31173 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(ID#31173, 200), ENSURE_REQUIREMENTS, [plan_id=52644]
+  :     +- Scan JDBCRelation((SELECT "ID", "SEX", CAST("Birthday" AS TEXT) AS "Birthday", CAST("Description" AS TEXT) AS "Description", CAST("First Date" AS TEXT) AS "First Date", "Admission", "Diagnosis" FROM "Patient") AS "Patient") [numPartitions=1] [ID#31173,SEX#31174] PushedFilters: [*IsNotNull(ID)], ReadSchema: struct<ID:int,SEX:string>
+  +- Sort [ID#31180 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(ID#31180, 200), ENSURE_REQUIREMENTS, [plan_id=52645]
+  +- Scan JDBCRelation((SELECT "ID", CAST("Date" AS TEXT) AS "Date", "GOT", "GPT", "LDH", "ALP", "TP", "ALB", "UA", "UN", "CRE", "T-BIL", "T-CHO", "TG", "CPK", "GLU", "WBC", "RBC", "HGB", "HCT", "PLT", "PT", "APTT", "FG", "PIC", "TAT", "TAT2", "U-PRO", "IGG", "IGA", "IGM", "CRP", "RA", "RF", "C3", "C4", "RNP", "SM", "SC170", "SSA", "SSB", "CENTROMEA", "DNA", "DNA-II" FROM "Laboratory") AS "Laboratory") [numPartitions=1] [ID#31180] PushedFilters: [*IsNotNull(CRE), *GreaterThanOrEqual(CRE,1.5), *IsNotNull(ID)], ReadSchema: struct<ID:int>
+================================================================================

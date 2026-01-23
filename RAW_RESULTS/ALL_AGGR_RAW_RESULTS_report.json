@@ -1,0 +1,272 @@
+[
+  {
+    "query_id": 30,
+    "difficulty": "simple",
+    "nl_query": "Which cities have the top 5 lowest enrollment number for students in grades 1 through 12? K-12 refers to students in grades 1 through 12.",
+    "golden_query": "SELECT T2.City FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode GROUP BY T2.City ORDER BY SUM(T1.`Enrollment (K-12)`) ASC LIMIT 5",
+    "sparksql_query": "SELECT s.City, SUM(f.`Enrollment (K-12)`) AS TotalEnrollment FROM frpm AS f JOIN schools AS s ON f.CDSCode = s.CDSCode GROUP BY s.City ORDER BY TotalEnrollment ASC LIMIT 5",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 134,
+    "difficulty": "simple",
+    "nl_query": "In the branch where the largest number of crimes were committed in 1996, how many accounts were opened? A16 stands for no. of committed crimes 1996",
+    "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id GROUP BY T1.A16 ORDER BY T1.A16 DESC LIMIT 1",
+    "sparksql_query": "SELECT COUNT(account_id) FROM account WHERE district_id = (SELECT district_id FROM district ORDER BY `A16` DESC LIMIT 1)",
+    "jaccard_index_new_avg": "0.7",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 593,
+    "difficulty": "simple",
+    "nl_query": "How many users from New York have a teacher and supporter badge? \"Supporter\" and \"Teachers\" are both Name of badge; 'New York' is the Location; user refers to UserId",
+    "golden_query": "SELECT COUNT(DISTINCT T1.Id) FROM badges AS T1 INNER JOIN users AS T2 ON T1.UserId = T2.Id WHERE T1.Name IN ('Supporter', 'Teacher') AND T2.Location = 'New York'",
+    "sparksql_query": "SELECT COUNT(DISTINCT `u`.`Id`) FROM `users` AS `u` JOIN `badges` AS `b_supporter` ON `u`.`Id` = `b_supporter`.`UserId` JOIN `badges` AS `b_teacher` ON `u`.`Id` = `b_teacher`.`UserId` WHERE `u`.`Location` = 'New York' AND `b_supporter`.`Name` = 'Supporter' AND `b_teacher`.`Name` = 'Teachers';",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 776,
+    "difficulty": "simple",
+    "nl_query": "Provide the hero name and race of Charles Chandler. hero name refers to superhero_name; Charles Chandler is the full name of superhero;",
+    "golden_query": "SELECT T1.superhero_name, T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+    "sparksql_query": "SELECT T1.superhero_name, T2.race FROM superhero AS T1 JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.full_name = 'Charles Chandler'",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "1.0"
+  },
+  {
+    "query_id": 778,
+    "difficulty": "simple",
+    "nl_query": "Provide superheroes' names who have the adaptation power. adaptation power refers to power_name = 'Adaptation';",
+    "golden_query": "SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T3.power_name = 'Adaptation'",
+    "sparksql_query": "SELECT s.superhero_name FROM superhero AS s JOIN hero_power AS hp ON s.id = hp.hero_id JOIN superpower AS sp ON hp.power_id = sp.id WHERE sp.power_name = 'Adaptation'",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "0.7"
+  },
+  {
+    "query_id": 983,
+    "difficulty": "simple",
+    "nl_query": "Which of the Italian constructor got the highest point to date? Give its introduction website? introduction website refers to url; Italian is a nationality",
+    "golden_query": "SELECT T1.url FROM constructors AS T1 INNER JOIN constructorStandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' ORDER BY T2.points DESC LIMIT 1",
+    "sparksql_query": "SELECT T1.name, T1.url, SUM(T2.points) AS total_points FROM constructors AS T1 JOIN constructorstandings AS T2 ON T1.constructorId = T2.constructorId WHERE T1.nationality = 'Italian' GROUP BY T1.name, T1.url ORDER BY total_points DESC LIMIT 1",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 1326,
+    "difficulty": "simple",
+    "nl_query": "How many members of the Student_Club have majored Environmental Engineering?\n 'Environmental Engineering' is the major name",
+    "golden_query": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+    "sparksql_query": "SELECT COUNT(T1.member_id) FROM member AS T1 JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.major_name = 'Environmental Engineering'",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "1.0"
+  },
+  {
+    "query_id": 1374,
+    "difficulty": "simple",
+    "nl_query": "How many events did the member with the phone number \"954-555-6240\" attend? ",
+    "golden_query": "SELECT COUNT(T2.link_to_event) FROM member AS T1 INNER JOIN attendance AS T2 ON T1.member_id = T2.link_to_member WHERE T1.phone = '954-555-6240'",
+    "sparksql_query": "\nSELECT\n  COUNT(T2.link_to_event)\nFROM member AS T1\nINNER JOIN attendance AS T2\n  ON T1.member_id = T2.link_to_member\nWHERE\n  T1.phone = '954-555-6240';\n",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "1.0"
+  },
+  {
+    "query_id": 1385,
+    "difficulty": "simple",
+    "nl_query": "Which student was able to generate income more than $40? name of students means the full name; full name refers to first_name, last_name; generate income more than $50 refers to income.amount > 40",
+    "golden_query": "SELECT T1.first_name, T1.last_name FROM member AS T1 INNER JOIN income AS T2 ON T1.member_id = T2.link_to_member WHERE T2.amount > 40",
+    "sparksql_query": "SELECT CONCAT(m.first_name, ' ', m.last_name) AS full_name FROM member AS m JOIN income AS i ON m.member_id = i.link_to_member WHERE i.amount > 40",
+    "jaccard_index_new_avg": "0.5",
+    "exact_match_avg": "0.2"
+  },
+  {
+    "query_id": 1532,
+    "difficulty": "simple",
+    "nl_query": "Which country had the gas station that sold the most expensive product id No.2 for one unit? ",
+    "golden_query": "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price DESC LIMIT 1",
+    "sparksql_query": "SELECT T2.Country FROM transactions_1k AS T1 INNER JOIN gasstations AS T2 ON T1.GasStationID = T2.GasStationID WHERE T1.ProductID = 2 ORDER BY T1.Price / T1.Amount DESC LIMIT 1",
+    "jaccard_index_new_avg": "None",
+    "exact_match_avg": "None"
+  },
+  {
+    "query_id": 48,
+    "difficulty": "moderate",
+    "nl_query": "What is the ratio of merged Unified School District schools in Orange County to merged Elementary School District schools? Elementary School District refers to DOC = 52; Unified School District refers to DOC = 54.",
+    "golden_query": "SELECT CAST(SUM(CASE WHEN DOC = 54 THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN DOC = 52 THEN 1 ELSE 0 END) FROM schools WHERE StatusType = 'Merged' AND County = 'Orange'",
+    "sparksql_query": "SELECT CAST(SUM(CASE WHEN DOC = '54' THEN 1 ELSE 0 END) AS REAL) / SUM(CASE WHEN DOC = '52' THEN 1 ELSE 0 END) FROM schools WHERE County = 'Orange County'",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 150,
+    "difficulty": "moderate",
+    "nl_query": "How many accounts in North Bohemia has made a transaction with the partner's bank being AB? A3 contains the region names; North Bohemia is a region.",
+    "golden_query": "SELECT COUNT(T2.account_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T3.bank = 'AB' AND T1.A3 = 'north Bohemia'",
+    "sparksql_query": "SELECT COUNT(DISTINCT T1.account_id) FROM account AS T1 JOIN district AS T2 ON T1.district_id = T2.district_id JOIN trans AS T3 ON T1.account_id = T3.account_id WHERE T2.A3 = 'north Bohemia' AND T3.bank = 'AB'",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 168,
+    "difficulty": "moderate",
+    "nl_query": "What percentage of clients who opened their accounts in the district with an average salary of over 10000 are women? Female refers to gender = 'F'; Woman and female are closed; Average salary can be found in A11",
+    "golden_query": "SELECT CAST(SUM(CASE WHEN T2.gender = 'F' THEN 1 ELSE 0 END) AS FLOAT) * 100 / COUNT(T2.client_id) FROM district AS T1 INNER JOIN client AS T2 ON T1.district_id = T2.district_id WHERE T1.A11 > 10000",
+    "sparksql_query": "SELECT CAST(SUM(CASE WHEN T3.gender = 'F' THEN 1 ELSE 0 END) AS DOUBLE) * 100 / COUNT(T3.client_id) FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id INNER JOIN client AS T3 ON T2.district_id = T3.district_id WHERE T1.A11 > 10000;",
+    "jaccard_index_new_avg": "0.3",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 544,
+    "difficulty": "moderate",
+    "nl_query": "What is the display name of the user who last edited the post \"Examples for teaching: Correlation does not mean causation\"? \"Examples for teaching: Correlation does not mean causation\" is the Title of post; user who last edited refers to LastEditorUserId",
+    "golden_query": "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+    "sparksql_query": "SELECT T2.DisplayName FROM posts AS T1 INNER JOIN users AS T2 ON T1.LastEditorUserId = T2.Id WHERE T1.Title = 'Examples for teaching: Correlation does not mean causation'",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "0.9"
+  },
+  {
+    "query_id": 557,
+    "difficulty": "moderate",
+    "nl_query": "Among the posts with a score of over 5, what is the percentage of them being owned by an elder user? score of over 5 refers to Score > 5; elder user refers to Age > 65; percentage = Divide (Count(Id where Age>65), Count(Id)) * 100",
+    "golden_query": "SELECT CAST(SUM(IF(T2.Age > 65, 1, 0)) AS FLOAT) * 100 / COUNT(T1.Id) FROM posts AS T1 INNER JOIN users AS T2 ON T1.OwnerUserId = T2.Id WHERE T1.Score > 5",
+    "sparksql_query": "SELECT (SUM(CASE WHEN T2.`Age` > 65 THEN 1 ELSE 0 END) * 100.0) / COUNT(T1.`Id`) FROM `posts` AS T1 INNER JOIN `users` AS T2 ON T1.`OwnerUserId` = T2.`Id` WHERE T1.`Score` > 5;",
+    "jaccard_index_new_avg": "0.2",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 845,
+    "difficulty": "moderate",
+    "nl_query": "List the power of superheroes with height greater than 80% of the average height of all superheroes. power of superheroes refers to power_name; height greater than 80% of the average height of all superheroes = height_cm > MULTIPLY(AVG(height_cm), 0.8);",
+    "golden_query": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm * 100 > (SELECT AVG(height_cm) FROM superhero) * 80",
+    "sparksql_query": "SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id INNER JOIN superpower AS T3 ON T2.power_id = T3.id WHERE T1.height_cm > (SELECT AVG(height_cm) * 0.8 FROM superhero)",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 879,
+    "difficulty": "moderate",
+    "nl_query": "For the driver who set the fastest lap speed, what is his nationality? the fastest lap speed refers to (MAX) fastestLapSpeed;",
+    "golden_query": "SELECT T1.nationality FROM drivers AS T1 INNER JOIN results AS T2 ON T2.driverId = T1.driverId ORDER BY T2.fastestLapSpeed DESC LIMIT 1",
+    "sparksql_query": "SELECT T2.nationality FROM results AS T1 INNER JOIN drivers AS T2 ON T1.driverId = T2.driverId ORDER BY CAST(T1.fastestLapSpeed AS DOUBLE) DESC LIMIT 1",
+    "jaccard_index_new_avg": "0.8",
+    "exact_match_avg": "0.8"
+  },
+  {
+    "query_id": 892,
+    "difficulty": "moderate",
+    "nl_query": "State the driver with the most points scored. Find his full name with that points. the most points scored refers to max(points); Full name of the driver refers to drivers.forename and drivers.surname;",
+    "golden_query": "SELECT T3.forename, T3.surname, T2.points FROM races AS T1 INNER JOIN driverStandings AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId ORDER BY T2.points DESC LIMIT 1",
+    "sparksql_query": "SELECT d.forename, d.surname, ds.points FROM drivers AS d JOIN driverstandings AS ds ON d.driverId = ds.driverId ORDER BY ds.points DESC LIMIT 1;",
+    "jaccard_index_new_avg": "0.9",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 895,
+    "difficulty": "moderate",
+    "nl_query": "What is the average lap time for Lewis Hamilton in the 2009 Malaysian Grand Prix? average lap time = AVG(milliseconds); 'Lewis Hamilton' refers to the full name of the driver; Full name of the driver refers to drivers.forename and drivers.surname; 'Malaysian Grand Prix' refers to races.name = 'Malaysian Grand Prix'",
+    "golden_query": "SELECT AVG(T2.milliseconds) FROM races AS T1 INNER JOIN lapTimes AS T2 ON T2.raceId = T1.raceId INNER JOIN drivers AS T3 ON T3.driverId = T2.driverId WHERE T3.forename = 'Lewis' AND T3.surname = 'Hamilton' AND T1.year = 2009 AND T1.name = 'Malaysian Grand Prix'",
+    "sparksql_query": "SELECT AVG(lt.milliseconds) FROM laptimes lt JOIN drivers d ON lt.driverId = d.driverId JOIN races r ON lt.raceId = r.raceId WHERE d.forename = 'Lewis' AND d.surname = 'Hamilton' AND r.name = 'Malaysian Grand Prix' AND r.year = 2009",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "1.0"
+  },
+  {
+    "query_id": 1212,
+    "difficulty": "moderate",
+    "nl_query": "For patients with alkaliphophatase (ALP) within normal range, were they treated as inpatient or outpatient? alkaliphophatase (ALP) within normal range refers to ALP < 300; inpatient refers to admission = '+'; outpatient refers to admission = '-'",
+    "golden_query": "SELECT T1.Admission FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.ALP < 300",
+    "sparksql_query": "SELECT T1.Admission, COUNT(T1.Admission) FROM patient AS T1 JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.ALP < 300 GROUP BY T1.Admission;",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 28,
+    "difficulty": "challenging",
+    "nl_query": "Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that are locally funded, list the names and DOC type of schools which has a difference above this average. Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)` - `Enrollment (Ages 5-17)`",
+    "golden_query": "SELECT T2.School, T2.DOC FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.FundingType = 'Locally funded' AND (T1.`Enrollment (K-12)` - T1.`Enrollment (Ages 5-17)`) > (SELECT AVG(T3.`Enrollment (K-12)` - T3.`Enrollment (Ages 5-17)`) FROM frpm AS T3 INNER JOIN schools AS T4 ON T3.CDSCode = T4.CDSCode WHERE T4.FundingType = 'Locally funded')",
+    "sparksql_query": "SELECT AVG(T2.`Enrollment (K-12)` - T2.`Enrollment (Ages 5-17)`) FROM schools AS T1 INNER JOIN frpm AS T2 ON T1.CDSCode = T2.CDSCode WHERE T1.FundingType = 'Local'",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 83,
+    "difficulty": "challenging",
+    "nl_query": "Of the schools that offers a magnet program serving a grade span of Kindergarten to 8th grade, how many offers Multiple Provision Types? List the number of cities that offers a Kindergarten to 8th grade span and indicate how many schools are there serving such grade span for each city. Kindergarten to 8th grade refers to K-8; 'Offers a magnet program' means Magnet = 1; Multiple Provision Types refers to `NSLP Provision Status` = 'Multiple Provision Types'",
+    "golden_query": "SELECT T2.City, COUNT(T2.CDSCode) FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.Magnet = 1 AND T2.GSoffered = 'K-8' AND T1.`NSLP Provision Status` = 'Multiple Provision Types' GROUP BY T2.City",
+    "sparksql_query": "SELECT DISTINCT GSserved FROM schools LIMIT 10",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 125,
+    "difficulty": "challenging",
+    "nl_query": "For loans contracts which are still running where client are in debt, list the district of the and the state the percentage unemployment rate increment from year 1995 to 1996. Unemployment increment rate in percentage = [(unemployment rate 2016 - unemployment rate 2015) / unemployment rate 2015] * 100; unemployment rate 2015 appears in the A12; unemployment rate 2016 appears in the A13; Loan contracts which are still running where client are in debt can be presented as status = 'D'",
+    "golden_query": "SELECT CAST((T3.A13 - T3.A12) AS FLOAT) * 100 / T3.A12 FROM loan AS T1 INNER JOIN account AS T2 ON T1.account_id = T2.account_id INNER JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+    "sparksql_query": "SELECT T3.A3 AS district_name, T3.A2 AS state_region, ((CAST(T3.A13 AS DOUBLE) - T3.A12) / T3.A12) * 100 AS unemployment_rate_increment FROM loan AS T1 JOIN account AS T2 ON T1.account_id = T2.account_id JOIN district AS T3 ON T2.district_id = T3.district_id WHERE T1.status = 'D'",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 219,
+    "difficulty": "challenging",
+    "nl_query": "What is the percentage of carcinogenic molecules in triple type bonds? label = '+' mean molecules are carcinogenic; triple bond refers to bond_type = '#'; percentage = DIVIDE(SUM(bond_type = '#') * 100, COUNT(bond_id)) as percent where label = '+'",
+    "golden_query": "SELECT CAST(COUNT(DISTINCT CASE WHEN T2.label = '+' THEN T2.molecule_id ELSE NULL END) AS FLOAT) * 100 / COUNT(DISTINCT T2.molecule_id) FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id = T2.molecule_id INNER JOIN bond AS T3 ON T2.molecule_id = T3.molecule_id WHERE T3.bond_type = '#'",
+    "sparksql_query": "SELECT (SUM(CASE WHEN T2.bond_type = '#' THEN 1 ELSE 0 END) * 100.0) / COUNT(T2.bond_id) AS percentage_triple_bonds FROM molecule AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T1.label = '+'",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 944,
+    "difficulty": "challenging",
+    "nl_query": "How much faster in percentage is the champion than the driver who finished the race last in the 2008 Australian Grand Prix? how much faster in percentage = divide(subtract(incremental time, champion time), last_driver time) * 100; last driver finished time = incremental time + champion time; only champion's finished time is represented by 'HH:MM:SS.mmm'; finished the game refers to time is not null",
+    "golden_query": "WITH time_in_seconds AS (SELECT T1.positionOrder, CASE WHEN T1.positionOrder = 1 THEN (CAST(SUBSTRING(T1.time, 1, 1) AS FLOAT) * 3600) + (CAST(SUBSTRING(T1.time, 3, 2) AS FLOAT) * 60) + CAST(SUBSTRING(T1.time, 6) AS FLOAT) ELSE CAST(SUBSTRING(T1.time, 2) AS FLOAT) END AS time_seconds FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId WHERE T2.name = 'Australian Grand Prix' AND NOT T1.time IS NULL AND T2.year = 2008), champion_time AS (SELECT time_seconds FROM time_in_seconds WHERE positionOrder = 1), last_driver_incremental AS (SELECT time_seconds FROM time_in_seconds WHERE positionOrder = (SELECT MAX(positionOrder) FROM time_in_seconds)) SELECT (CAST((SELECT time_seconds FROM last_driver_incremental) AS FLOAT) * 100) / (SELECT time_seconds + (SELECT time_seconds FROM last_driver_incremental) FROM champion_time)",
+    "sparksql_query": "WITH RaceResults AS (SELECT T2.milliseconds, T2.position FROM races AS T1 INNER JOIN results AS T2 ON T1.raceId = T2.raceId WHERE T1.year = 2008 AND T1.name = 'Australian Grand Prix' AND T2.time IS NOT NULL) SELECT ((SELECT milliseconds FROM RaceResults ORDER BY position DESC LIMIT 1) - (SELECT milliseconds FROM RaceResults WHERE position = 1)) * 100.0 / (SELECT milliseconds FROM RaceResults ORDER BY position DESC LIMIT 1) AS percentage_faster;",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 1169,
+    "difficulty": "challenging",
+    "nl_query": "What is the ratio of male to female patients among all those with abnormal uric acid counts? male refers to SEX = 'M'; female refers to SEX = 'F'; abnormal uric acid refers to UA < = '8.0' where SEX = 'M', UA < = '6.5' where SEX = 'F'; calculation = DIVIDE(SUM(UA <= '8.0' and SEX = 'M'), SUM(UA <= '6.5 and SEX = 'F'))",
+    "golden_query": "SELECT CAST(SUM(CASE WHEN T2.UA <= 8.0 AND T1.SEX = 'M' THEN 1 ELSE 0 END) AS FLOAT) / SUM(CASE WHEN T2.UA <= 6.5 AND T1.SEX = 'F' THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID",
+    "sparksql_query": "SELECT CAST(SUM(CASE WHEN P.SEX = 'M' AND L.UA <= 8.0 THEN 1 ELSE 0 END) AS DOUBLE) / CAST(SUM(CASE WHEN P.SEX = 'F' AND L.UA <= 6.5 THEN 1 ELSE 0 END) AS DOUBLE) FROM patient AS P JOIN laboratory AS L ON P.ID = L.ID;",
+    "jaccard_index_new_avg": "0.5",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 1223,
+    "difficulty": "challenging",
+    "nl_query": "Are there more male patients with creatinine not within the normal range than female? True or False? creatinine (CRE) not within the normal range refers to CRE > = 1.5; male refers to Sex = 'M'; female refers to Sex = 'F'; calculation = (SUM(SEX = 'M') > SUM(SEX = 'F')) where CRE > = 1.5",
+    "golden_query": "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5",
+    "sparksql_query": "SELECT CASE WHEN SUM(CASE WHEN T1.SEX = 'M' THEN 1 ELSE 0 END) > SUM(CASE WHEN T1.SEX = 'F' THEN 1 ELSE 0 END) THEN 'True' ELSE 'False' END AS more_male_than_female FROM patient AS T1 INNER JOIN laboratory AS T2 ON T1.ID = T2.ID WHERE T2.CRE >= 1.5;",
+    "jaccard_index_new_avg": "0.1",
+    "exact_match_avg": "0.1"
+  },
+  {
+    "query_id": 1241,
+    "difficulty": "challenging",
+    "nl_query": "For patients with abnormal platelet level, state the number of patients with lower than normal range. How is it compare to the number of patients with higher than normal range? abnormal platelet level refers to PLT <= 100 or PLT >= 400; platelet level lower than normal range refers to PLT < 100; calculation = SUBTRACT(SUM(PLT < 100), SUM(PLT > 400)); platelet level higher than normal range refers to PLT > 400;",
+    "golden_query": "SELECT SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN 1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID",
+    "sparksql_query": "SELECT SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) AS lower_than_normal, SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS higher_than_normal, SUM(CASE WHEN PLT < 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN PLT > 400 THEN 1 ELSE 0 END) AS difference FROM laboratory WHERE PLT < 100 OR PLT > 400",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  },
+  {
+    "query_id": 1429,
+    "difficulty": "challenging",
+    "nl_query": "What is the name of the social event that was attended by the vice president of the Student_Club located at 900 E. Washington St.? name of social event refers to event_name where type = 'Social'; 'Vice President' is position; located at refers to location",
+    "golden_query": "SELECT T2.event_name FROM attendance AS T1 INNER JOIN event AS T2 ON T2.event_id = T1.link_to_event INNER JOIN member AS T3 ON T1.link_to_member = T3.member_id WHERE T3.position = 'Vice President' AND T2.location = '900 E. Washington St.' AND T2.type = 'Social'",
+    "sparksql_query": "SELECT T1.event_name FROM event AS T1 INNER JOIN attendance AS T2 ON T1.event_id = T2.link_to_event INNER JOIN member AS T3 ON T2.link_to_member = T3.member_id WHERE T1.type = 'Social' AND T3.position = 'Vice President' AND T1.location = '900 E. Washington St.'",
+    "jaccard_index_new_avg": "1.0",
+    "exact_match_avg": "0.9"
+  },
+  {
+    "query_id": 1482,
+    "difficulty": "challenging",
+    "nl_query": "Which of the three segments\u2014SME, LAM and KAM\u2014has the biggest and lowest percentage increases in consumption paid in EUR between 2012 and 2013? Increase or Decrease = consumption for 2013 - consumption for 2012; Percentage of Increase = (Increase or Decrease / consumption for 2013) * 100%; The first 4 strings of the Date values in the yearmonth table can represent year",
+    "golden_query": "SELECT CAST((SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0))) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'SME' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST(SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'LAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)), CAST(SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2013%', T2.Consumption, 0)) - SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) AS FLOAT) * 100 / SUM(IF(T1.Segment = 'KAM' AND T2.Date LIKE '2012%', T2.Consumption, 0)) FROM customers AS T1 INNER JOIN yearmonth AS T2 ON T1.CustomerID = T2.CustomerID",
+    "sparksql_query": "WITH ConsumptionByYear AS (SELECT c.`Segment`, YEAR(t.`Date`) AS `Year`, SUM(t.`Price`) AS `TotalConsumption` FROM `customers` c JOIN `transactions_1k` t ON c.`CustomerID` = t.`CustomerID` WHERE c.`Currency` = 'EUR' AND YEAR(t.`Date`) IN (2012, 2013) GROUP BY c.`Segment`, YEAR(t.`Date`)), SegmentConsumption AS (SELECT `Segment`, SUM(CASE WHEN `Year` = 2012 THEN `TotalConsumption` ELSE 0 END) AS `Consumption2012`, SUM(CASE WHEN `Year` = 2013 THEN `TotalConsumption` ELSE 0 END) AS `Consumption2013` FROM ConsumptionByYear GROUP BY `Segment`) SELECT `Segment`, `Consumption2012`, `Consumption2013`, (`Consumption2013` - `Consumption2012`) AS `IncreaseDecrease`, ( CAST((`Consumption2013` - `Consumption2012`) AS DOUBLE) / NULLIF(`Consumption2013`, 0) ) * 100 AS `PercentageIncrease` FROM SegmentConsumption ORDER BY `PercentageIncrease` DESC;",
+    "jaccard_index_new_avg": "0.0",
+    "exact_match_avg": "0.0"
+  }
+]

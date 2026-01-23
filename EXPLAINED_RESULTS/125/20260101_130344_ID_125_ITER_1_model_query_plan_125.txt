@@ -1,0 +1,76 @@
+
+Execution Plan for: Model Query ID 125...
+================================================================================
+
+1. Logical plan:
+----------------------------------------
+'Project ['T3.A2, 'T3.A3, ((('T3.A13 - 'T3.A12) / 'T3.A12) * 100) AS unemployment_increment_percentage#30544]
++- 'Filter ('T1.status = D)
+   +- 'Join Inner, ('T2.district_id = 'T3.district_id)
+      :- 'Join Inner, ('T1.account_id = 'T2.account_id)
+      :  :- 'SubqueryAlias T1
+      :  :  +- 'UnresolvedRelation [loan], [], false
+      :  +- 'SubqueryAlias T2
+      :     +- 'UnresolvedRelation [account], [], false
+      +- 'SubqueryAlias T3
+         +- 'UnresolvedRelation [district], [], false
+
+
+2. Optimized logical plan (After Catalyst AFAIK):
+----------------------------------------
+Project [A2#30500, A3#30501, (((A13#30511 - A12#30510) / A12#30510) * 100.0) AS unemployment_increment_percentage#30544]
++- Join Inner, (district_id#30484 = district_id#30499)
+   :- Project [district_id#30484]
+   :  +- Join Inner, (account_id#30516 = account_id#30483)
+   :     :- Project [account_id#30516]
+   :     :  +- Filter ((isnotnull(status#30521) AND (status#30521 = D)) AND isnotnull(account_id#30516))
+   :     :     +- Relation [loan_id#30515,account_id#30516,date#30517,amount#30518,duration#30519,payments#30520,status#30521] JDBCRelation((SELECT "loan_id", "account_id", CAST("date" AS TEXT) AS "date", "amount", "duration", "payments", "status" FROM "loan") AS "loan") [numPartitions=1]
+   :     +- Project [account_id#30483, district_id#30484]
+   :        +- Filter (isnotnull(account_id#30483) AND isnotnull(district_id#30484))
+   :           +- Relation [account_id#30483,district_id#30484,frequency#30485,date#30486] JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1]
+   +- Project [district_id#30499, A2#30500, A3#30501, A12#30510, A13#30511]
+      +- Filter isnotnull(district_id#30499)
+         +- Relation [district_id#30499,A2#30500,A3#30501,A4#30502,A5#30503,A6#30504,A7#30505,A8#30506,A9#30507,A10#30508,A11#30509,A12#30510,A13#30511,A14#30512,A15#30513,A16#30514] JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1]
+
+
+3. Physical plan:
+----------------------------------------
+AdaptiveSparkPlan isFinalPlan=false
++- Project [A2#30500, A3#30501, (((A13#30511 - A12#30510) / A12#30510) * 100.0) AS unemployment_increment_percentage#30544]
+  +- SortMergeJoin [district_id#30484], [district_id#30499], Inner
+      :- Sort [district_id#30484 ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(district_id#30484, 200), ENSURE_REQUIREMENTS, [plan_id=51415]
+      :     +- Project [district_id#30484]
+      :        +- SortMergeJoin [account_id#30516], [account_id#30483], Inner
+      :           :- Sort [account_id#30516 ASC NULLS FIRST], false, 0
+      :           :  +- Exchange hashpartitioning(account_id#30516, 200), ENSURE_REQUIREMENTS, [plan_id=51407]
+      :           :     +- Scan JDBCRelation((SELECT "loan_id", "account_id", CAST("date" AS TEXT) AS "date", "amount", "duration", "payments", "status" FROM "loan") AS "loan") [numPartitions=1] [account_id#30516] PushedFilters: [*IsNotNull(status), *EqualTo(status,D), *IsNotNull(account_id)], ReadSchema: struct<account_id:int>
+      :           +- Sort [account_id#30483 ASC NULLS FIRST], false, 0
+      :              +- Exchange hashpartitioning(account_id#30483, 200), ENSURE_REQUIREMENTS, [plan_id=51408]
+      :                 +- Scan JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1] [account_id#30483,district_id#30484] PushedFilters: [*IsNotNull(account_id), *IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>
+      +- Sort [district_id#30499 ASC NULLS FIRST], false, 0
+        +- Exchange hashpartitioning(district_id#30499, 200), ENSURE_REQUIREMENTS, [plan_id=51416]
+            +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#30499,A2#30500,A3#30501,A12#30510,A13#30511] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int,A2:string,A3:string,A12:double,A13:double>
+
+4. Explain output:
+----------------------------------------
+
+Physical Plan ==:
+-----------------
+  AdaptiveSparkPlan isFinalPlan=false
+  +- Project [A2#30500, A3#30501, (((A13#30511 - A12#30510) / A12#30510) * 100.0) AS unemployment_increment_percentage#30545]
+  +- SortMergeJoin [district_id#30484], [district_id#30499], Inner
+  :- Sort [district_id#30484 ASC NULLS FIRST], false, 0
+  :  +- Exchange hashpartitioning(district_id#30484, 200), ENSURE_REQUIREMENTS, [plan_id=51467]
+  :     +- Project [district_id#30484]
+  :        +- SortMergeJoin [account_id#30516], [account_id#30483], Inner
+  :           :- Sort [account_id#30516 ASC NULLS FIRST], false, 0
+  :           :  +- Exchange hashpartitioning(account_id#30516, 200), ENSURE_REQUIREMENTS, [plan_id=51459]
+  :           :     +- Scan JDBCRelation((SELECT "loan_id", "account_id", CAST("date" AS TEXT) AS "date", "amount", "duration", "payments", "status" FROM "loan") AS "loan") [numPartitions=1] [account_id#30516] PushedFilters: [*IsNotNull(status), *EqualTo(status,D), *IsNotNull(account_id)], ReadSchema: struct<account_id:int>
+  :           +- Sort [account_id#30483 ASC NULLS FIRST], false, 0
+  :              +- Exchange hashpartitioning(account_id#30483, 200), ENSURE_REQUIREMENTS, [plan_id=51460]
+  :                 +- Scan JDBCRelation((SELECT "account_id", "district_id", "frequency", CAST("date" AS TEXT) AS "date" FROM "account") AS "account") [numPartitions=1] [account_id#30483,district_id#30484] PushedFilters: [*IsNotNull(account_id), *IsNotNull(district_id)], ReadSchema: struct<account_id:int,district_id:int>
+  +- Sort [district_id#30499 ASC NULLS FIRST], false, 0
+  +- Exchange hashpartitioning(district_id#30499, 200), ENSURE_REQUIREMENTS, [plan_id=51468]
+  +- Scan JDBCRelation((SELECT "district_id", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16" FROM "district") AS "district") [numPartitions=1] [district_id#30499,A2#30500,A3#30501,A12#30510,A13#30511] PushedFilters: [*IsNotNull(district_id)], ReadSchema: struct<district_id:int,A2:string,A3:string,A12:double,A13:double>
+================================================================================
